@@ -949,13 +949,6 @@
             showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
         }
 
-        function initCountdown() {
-            // Đã điều chỉnh mốc mở cổng thi về trước thời điểm hiện tại để có thể thử nghiệm ngay lập tức
-            const startDate = new Date("2026-07-01T00:00:00").getTime();
-            const endDate = new Date("2026-08-31T23:59:59").getTime();
-
-            setInterval(() => {
-
         // HÀM RÚT NGẪU NHIÊN 20 CÂU TỪ 100 CÂU & BẮT ĐẦU BÀI THI 10 PHÚT
         function startExamFlow() {
             if (!currentUser) {
@@ -964,7 +957,13 @@
                 return;
             }
 
-            // Đã loại bỏ đoạn kiểm tra mốc ngày 15/08/2026 để mở cổng thi ngay hôm nay
+            // Kiểm tra thời gian bắt đầu cuộc thi (00h00 ngày 15/08/2026)
+            const contestStartDate = new Date("2026-07-29T00:00:00").getTime();
+            const now = new Date().getTime();
+            if (now < contestStartDate) {
+                showToast("Cuộc thi chưa bắt đầu! Thời gian mở cổng thi từ 00h00 ngày 29/7/2026.");
+                return;
+            }
 
             // Kiểm tra giới hạn 2 lượt thi
             const attempts = currentUser.attempts || 0;
