@@ -54,8 +54,11 @@
     <!-- Top Bar Notice -->
     <div class="bg-yellow-500 text-slate-900 text-xs font-semibold py-1.5 px-4 text-center flex items-center justify-center space-x-2 shadow-inner">
         <span class="bg-red-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full animate-pulse">Thông báo</span>
-        <span>Cuộc thi diễn ra từ 15/08/2026 đến hết 31/08/2026. Hãy nhanh tay tham gia ngay!</span>
-        <button onclick="toggleModal('gasConfigModal')" class="underline hover:text-white ml-3 text-[11px] font-bold"><i class="fa-solid fa-gear mr-1"></i> Tích hợp Google Sheets API</button>
+        <span class="hidden sm:inline">Cuộc thi diễn ra từ 15/08/2026 đến hết 31/08/2026. Hãy nhanh tay tham gia ngay!</span>
+        <span class="sm:hidden">Cuộc thi CĐS 2026 đang diễn ra sôi nổi!</span>
+        <button onclick="toggleModal('gasConfigModal')" class="underline hover:text-white ml-3 text-[11px] font-bold inline-flex items-center">
+            <i class="fa-solid fa-gear mr-1"></i> Kết nối Google Sheets API
+        </button>
     </div>
 
     <!-- Main Navigation Bar -->
@@ -64,18 +67,18 @@
             <div class="flex justify-between h-20 items-center">
                 <!-- Logo & Brand -->
                 <a href="#home" class="flex items-center space-x-3 group">
-                    <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="Quốc huy Việt Nam" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform drop-shadow">
+                    <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="Quốc huy Việt Nam" class="w-11 h-11 object-contain group-hover:scale-105 transition-transform drop-shadow">
                     <div>
-                        <div class="text-xs font-bold text-gray-500 uppercase tracking-wider">UBND XÃ MỎ CÀY</div>
-                        <div class="font-extrabold text-base md:text-lg text-gov leading-tight">CẢI CÁCH HÀNH CHÍNH & CHUYỂN ĐỔI SỐ 2026</div>
+                        <div class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">UBND XÃ MỎ CÀY</div>
+                        <div class="font-extrabold text-sm sm:text-base md:text-lg text-gov leading-tight">CẢI CÁCH HÀNH CHÍNH & CHUYỂN ĐỔI SỐ 2026</div>
                     </div>
                 </a>
 
                 <!-- Desktop Menu -->
-                <div class="hidden xl:flex items-center space-x-5 text-sm font-medium text-slate-700">
+                <div class="hidden xl:flex items-center space-x-6 text-sm font-medium text-slate-700">
                     <a href="#home" class="hover:text-gov transition-colors py-2">Trang chủ</a>
                     <a href="#about" class="hover:text-gov transition-colors py-2">Giới thiệu</a>
-                    <a href="#rules" class="hover:text-gov transition-colors py-2">Thể lệ</a>
+                    <a href="#rules" class="hover:text-gov transition-colors py-2">Thể lệ & Giải thưởng</a>
                     <a href="#faq" class="hover:text-gov transition-colors py-2">Hỏi đáp</a>
                 </div>
 
@@ -104,7 +107,7 @@
             <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Giới thiệu</a>
             <a href="#rules" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Thể lệ & Giải thưởng</a>
             <a href="#faq" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Hỏi đáp</a>
-            <div class="pt-2 flex flex-col space-y-2">
+            <div class="pt-2 flex flex-col space-y-2" id="mobileUserArea">
                 <button onclick="toggleMobileMenu(); toggleModal('registerModal')" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
                     <i class="fa-solid fa-pen-to-square mr-1.5"></i>Đăng ký tham gia
                 </button>
@@ -123,7 +126,7 @@
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
-                <div class="lg:w-10/12 text-center lg:text-left space-y-6">
+                <div class="lg:w-7/12 text-center lg:text-left space-y-6">
                     <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-yellow-300 text-xs sm:text-sm font-semibold">
                         <i class="fa-solid fa-star"></i>
                         <span>Chào mừng Ngày chuyển đổi số Quốc gia 2026</span>
@@ -161,11 +164,11 @@
 
                 <div class="lg:w-5/12 w-full flex flex-col items-center">
                     <div class="relative w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 p-6 sm:p-8 rounded-3xl shadow-2xl text-center">
-                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-yellow-400 text-slate-900 font-black px-6 py-1.5 rounded-full text-xs uppercase tracking-wider shadow-md">
+                        <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-yellow-400 text-slate-900 font-black px-6 py-1.5 rounded-full text-xs uppercase tracking-wider shadow-md">
                             Đồng hồ đếm ngược
                         </div>
                         
-                        <p id="cdLabel" class="text-sm font-semibold text-blue-100 mb-4 mt-2">Thời gian còn lại đến ngày mở cổng thi</p>
+                        <p id="cdLabel" class="text-sm font-semibold text-blue-100 mb-4 mt-2">Thời gian còn lại của đợt thi hiện tại</p>
 
                         <div class="grid grid-cols-4 gap-2 sm:gap-3 text-slate-900 mb-6">
                             <div class="bg-white p-3 rounded-2xl shadow-md">
@@ -206,28 +209,28 @@
                 <div class="w-10 h-10 bg-blue-100 text-gov rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
                     <i class="fa-solid fa-users"></i>
                 </div>
-                <div id="statUsers" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
+                <div id="statUsers" class="text-2xl sm:text-3xl font-black text-slate-800">1,248</div>
                 <div class="text-xs font-medium text-slate-500 mt-1">Người tham gia</div>
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
                 <div class="w-10 h-10 bg-green-100 text-green-700 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
                     <i class="fa-solid fa-file-pen"></i>
                 </div>
-                <div id="statAttempts" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
+                <div id="statAttempts" class="text-2xl sm:text-3xl font-black text-slate-800">2,105</div>
                 <div class="text-xs font-medium text-slate-500 mt-1">Lượt làm bài</div>
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
                 <div class="w-10 h-10 bg-yellow-100 text-yellow-700 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
-                <div id="statCompleted" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
+                <div id="statCompleted" class="text-2xl sm:text-3xl font-black text-slate-800">1,980</div>
                 <div class="text-xs font-medium text-slate-500 mt-1">Bài thi hoàn thành</div>
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
                 <div class="w-10 h-10 bg-purple-100 text-purple-700 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
                     <i class="fa-solid fa-award"></i>
                 </div>
-                <div id="statAvgScore" class="text-2xl sm:text-3xl font-black text-slate-800">0.0 <span class="text-xs font-normal text-slate-400">/20</span></div>
+                <div id="statAvgScore" class="text-2xl sm:text-3xl font-black text-slate-800">16.8 <span class="text-xs font-normal text-slate-400">/20</span></div>
                 <div class="text-xs font-medium text-slate-500 mt-1">Điểm trung bình</div>
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center col-span-2 md:col-span-1 card-hover">
@@ -235,7 +238,7 @@
                     <i class="fa-solid fa-signal"></i>
                     <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
                 </div>
-                <div id="statOnline" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
+                <div id="statOnline" class="text-2xl sm:text-3xl font-black text-slate-800">42</div>
                 <div class="text-xs font-medium text-slate-500 mt-1">Đang trực tuyến</div>
             </div>
         </div>
@@ -254,10 +257,10 @@
                 <i class="fa-solid fa-quote-left absolute top-4 left-6 text-6xl opacity-10"></i>
                 <i class="fa-solid fa-quote-right absolute bottom-4 right-6 text-6xl opacity-10"></i>
                 <div class="relative z-10 text-center max-w-4xl mx-auto">
-                 <p class="text-lg md:text-xl font-bold italic text-yellow-300 whitespace-nowrap">
-                    "Cải cách hành chính là động lực phát triển. Chuyển đổi số là xu hướng tất yếu."
-                </p>
-                    
+                    <p class="text-lg md:text-xl font-bold italic text-yellow-300">
+                        "Cải cách hành chính là động lực phát triển. Chuyển đổi số là xu hướng tất yếu."
+                    </p>
+                    <p class="text-xs sm:text-sm text-blue-100 mt-2">Đẩy mạnh ứng dụng công nghệ thông tin, nâng cao hiệu quả giải quyết thủ tục hành chính vì sự hài lòng của công dân và doanh nghiệp.</p>
                 </div>
             </div>
 
@@ -296,7 +299,7 @@
     </section>
 
     <!-- Contest Rules Section -->
-    <section id="rules" class="py-16 md:py-24 bg-slate-50">
+    <section id="rules" class="py-16 md:py-24 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Quy định cuộc thi</span>
@@ -304,84 +307,99 @@
                 <div class="w-20 h-1.5 bg-gov mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-12 items-start">
-                <div class="space-y-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <h3 class="text-lg font-bold text-gov flex items-center mb-3">
-                        <i class="fa-solid fa-clock-rotate-left mr-2.5 text-xl"></i> Hình thức & Thời gian thi
-                    </h3>
-                    <ul class="text-slate-600 text-sm leading-relaxed space-y-2 list-disc list-inside">
-                        <li><strong>Hình thức:</strong> Thi trắc nghiệm trực tuyến 100% trên thiết bị kết nối Internet.</li>
-                        <li><strong>Cấu trúc:</strong> 20 câu hỏi trắc nghiệm (rút ngẫu nhiên từ bộ 100 câu) làm trong tối đa 10 phút.</li>
-                        <li><strong>Số lần thi:</strong> Mỗi thí sinh được tham gia thi tối đa 02 lần. Hệ thống tự động ghi nhận kết quả cao nhất.</li>
-                    </ul>
-                </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 relative">
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center relative card-hover">
-                    <span class="absolute top-3 right-3 text-2xl font-black text-slate-200">01</span>
-                    <div class="w-12 h-12 bg-gov text-white rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold shadow-md">
-                        <i class="fa-solid fa-user-plus"></i>
+            <div class="grid lg:grid-cols-2 gap-12 items-stretch">
+                <div class="space-y-6 flex flex-col justify-between">
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-lg font-bold text-gov flex items-center mb-3">
+                            <i class="fa-solid fa-clock-rotate-left mr-2.5 text-xl"></i> Hình thức & Thời gian thi
+                        </h3>
+                        <ul class="text-slate-600 text-sm leading-relaxed space-y-2 list-disc list-inside">
+                            <li><strong>Hình thức:</strong> Thi trắc nghiệm trực tuyến 100% trên thiết bị kết nối Internet.</li>
+                            <li><strong>Cấu trúc:</strong> 20 câu hỏi trắc nghiệm (rút ngẫu nhiên từ bộ ngân hàng câu hỏi) làm trong tối đa 10 phút.</li>
+                            <li><strong>Số lần thi:</strong> Mỗi thí sinh được tham gia thi tối đa <strong>02 lần</strong>. Hệ thống tự động ghi nhận kết quả cao nhất.</li>
+                        </ul>
                     </div>
-                    <h4 class="font-bold text-sm text-slate-800 mb-1">Đăng ký</h4>
-                    <p class="text-xs text-slate-500">Tạo tài khoản bằng SĐT hoặc CCCD</p>
-                </div>
 
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center relative card-hover">
-                    <span class="absolute top-3 right-3 text-2xl font-black text-slate-200">02</span>
-                    <div class="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold shadow-md">
-                        <i class="fa-solid fa-right-to-bracket"></i>
-                    </div>
-                    <h4 class="font-bold text-sm text-slate-800 mb-1">Đăng nhập</h4>
-                    <p class="text-xs text-slate-500">Xác thực tài khoản thi cá nhân</p>
-                </div>
-
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center relative card-hover">
-                    <span class="absolute top-3 right-3 text-2xl font-black text-slate-200">03</span>
-                    <div class="w-12 h-12 bg-orange-500 text-white rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold shadow-md">
-                        <i class="fa-solid fa-laptop-code"></i>
-                    </div>
-                    <h4 class="font-bold text-sm text-slate-800 mb-1">Làm bài thi</h4>
-                    <p class="text-xs text-slate-500">Trả lời 20 câu hỏi trắc nghiệm</p>
-                </div>
-                </div>
-
-                <div class="bg-gradient-to-br from-blue-900 to-gov text-white p-8 rounded-3xl shadow-xl relative overflow-hidden">
-                    <h3 class="text-2xl font-black text-yellow-400 mb-6 flex items-center">
-                        <i class="fa-solid fa-crown mr-3"></i> Cơ Cấu Giải Thưởng 2026
-                    </h3>
-
-                    <div class="space-y-4">
-                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <span class="text-3xl">🥇</span>
-                                <div>
-                                    <h4 class="font-bold text-base text-yellow-300">01 Giải Nhất</h4>
-                                    <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
-                                </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center relative card-hover">
+                            <span class="absolute top-3 right-3 text-2xl font-black text-slate-200">01</span>
+                            <div class="w-12 h-12 bg-gov text-white rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold shadow-md">
+                                <i class="fa-solid fa-user-plus"></i>
                             </div>
-                            <span class="font-extrabold text-lg text-yellow-300">500.000 VNĐ</span>
+                            <h4 class="font-bold text-sm text-slate-800 mb-1">Đăng ký</h4>
+                            <p class="text-xs text-slate-500">Tạo tài khoản bằng SĐT & CCCD</p>
                         </div>
 
-                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <span class="text-3xl">🥈</span>
-                                <div>
-                                    <h4 class="font-bold text-base text-slate-200">02 Giải Nhì</h4>
-                                    <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
-                                </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center relative card-hover">
+                            <span class="absolute top-3 right-3 text-2xl font-black text-slate-200">02</span>
+                            <div class="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold shadow-md">
+                                <i class="fa-solid fa-right-to-bracket"></i>
                             </div>
-                            <span class="font-extrabold text-lg text-slate-200">400.000 VNĐ</span>
+                            <h4 class="font-bold text-sm text-slate-800 mb-1">Đăng nhập</h4>
+                            <p class="text-xs text-slate-500">Xác thực tài khoản thi cá nhân</p>
                         </div>
 
-                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <span class="text-3xl">🥉</span>
-                                <div>
-                                    <h4 class="font-bold text-base text-amber-300">03 Giải Ba</h4>
-                                    <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
-                                </div>
+                        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 text-center relative card-hover">
+                            <span class="absolute top-3 right-3 text-2xl font-black text-slate-200">03</span>
+                            <div class="w-12 h-12 bg-orange-500 text-white rounded-xl flex items-center justify-center mx-auto mb-3 text-lg font-bold shadow-md">
+                                <i class="fa-solid fa-laptop-code"></i>
                             </div>
-                            <span class="font-extrabold text-lg text-amber-300">300.000 VNĐ</span>
+                            <h4 class="font-bold text-sm text-slate-800 mb-1">Làm bài thi</h4>
+                            <p class="text-xs text-slate-500">Trả lời 20 câu trắc nghiệm</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-900 to-gov text-white p-8 rounded-3xl shadow-xl relative overflow-hidden flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-2xl font-black text-yellow-400 mb-6 flex items-center">
+                            <i class="fa-solid fa-crown mr-3"></i> Cơ Cấu Giải Thưởng 2026
+                        </h3>
+
+                        <div class="space-y-4">
+                            <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-3xl">🥇</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-yellow-300">01 Giải Nhất</h4>
+                                        <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
+                                    </div>
+                                </div>
+                                <span class="font-extrabold text-lg text-yellow-300">500.000 VNĐ</span>
+                            </div>
+
+                            <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-3xl">🥈</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-slate-200">02 Giải Nhì</h4>
+                                        <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
+                                    </div>
+                                </div>
+                                <span class="font-extrabold text-lg text-slate-200">400.000 VNĐ</span>
+                            </div>
+
+                            <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-3xl">🥉</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-amber-300">03 Giải Ba</h4>
+                                        <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
+                                    </div>
+                                </div>
+                                <span class="font-extrabold text-lg text-amber-300">300.000 VNĐ</span>
+                            </div>
+
+                            <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-3xl">🎖️</span>
+                                    <div>
+                                        <h4 class="font-bold text-base text-blue-200">05 Giải Khuyến Khích</h4>
+                                        <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
+                                    </div>
+                                </div>
+                                <span class="font-extrabold text-lg text-blue-200">150.000 VNĐ</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -390,7 +408,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faq" class="py-16 bg-white border-t border-slate-200">
+    <section id="faq" class="py-16 bg-slate-50 border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12">
                 <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Giải đáp thắc mắc</span>
@@ -398,23 +416,33 @@
             </div>
 
             <div class="space-y-4">
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
                     <button onclick="toggleFaq(1)" class="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none">
                         <span>1. Ai được phép đăng ký tham gia cuộc thi?</span>
                         <i id="faqIcon1" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
                     </button>
                     <div id="faqAnswer1" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        Tất cả công dân Việt Nam đang làm việc, học tập, sinh sống trên địa bàn xã Mỏ Cày đều thuộc đối tượng tham gia cuộc thi.
+                        Tất cả cán bộ, công chức, viên chức, người lao động, đoàn viên thanh niên, học sinh và nhân dân đang sinh sống, làm việc, học tập trên địa bàn xã Mỏ Cày, tỉnh Quảng Ngãi đều được khuyến khích tham gia.
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
                     <button onclick="toggleFaq(2)" class="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none">
                         <span>2. Mỗi người được tham gia làm bài thi bao nhiêu lần?</span>
                         <i id="faqIcon2" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
                     </button>
                     <div id="faqAnswer2" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        Mỗi tài khoản cá nhân được tham gia tối đa <strong>02 lần thi</strong>. Hệ thống sẽ tự động ghi nhận kết quả cao nhất.
+                        Mỗi tài khoản cá nhân được tham gia tối đa <strong>02 lần thi</strong>. Hệ thống sẽ tự động lưu giữ và tính điểm lần thi có kết quả cao nhất của thí sinh.
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFaq(3)" class="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none">
+                        <span>3. Kết quả thi được lưu dữ liệu ở đâu?</span>
+                        <i id="faqIcon3" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
+                    </button>
+                    <div id="faqAnswer3" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Kết quả bài thi được tự động lưu trữ an toàn trên hệ thống LocalStorage của trình duyệt và đồng bộ về Google Sheets của Ban Tổ chức thông qua Google Apps Script Web API.
                     </div>
                 </div>
             </div>
@@ -423,12 +451,17 @@
 
     <!-- Footer -->
     <footer class="bg-gov-dark text-white py-12 border-t border-blue-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-blue-200">
-            <p>Bản quyền © 2026 - Ủy ban nhân dân xã Mỏ Cày, tỉnh Quảng Ngãi.</p>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-blue-200 space-y-2">
+            <div class="flex justify-center items-center space-x-3 mb-4">
+                <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="UBND Mỏ Cày" class="w-8 h-8 object-contain">
+                <span class="font-bold text-white text-sm">UBND XÃ MỎ CÀY - TỈNH QUẢNG NGÃI</span>
+            </div>
+            <p>Bản quyền © 2026 - Ủy ban nhân dân xã Mỏ Cày. Tất cả các quyền được bảo lưu.</p>
+            <p class="text-[11px] text-slate-300">Hệ thống Trắc nghiệm Trực tuyến Cải cách hành chính & Chuyển đổi số 2026</p>
         </div>
     </footer>
 
-    <!-- MODAL 1: Registration Modal (FIXED FORM INPUTS) -->
+    <!-- MODAL 1: Registration Modal -->
     <div id="registerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8">
             <div class="bg-gov px-6 py-4 text-white flex justify-between items-center">
@@ -457,8 +490,8 @@
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Cơ quan / Đơn vị <span class="text-red-500">*</span></label>
-                        <input type="text" id="regVillage" required placeholder="Ví dụ: Thôn 1 hoặc Cơ quan..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Cơ quan / Thôn / Đơn vị <span class="text-red-500">*</span></label>
+                        <input type="text" id="regVillage" required placeholder="Ví dụ: Thôn 1 hoặc Trường THCS" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Số điện thoại <span class="text-red-500">*</span></label>
@@ -467,29 +500,19 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Địa chỉ Email (Không bắt buộc)</label>
-                    <input type="email" id="regEmail" placeholder="nguyenvana@gmail.com" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu đăng nhập <span class="text-red-500">*</span></label>
+                    <input type="password" id="regPass" required placeholder="Nhập mật khẩu tự chọn" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu <span class="text-red-500">*</span></label>
-                        <input type="password" id="regPass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Xác nhận mật khẩu <span class="text-red-500">*</span></label>
-                        <input type="password" id="regPassConfirm" required placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
-                    </div>
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-cta hover:bg-cta-hover text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all">
+                        Hoàn tất Đăng ký
+                    </button>
                 </div>
 
-                <div class="flex items-center space-x-2 pt-1">
-                    <input type="checkbox" id="regAgree" required class="w-4 h-4 text-gov rounded border-slate-300 focus:ring-gov">
-                    <label for="regAgree" class="text-xs text-slate-600">Tôi đồng ý với <a href="#rules" class="text-gov font-bold underline">Thể lệ cuộc thi</a>.</label>
+                <div class="text-center text-xs text-slate-500 pt-1">
+                    Đã có tài khoản? <button type="button" onclick="toggleModal('registerModal'); toggleModal('loginModal');" class="text-gov font-bold underline">Đăng nhập tại đây</button>
                 </div>
-
-                <button type="submit" class="w-full bg-cta hover:bg-cta-hover text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all mt-2">
-                    <i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản
-                </button>
             </form>
         </div>
     </div>
@@ -506,713 +529,951 @@
 
             <form onsubmit="handleLoginSubmit(event)" class="p-6 space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Số CCCD hoặc Số điện thoại</label>
-                    <input type="text" id="loginUser" required placeholder="Nhập CCCD hoặc SĐT..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu</label>
-                    <input type="password" id="loginPass" required placeholder="Mật khẩu của bạn..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Số điện thoại / CCCD <span class="text-red-500">*</span></label>
+                    <input type="text" id="loginId" required placeholder="Nhập SĐT hoặc CCCD đã đăng ký" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                 </div>
 
-                <button type="submit" class="w-full bg-gov hover:bg-gov-dark text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all mt-2">
-                    <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i>Đăng Nhập
-                </button>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu <span class="text-red-500">*</span></label>
+                    <input type="password" id="loginPass" required placeholder="Nhập mật khẩu" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                </div>
+
+                <div id="loginError" class="hidden text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200"></div>
+
+                <div class="pt-2">
+                    <button type="submit" class="w-full bg-gov hover:bg-gov-dark text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all">
+                        Đăng Nhập Thi Ngay
+                    </button>
+                </div>
+
+                <div class="text-center text-xs text-slate-500 pt-1">
+                    Chưa có tài khoản? <button type="button" onclick="toggleModal('loginModal'); toggleModal('registerModal');" class="text-cta font-bold underline">Đăng ký mới</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL 3: EXAM INTERFACE -->
-    <div id="examModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-        <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[92vh] border border-slate-100">
-            <div class="bg-gov text-white px-6 py-4 flex justify-between items-center border-b border-blue-700 flex-shrink-0">
-                <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm text-yellow-300">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-extrabold text-sm sm:text-base leading-tight" id="examCandidateName">Thí sinh: Nguyễn Văn A</h3>
-                        <p class="text-[11px] text-blue-200" id="examCandidateUnit">Đơn vị: Thôn 1 - Xã Mỏ Cày</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-3">
-                    <div id="examTimerBox" class="bg-white/10 px-4 py-2 rounded-2xl border border-white/20 flex items-center space-x-2 text-yellow-300">
-                        <i class="fa-regular fa-clock text-lg animate-pulse"></i>
-                        <div>
-                            <span class="text-[10px] block text-blue-200 leading-none">Thời gian</span>
-                            <span id="examTimer" class="font-mono font-black text-lg sm:text-xl leading-none">10:00</span>
-                        </div>
-                    </div>
-                    <button onclick="confirmExitExam()" class="text-white/80 hover:text-white text-2xl font-bold px-2">&times;</button>
-                </div>
+    <!-- MODAL 3: GAS (Google Apps Script) Configuration Modal -->
+    <div id="gasConfigModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100">
+            <div class="bg-slate-800 px-6 py-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-base flex items-center">
+                    <i class="fa-solid fa-cloud-arrow-up mr-2 text-yellow-400"></i> Cấu hình Google Apps Script API
+                </h3>
+                <button onclick="toggleModal('gasConfigModal')" class="text-white/80 hover:text-white text-xl focus:outline-none">&times;</button>
             </div>
 
-            <div class="w-full bg-slate-200 h-2">
-                <div id="examProgressBar" class="bg-cta h-2 w-0 transition-all duration-300"></div>
-            </div>
+            <form onsubmit="handleGasConfigSubmit(event)" class="p-6 space-y-4">
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Dán URL Web App triển khai từ Google Apps Script để kết quả làm bài thi được tự động đồng bộ trực tiếp về <strong>Google Sheets</strong> của Ban Tổ chức.
+                </p>
 
-            <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 custom-scrollbar">
-                <div class="lg:col-span-8 space-y-6 flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <span class="bg-blue-100 text-gov font-extrabold text-xs px-3 py-1.5 rounded-lg" id="qCurrentIndexText">Câu hỏi 1 / 20</span>
-                            <button onclick="toggleFlagQuestion()" id="flagBtn" class="text-xs font-semibold text-slate-500 hover:text-yellow-600 flex items-center space-x-1">
-                                <i class="fa-regular fa-flag"></i>
-                                <span>Đánh dấu xem lại</span>
-                            </button>
-                        </div>
-
-                        <h4 id="qTitle" class="text-base sm:text-lg font-extrabold text-slate-900 leading-relaxed mb-6">
-                            Đang tải câu hỏi...
-                        </h4>
-
-                        <div id="qOptions" class="space-y-3">
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between items-center pt-6 border-t border-slate-100">
-                        <button onclick="navigateQuestion(-1)" id="prevQBtn" class="px-5 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition-colors">
-                            <i class="fa-solid fa-chevron-left mr-1.5"></i> Câu trước
-                        </button>
-                        <button onclick="navigateQuestion(1)" id="nextQBtn" class="px-5 py-2.5 bg-gov text-white font-bold text-xs rounded-xl hover:bg-gov-dark transition-colors">
-                            Câu tiếp <i class="fa-solid fa-chevron-right ml-1.5"></i>
-                        </button>
-                    </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Google Apps Script Web App URL</label>
+                    <input type="url" id="gasUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:border-gov">
                 </div>
 
-                <div class="lg:col-span-4 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
-                    <div>
-                        <h5 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-3">Danh sách câu hỏi</h5>
-                        <div id="questionMatrix" class="grid grid-cols-5 gap-2">
-                        </div>
-                    </div>
-
-                    <div class="pt-6 border-t border-slate-200">
-                        <button onclick="submitExamConfirmation()" class="w-full bg-cta hover:bg-cta-hover text-white py-3.5 rounded-xl font-extrabold text-sm shadow-xl shadow-orange-500/20 transition-all flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            <span>NỘP BÀI THI NGAY</span>
-                        </button>
-                    </div>
+                <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 text-[11px] text-blue-800 space-y-1">
+                    <p class="font-bold"><i class="fa-solid fa-circle-info mr-1"></i> Định dạng dữ liệu gửi về Google Sheets:</p>
+                    <p class="font-mono text-[10px]">Name, Phone, CCCD, Village, Score (20), TimeSpent, SubmissionDate</p>
                 </div>
-            </div>
+
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="toggleModal('gasConfigModal')" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Hủy</button>
+                    <button type="submit" class="px-5 py-2 bg-gov text-white rounded-xl text-xs font-bold shadow-md">Lưu Cấu Hình</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- MODAL 4: RESULT MODAL -->
-    <div id="resultModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 text-center my-8">
-            <div class="bg-gov p-8 text-white relative">
-                <div class="w-20 h-20 bg-yellow-400 text-slate-900 rounded-full flex items-center justify-center text-4xl mx-auto shadow-xl border-4 border-white mb-3">
-                    <i class="fa-solid fa-trophy"></i>
+    <!-- EXAM OVERLAY / ARENA -->
+    <div id="examArena" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex flex-col justify-between overflow-y-auto">
+        <!-- Exam Header Bar -->
+        <div class="bg-slate-900 border-b border-slate-700 px-4 sm:px-8 py-3 text-white flex justify-between items-center sticky top-0 z-20">
+            <div class="flex items-center space-x-3">
+                <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" class="w-8 h-8 object-contain">
+                <div>
+                    <h2 id="examHeaderTitle" class="font-bold text-xs sm:text-sm text-yellow-400">BÀI THI TRẮC NGHIỆM CHUYỂN ĐỔI SỐ 2026</h2>
+                    <p id="examUserInfo" class="text-[11px] text-slate-300">Thí sinh: --</p>
                 </div>
-                <h3 class="text-2xl font-black">HOÀN THÀNH BÀI THI!</h3>
             </div>
 
-            <div class="p-8 space-y-6">
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
-                        <span class="text-xs font-bold text-slate-500 uppercase block">Điểm Số</span>
-                        <span id="resScoreText" class="text-3xl font-black text-gov">0/20</span>
+            <div class="flex items-center space-x-4">
+                <!-- Exam Timer Display -->
+                <div id="examTimerContainer" class="bg-slate-800 px-4 py-1.5 rounded-xl border border-slate-600 flex items-center space-x-2 text-yellow-300">
+                    <i class="fa-solid fa-stopwatch text-sm"></i>
+                    <span id="examTimer" class="font-mono font-black text-base sm:text-lg">10:00</span>
+                </div>
+
+                <button id="btnExamSubmit" onclick="confirmSubmitExam()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-xl text-xs font-bold transition-all">
+                    <i class="fa-solid fa-paper-plane mr-1"></i> Nộp Bài Thi
+                </button>
+                <button id="btnExamExitReview" onclick="exitReviewMode()" class="hidden bg-slate-700 hover:bg-slate-600 text-white px-4 py-1.5 rounded-xl text-xs font-bold transition-all">
+                    <i class="fa-solid fa-xmark mr-1"></i> Thoát Xem Lại
+                </button>
+            </div>
+        </div>
+
+        <!-- Exam Main Body Container -->
+        <div class="max-w-5xl mx-auto w-full my-6 px-4 flex-grow grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Left: Question List & Navigation Palette -->
+            <div class="bg-white rounded-3xl p-5 shadow-2xl border border-slate-200 h-fit lg:col-span-1">
+                <h3 class="font-bold text-xs text-slate-500 uppercase tracking-wider mb-3">Danh sách câu hỏi</h3>
+                <div id="questionGrid" class="grid grid-cols-5 gap-2">
+                    <!-- Dynamic Question Buttons generated here -->
+                </div>
+
+                <div id="examPaletteLegend" class="mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-500 space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-gov rounded-md inline-block"></span>
+                        <span>Đã chọn đáp án</span>
                     </div>
-                    <div class="bg-green-50 p-4 rounded-2xl border border-green-100">
-                        <span class="text-xs font-bold text-slate-500 uppercase block">Số Câu Đúng</span>
-                        <span id="resCorrectText" class="text-3xl font-black text-green-600">0</span>
-                    </div>
-                    <div class="bg-orange-50 p-4 rounded-2xl border border-orange-100">
-                        <span class="text-xs font-bold text-slate-500 uppercase block">Thời Gian</span>
-                        <span id="resTimeText" class="text-2xl font-black text-orange-600">00:00</span>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-slate-100 border border-slate-300 rounded-md inline-block"></span>
+                        <span>Chưa làm</span>
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                    <button onclick="toggleModal('resultModal')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded-xl font-bold text-sm transition-all">
-                        Đóng cửa sổ
+                <div id="reviewPaletteLegend" class="hidden mt-6 pt-4 border-t border-slate-100 text-[11px] text-slate-500 space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-emerald-500 rounded-md inline-block"></span>
+                        <span>Trả lời ĐÚNG</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-rose-500 rounded-md inline-block"></span>
+                        <span>Trả lời SAI</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="w-3 h-3 bg-amber-400 rounded-md inline-block"></span>
+                        <span>Bỏ trống</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Question Box -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 lg:col-span-3 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span id="qNumberBadge" class="bg-blue-100 text-gov font-extrabold text-xs px-3 py-1 rounded-full">Câu 1 / 20</span>
+                        <span id="qInstruction" class="text-xs text-slate-400 font-medium">Chọn 01 đáp án đúng nhất</span>
+                    </div>
+
+                    <h2 id="qTitle" class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed mb-6">
+                        Loading câu hỏi...
+                    </h2>
+
+                    <div id="qOptions" class="space-y-3">
+                        <!-- Dynamic radio options generated here -->
+                    </div>
+
+                    <!-- Answer Explanation Box (Shown during review mode) -->
+                    <div id="qExplanationBox" class="hidden mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900">
+                        <div class="font-bold mb-1 flex items-center text-amber-800">
+                            <i class="fa-solid fa-lightbulb mr-1.5 text-amber-600"></i> Giải thích đáp án:
+                        </div>
+                        <p id="qExplanationText" class="leading-relaxed">--</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between items-center pt-8 border-t border-slate-100 mt-6">
+                    <button id="btnPrevQ" onclick="navigateQuestion(-1)" class="px-5 py-2.5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl text-xs font-bold flex items-center">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Câu Trước
+                    </button>
+                    <button id="btnNextQ" onclick="navigateQuestion(1)" class="px-6 py-2.5 bg-gov hover:bg-gov-dark text-white rounded-xl text-xs font-bold flex items-center shadow-md">
+                        Câu Tiếp Theo <i class="fa-solid fa-arrow-right ml-2"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 5: GOOGLE APPS SCRIPT CONFIG -->
-    <div id="gasConfigModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8 p-6">
-            <h3 class="font-bold text-lg text-gov mb-4"><i class="fa-solid fa-link mr-2"></i>Cấu hình URL Google Apps Script</h3>
-            <input type="text" id="gasApiUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-4 py-3 border border-slate-300 rounded-xl text-xs font-mono mb-4">
-            <div class="flex justify-end space-x-2">
-                <button onclick="toggleModal('gasConfigModal')" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs">Đóng</button>
-                <button onclick="saveGasUrl()" class="px-5 py-2 bg-gov text-white rounded-xl font-bold text-xs">Lưu cấu hình</button>
+    <!-- MODAL 4: Exam Result Modal -->
+    <div id="resultModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden relative text-center p-6 sm:p-8 border border-slate-100">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-inner">
+                <i class="fa-solid fa-trophy animate-bounce"></i>
+            </div>
+
+            <h3 class="text-2xl font-black text-slate-900 mb-1">HOÀN THÀNH BÀI THI!</h3>
+            <p id="resultUserName" class="text-xs font-semibold text-slate-500 mb-6">Thí sinh: --</p>
+
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6 space-y-2">
+                <div class="text-xs text-slate-500">Kết quả đạt được</div>
+                <div class="text-4xl font-black text-gov"><span id="resultScore">0</span> <span class="text-lg font-bold text-slate-400">/ 20</span></div>
+                <div class="text-xs font-medium text-slate-600 pt-1">
+                    Thời gian làm bài: <strong id="resultTime" class="text-slate-800">00:00</strong>
+                </div>
+            </div>
+
+            <p id="resultFeedback" class="text-xs text-slate-600 mb-6 font-medium">
+                Chúc mừng bạn đã hoàn thành bài thi tìm hiểu Chuyển đổi số năm 2026!
+            </p>
+
+            <div class="flex flex-col space-y-2">
+                <button onclick="reviewAnswers()" class="w-full bg-blue-50 text-gov hover:bg-blue-100 py-3 rounded-xl font-bold text-xs transition-all">
+                    <i class="fa-solid fa-eye mr-1"></i> Xem Lại Đáp Án Bài Thi
+                </button>
+                <button onclick="closeResultAndReset()" class="w-full bg-gov hover:bg-gov-dark text-white py-3 rounded-xl font-bold text-xs shadow-md transition-all">
+                    Quay Về Trang Chủ
+                </button>
             </div>
         </div>
-    </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center space-x-3 transition-all duration-300 text-xs font-semibold">
-        <i id="toastIcon" class="fa-solid fa-circle-info text-yellow-400 text-base"></i>
-        <span id="toastMessage">Thông báo ứng dụng</span>
     </div>
 
     <script>
-        let currentUser = null;
-        let gasApiUrl = 'https://script.google.com/macros/s/AKfycbyBK2jtG5vfgBJvjGqfI92Pd0OQaLvlDTNGZI82NSR1m24SxnT1WXcvb4nUb9lF0IKz/exec';
-        let timerInterval = null;
-        let examTimeLeft = 600; // 10 phút = 600 giây
-        let currentQuestionIdx = 0;
-        let userAnswers = {};
-        let flaggedQuestions = {};
-        let activeQuestions = []; // Lưu 20 câu ngẫu nhiên được chọn cho lượt thi này
-
-        window.onload = function() {
-            initCountdown();
-            loadUserSession();
-            updateRealStats();
-            setInterval(updateRealStats, 20000); // Tự động cập nhật số liệu mỗi 20 giây
-            if(gasApiUrl) {
-                document.getElementById('gasApiUrlInput').value = gasApiUrl;
-            }
+        // Configuration & Global State
+        let config = {
+            gasUrl: localStorage.getItem('mocay_gas_url') || ''
         };
 
-        function updateRealStats() {
-            let registeredUsers = [];
-            let examLogs = [];
-            try {
-                registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-            } catch(e) { registeredUsers = []; }
-            try {
-                examLogs = JSON.parse(localStorage.getItem('cds_exam_logs')) || [];
-            } catch(e) { examLogs = []; }
+        let currentUser = JSON.parse(localStorage.getItem('mocay_logged_user')) || null;
 
-            let totalUsers = registeredUsers.length;
-            let totalAttempts = registeredUsers.reduce((sum, u) => sum + (u.attempts || 0), 0);
-            let completedExams = examLogs.length;
-            let totalScore = examLogs.reduce((sum, e) => sum + (e.score || 0), 0);
-            let avgScore = completedExams > 0 ? (totalScore / completedExams).toFixed(1) : "0.0";
-            
-            // Tính số người đang trực tuyến thực tế + biến thiên nhẹ
-            let onlineBase = Math.max(1, Math.floor(totalUsers * 0.15) + Math.floor(Math.random() * 5));
-
-            if (gasApiUrl) {
-                fetch(`${gasApiUrl}?action=getStats`)
-                    .then(res => res.json())
-                    .then(res => {
-                        if (res.status === 'success') {
-                            animateNumber('statUsers', res.users || totalUsers);
-                            animateNumber('statAttempts', res.attempts || totalAttempts);
-                            animateNumber('statCompleted', res.completed || completedExams);
-                            document.getElementById('statAvgScore').innerHTML = `${res.avgScore || avgScore} <span class="text-xs font-normal text-slate-400">/20</span>`;
-                            animateNumber('statOnline', res.online || onlineBase);
-                        } else {
-                            renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
-                        }
-                    })
-                    .catch(() => {
-                        renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
-                    });
-            } else {
-                renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
+        // Comprehensive Question Bank (20 Questions for Exam)
+        const questionBank = [
+            {
+                id: 1,
+                question: "Ứng dụng Định danh điện tử Quốc gia do Bộ Công an phát hành có tên gọi chính thức là gì?",
+                options: ["A. VNeID", "B. VssID", "C. eGov Quảng Ngãi", "D. Dịch vụ công 247"],
+                correct: 0,
+                explanation: "VNeID là ứng dụng do Trung tâm dữ liệu quốc gia về dân cư thuộc Bộ Công an phát triển."
+            },
+            {
+                id: 2,
+                question: "Cổng Dịch vụ công Quốc gia có địa chỉ truy cập chính thức là gì?",
+                options: ["A. dichvucong.gov.vn", "B. dichvucong.quangngai.gov.vn", "C. hanhchinh.gov.vn", "D. cdt.gov.vn"],
+                correct: 0,
+                explanation: "Cổng Dịch vụ công Quốc gia chính thức tại tên miền dichvucong.gov.vn."
+            },
+            {
+                id: 3,
+                question: "Ngày Chuyển đổi số quốc gia hàng năm được Chính phủ quyết định lấy làm ngày nào?",
+                options: ["A. Ngày 10 tháng 10", "B. Ngày 02 tháng 09", "C. Ngày 19 tháng 05", "D. Ngày 30 tháng 04"],
+                correct: 0,
+                explanation: "Thủ tướng Chính phủ đã chọn ngày 10 tháng 10 hằng năm là Ngày Chuyển đổi số quốc gia."
+            },
+            {
+                id: 4,
+                question: "Theo Luật Cư trú năm 2020, Sổ hộ khẩu giấy đã chính thức hết giá trị sử dụng từ thời điểm nào?",
+                options: ["A. 01/01/2023", "B. 01/01/2022", "C. 01/01/2024", "D. 31/12/2025"],
+                correct: 0,
+                explanation: "Sổ hộ khẩu giấy và Sổ tạm trú giấy hết giá trị từ ngày 01/01/2023."
+            },
+            {
+                id: 5,
+                question: "Dịch vụ công trực tuyến toàn trình là gì?",
+                options: [
+                    "A. Là dịch vụ bảo đảm cung cấp toàn bộ thông tin và thực hiện hoàn toàn trên môi trường mạng",
+                    "B. Là dịch vụ chỉ cho phép tải mẫu tờ khai về điền tay",
+                    "C. Là dịch vụ bắt buộc công dân đến nộp hồ sơ trực tiếp",
+                    "D. Là dịch vụ chỉ gửi phản hồi qua bưu điện"
+                ],
+                correct: 0,
+                explanation: "Dịch vụ công trực tuyến toàn trình cho phép thực hiện toàn bộ quy trình từ nộp hồ sơ, thanh toán phí đến nhận kết quả trên môi trường mạng."
+            },
+            {
+                id: 6,
+                question: "Để kích hoạt tài khoản định danh điện tử mức 2, công dân cần thực hiện ở đâu?",
+                options: [
+                    "A. Đến trực tiếp cơ quan Công an (xã/huyện/tỉnh)",
+                    "B. Tự thao tác đăng ký 100% trên điện thoại tại nhà",
+                    "C. Đăng ký tại UBND xã",
+                    "D. Đăng ký tại ngân hàng"
+                ],
+                correct: 0,
+                explanation: "Tài khoản định danh điện tử mức 2 cần đến cơ quan Công an để thu nhận vân tay, ảnh chân dung."
+            },
+            {
+                id: 7,
+                question: "Mã QR được in trên thẻ Căn cước công dân gắn chíp chứa những thông tin gì?",
+                options: [
+                    "A. Số CCCD, Số CMND 9 số (nếu có), Họ tên, Ngày sinh, Giới tính, Địa chỉ thường trú",
+                    "B. Chỉ duy nhất số điện thoại và email",
+                    "C. Lịch sử giao dịch ngân hàng",
+                    "D. Mật khẩu VNeID"
+                ],
+                correct: 0,
+                explanation: "Mã QR trên thẻ CCCD tích hợp thông tin nhân thân cơ bản giúp nhanh chóng tra cứu khi giao dịch."
+            },
+            {
+                id: 8,
+                question: "Trí tuệ nhân tạo (AI) áp dụng trong cải cách hành chính nhằm mục đích chính nào?",
+                options: [
+                    "A. Tự động hóa tư vấn giải đáp, hỗ trợ cán bộ xử lý văn bản, nâng cao năng suất",
+                    "B. Thay thế hoàn toàn con người trong quản lý",
+                    "C. Tăng chi phí quản lý hành chính",
+                    "D. Giảm lượng thông tin tiếp nhận từ công dân"
+                ],
+                correct: 0,
+                explanation: "AI hỗ trợ trả lời tự động, phân loại hồ sơ và tối ưu hóa thời gian xử lý thủ tục cho công dân."
+            },
+            {
+                id: 9,
+                question: "Khi nhận được cuộc gọi/tin nhắn xưng danh Công an, Viện kiểm sát yêu cầu chuyển tiền để điều tra, người dân nên làm gì?",
+                options: [
+                    "A. Tuyệt đối không chuyển tiền và báo ngay cho cơ quan công an gần nhất",
+                    "B. Chuyển tiền ngay theo yêu cầu",
+                    "C. Cung cấp ngay mã OTP ngân hàng",
+                    "D. Nhấp vào đường link lạ trong tin nhắn"
+                ],
+                correct: 0,
+                explanation: "Cơ quan nhà nước không làm việc hay yêu cầu chuyển tiền qua điện thoại. Người dân cần cảnh giác trước chiêu trò lừa đảo."
+            },
+            {
+                id: 10,
+                question: "Tổ Công nghệ số cộng đồng tại các thôn/tổ dân phố có nhiệm vụ trọng tâm nào?",
+                options: [
+                    "A. 'Đi từng ngõ, gõ từng nhà' hướng dẫn người dân sử dụng dịch vụ công, VNeID, thanh toán số",
+                    "B. Thu thuế công dân",
+                    "C. Bán thiết bị công nghệ",
+                    "D. Sửa chữa máy tính cho người dân"
+                ],
+                correct: 0,
+                explanation: "Tổ CNSCĐ là cánh tay nối dài hướng dẫn trực tiếp kỹ năng số cơ bản cho nhân dân."
+            },
+            {
+                id: 11,
+                question: "Mục tiêu nâng cao chỉ số hài lòng của người dân đối với sự phục vụ của cơ quan hành chính nhà nước viết tắt là gì?",
+                options: ["A. SIPAS", "B. PAR INDEX", "C. PCI", "D. PAPI"],
+                correct: 0,
+                explanation: "SIPAS (Satisfaction Index of Public Administrative Services) là chỉ số đo lường sự hài lòng về dịch vụ hành chính công."
+            },
+            {
+                id: 12,
+                question: "Một trong những lợi ích lớn nhất của việc thanh toán lệ phí trực tuyến khi làm TTHC là gì?",
+                options: [
+                    "A. Tiết kiệm thời gian, minh bạch, có thể thanh toán mọi lúc mọi nơi",
+                    "B. Phải trả thêm nhiều phí phụ thu",
+                    "C. Cần đến trực tiếp kho bạc để đối soát",
+                    "D. Bắt buộc dùng tiền mặt"
+                ],
+                correct: 0,
+                explanation: "Thanh toán trực tuyến giúp giao dịch diễn ra an toàn, minh bạch, giảm đi lại cho người dân."
+            },
+            {
+                id: 13,
+                question: "Chữ ký số cá nhân dùng để làm gì trong môi trường điện tử?",
+                options: [
+                    "A. Xác thực giá trị pháp lý của cá nhân khi ký các văn bản, giao dịch trực tuyến",
+                    "B. Dùng để mở khóa điện thoại",
+                    "C. Dùng thay thế ảnh thẻ",
+                    "D. Dùng để đăng ký tài khoản mạng xã hội"
+                ],
+                correct: 0,
+                explanation: "Chữ ký số có giá trị pháp lý tương đương chữ ký tay của cá nhân trong các giao dịch điện tử."
+            },
+            {
+                id: 14,
+                question: "Khái niệm 'Công dân số' bao gồm những yếu tố nền tảng nào?",
+                options: [
+                    "A. Kỹ năng số, thiết bị số, kết nối số, văn hóa số và an toàn thông tin số",
+                    "B. Chỉ cần có điện thoại thông minh",
+                    "C. Chỉ cần có tài khoản Facebook",
+                    "D. Chỉ cần biết nhắn tin SMS"
+                ],
+                correct: 0,
+                explanation: "Công dân số cần hội tụ kỹ năng, hạ tầng và nhận thức an toàn trong môi trường mạng."
+            },
+            {
+                id: 15,
+                question: "Nghị định 13/2023/NĐ-CP của Chính phủ quy định về vấn đề gì?",
+                options: [
+                    "A. Bảo vệ dữ liệu cá nhân",
+                    "B. Xử phạt vi phạm giao thông",
+                    "C. Quản lý đất đai",
+                    "D. Quy hoạch đô thị"
+                ],
+                correct: 0,
+                explanation: "Nghị định 13/2023/NĐ-CP là văn bản pháp lý quan trọng quy định về bảo vệ dữ liệu cá nhân tại Việt Nam."
+            },
+            {
+                id: 16,
+                question: "Việc nộp hồ sơ thủ tục hành chính trực tuyến mang lại lợi ích gì cho tổ chức, cá nhân?",
+                options: [
+                    "A. Giảm thời gian, chi phí đi lại; theo dõi công khai tiến độ xử lý hồ sơ",
+                    "B. Tăng thời gian chờ đợi",
+                    "C. Bắt buộc phải mua máy in",
+                    "D. Phải nộp bản gốc trực tiếp nhiều lần"
+                ],
+                correct: 0,
+                explanation: "Dịch vụ công trực tuyến giúp người dân dễ dàng giám sát quy trình và tiết kiệm công sức."
+            },
+            {
+                id: 17,
+                question: "Hệ thống thông tin giải quyết thủ tục hành chính cấp tỉnh Quảng Ngãi được truy cập qua địa chỉ nào?",
+                options: [
+                    "A. dichvucong.quangngai.gov.vn",
+                    "B. quangngai.com.vn",
+                    "C. tinthucquangngai.vn",
+                    "D. cdcquangngai.gov.vn"
+                ],
+                correct: 0,
+                explanation: "Hệ thống thông tin giải quyết TTHC tỉnh Quảng Ngãi tích hợp tại dichvucong.quangngai.gov.vn."
+            },
+            {
+                id: 18,
+                question: "Để đảm bảo an toàn thông tin khi truy cập Internet, người dân KHÔNG nên làm điều nào sau đây?",
+                options: [
+                    "A. Nhấp vào các đường link lạ gửi qua tin nhắn từ người không quen biết",
+                    "B. Đặt mật khẩu mạnh bao gồm chữ, số và ký tự đặc biệt",
+                    "C. Bật xác thực 2 bước cho các tài khoản quan trọng",
+                    "D. Cập nhật phần mềm hệ thống thường xuyên"
+                ],
+                correct: 0,
+                explanation: "Tuyệt đối không truy cập vào đường liên kết lạ để tránh bị mất tài khoản hoặc lộ bí mật cá nhân."
+            },
+            {
+                id: 19,
+                question: "Mô hình 'Một cửa', 'Một cửa liên thông' tại UBND xã Mỏ Cày hướng tới tiêu chí nào?",
+                options: [
+                    "A. Công khai, minh bạch, đơn giản hóa thủ tục, lấy sự hài lòng của dân làm thước đo",
+                    "B. Kéo dài thời gian giải quyết",
+                    "C. Yêu cầu công dân đi lại nhiều phòng ban",
+                    "D. Tăng thêm thủ tục phụ"
+                ],
+                correct: 0,
+                explanation: "Bộ phận Một cửa giúp tiếp nhận và trả kết quả tập trung, nâng cao sự phục vụ nhân dân."
+            },
+            {
+                id: 20,
+                question: "Chương trình Chuyển đổi số quốc gia đến năm 2025, định hướng đến năm 2030 phát triển trên 3 trụ cột nào?",
+                options: [
+                    "A. Chính phủ số - Kinh tế số - Xã hội số",
+                    "B. Nông nghiệp số - Công nghiệp số - Du lịch số",
+                    "C. Giáo dục số - Y tế số - Giao thông số",
+                    "D. Đô thị thông minh - Hạ tầng số - Công nghệ số"
+                ],
+                correct: 0,
+                explanation: "Chính phủ số, Kinh tế số và Xã hội số là 3 trụ cột cốt lõi của chiến lược Chuyển đổi số quốc gia."
             }
+        ];
+
+        // Exam Runtime Variables
+        let currentExamQuestions = [];
+        let userAnswers = {};
+        let currentQIndex = 0;
+        let examTimerInterval = null;
+        let examTimeLeft = 600; // 10 minutes in seconds
+        let isReviewMode = false; // Flag for review mode state
+
+        // Initialize on DOM Ready
+        window.addEventListener('DOMContentLoaded', () => {
+            initCountdown();
+            updateUserNavUI();
+            checkGasConfig();
+        });
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
         }
 
-        function renderLocalStats(users, attempts, completed, avg, online) {
-            animateNumber('statUsers', users);
-            animateNumber('statAttempts', attempts);
-            animateNumber('statCompleted', completed);
-            document.getElementById('statAvgScore').innerHTML = `${avg} <span class="text-xs font-normal text-slate-400">/20</span>`;
-            animateNumber('statOnline', online);
-        }
-
-        function animateNumber(elementId, targetVal) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-            const currentVal = parseInt(el.innerText) || 0;
-            if (currentVal === targetVal) {
-                el.innerText = targetVal;
-                return;
-            }
-            let start = currentVal;
-            let step = Math.ceil(Math.abs(targetVal - start) / 10) || 1;
-            let timer = setInterval(() => {
-                if (start < targetVal) {
-                    start += step;
-                    if (start >= targetVal) { start = targetVal; clearInterval(timer); }
-                } else {
-                    start -= step;
-                    if (start <= targetVal) { start = targetVal; clearInterval(timer); }
-                }
-                el.innerText = start;
-            }, 30);
-        }
-
-        function loadUserSession() {
-            const saved = localStorage.getItem('cds_user');
-            if (saved) {
-                try {
-                    currentUser = JSON.parse(saved);
-                    updateUserUI();
-                } catch(e) {
-                    localStorage.removeItem('cds_user');
-                }
-            }
-        }
-
-        function updateUserUI() {
-            const userArea = document.getElementById('navUserArea');
-            if (!userArea) return;
-
-            if (currentUser) {
-                const attempts = currentUser.attempts || 0;
-                userArea.innerHTML = `
-                    <div class="flex items-center space-x-3 bg-blue-50 border border-blue-200 px-3.5 py-1.5 rounded-xl text-xs">
-                        <div class="w-8 h-8 rounded-full bg-gov text-white flex items-center justify-center font-bold">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                        <div class="text-left">
-                            <span class="block font-bold text-gov text-xs leading-tight">${currentUser.name}</span>
-                            <span class="text-[10px] text-slate-500">Đã thi: <strong class="text-orange-600">${attempts}/2</strong> lượt</span>
-                        </div>
-                    </div>
-                    <button onclick="handleLogout()" class="border border-slate-300 text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold transition-all" title="Đăng xuất">
-                        <i class="fa-solid fa-right-from-bracket mr-1"></i>Thoát
-                    </button>
-                `;
-            } else {
-                userArea.innerHTML = `
-                    <button onclick="toggleModal('loginModal')" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
-                        <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Đăng nhập
-                    </button>
-                    <button onclick="toggleModal('registerModal')" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
-                        <i class="fa-solid fa-user-plus mr-1.5"></i>Đăng ký
-                    </button>
-                `;
-            }
-        }
-
-        function handleLogout() {
-            currentUser = null;
-            localStorage.removeItem('cds_user');
-            updateUserUI();
-            showToast("Đã đăng xuất tài khoản!");
-        }
-
+        // Modal Utility Toggle
         function toggleModal(modalId) {
             const modal = document.getElementById(modalId);
-            if (modal) modal.classList.toggle('hidden');
+            if (modal) {
+                modal.classList.toggle('hidden');
+            }
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
+        // FAQ Toggle
+        function toggleFaq(id) {
+            const ans = document.getElementById(`faqAnswer${id}`);
+            const icon = document.getElementById(`faqIcon${id}`);
+            if (ans && icon) {
+                ans.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            }
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 3500);
-        }
-
+        // Countdown Timer for Event Header
         function initCountdown() {
-            const startDate = new Date("2026-07-29T00:00:00").getTime();
-            const endDate = new Date("2026-08-31T23:59:59").getTime();
+            const targetDate = new Date('2026-08-31T23:59:59').getTime();
 
-            setInterval(() => {
+            function update() {
                 const now = new Date().getTime();
-                let targetDate = startDate;
-                let labelText = "Thời gian đếm ngược đến lúc mở cổng thi";
-
-                if (now >= startDate) {
-                    targetDate = endDate;
-                    labelText = "Thời gian còn lại của cuộc thi";
-                }
-
-                const cdLabel = document.getElementById('cdLabel');
-                if (cdLabel) cdLabel.innerText = labelText;
-
                 const diff = targetDate - now;
 
-                if (diff > 0) {
-                    document.getElementById('cdDays').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                    document.getElementById('cdHours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                    document.getElementById('cdMinutes').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                    document.getElementById('cdSeconds').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-                } else {
+                if (diff <= 0) {
                     document.getElementById('cdDays').innerText = "00";
                     document.getElementById('cdHours').innerText = "00";
                     document.getElementById('cdMinutes').innerText = "00";
                     document.getElementById('cdSeconds').innerText = "00";
+                    return;
                 }
-            }, 1000);
+
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('cdDays').innerText = String(days).padStart(2, '0');
+                document.getElementById('cdHours').innerText = String(hours).padStart(2, '0');
+                document.getElementById('cdMinutes').innerText = String(minutes).padStart(2, '0');
+                document.getElementById('cdSeconds').innerText = String(seconds).padStart(2, '0');
+            }
+
+            update();
+            setInterval(update, 1000);
         }
 
-        function initCounters() {
-            document.querySelectorAll('.counter').forEach(counter => {
-                const target = +counter.getAttribute('data-target');
-                let count = 0;
-                const speed = target / 50;
-                const updateCount = () => {
-                    count += speed;
-                    if (count < target) {
-                        counter.innerText = Math.ceil(count);
-                        setTimeout(updateCount, 25);
-                    } else {
-                        counter.innerText = target;
-                    }
-                };
-                updateCount();
-            });
-        }
+        // User Navigation UI State (Desktop + Mobile synchronized)
+        function updateUserNavUI() {
+            const navArea = document.getElementById('navUserArea');
+            const mobileArea = document.getElementById('mobileUserArea');
 
-        function toggleFaq(index) {
-            document.getElementById(`faqAnswer${index}`).classList.toggle('hidden');
-            document.getElementById(`faqIcon${index}`).classList.toggle('rotate-180');
-        }
-
-        function handleRegisterSubmit(e) {
-            e.preventDefault();
-            const pass = document.getElementById('regPass').value;
-            const passConfirm = document.getElementById('regPassConfirm').value;
-
-            if (pass !== passConfirm) {
-                showToast("Mật khẩu xác nhận không khớp!");
-                return;
-            }
-
-            const name = document.getElementById('regName').value;
-            const dob = document.getElementById('regDob') ? document.getElementById('regDob').value : '';
-            const cccd = document.getElementById('regCccd') ? document.getElementById('regCccd').value : '';
-            const village = document.getElementById('regVillage').value;
-            const phone = document.getElementById('regPhone').value;
-            const email = document.getElementById('regEmail') ? document.getElementById('regEmail').value : '';
-
-            let registeredUsers = [];
-            try {
-                registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-            } catch(err) { registeredUsers = []; }
-
-            const existingUser = registeredUsers.find(u => (u.phone && u.phone === phone) || (u.cccd && u.cccd === cccd));
-            if (existingUser) {
-                showToast("Số điện thoại hoặc CCCD này đã được đăng ký! Vui lòng Đăng nhập.");
-                toggleModal('registerModal');
-                toggleModal('loginModal');
-                return;
-            }
-
-            const newUser = { name, dob, cccd, village, phone, email, pass, attempts: 0 };
-            registeredUsers.push(newUser);
-            localStorage.setItem('cds_registered_users', JSON.stringify(registeredUsers));
-
-            currentUser = newUser;
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
-            updateUserUI();
-            updateRealStats();
-
-            if (gasApiUrl) {
-                fetch(gasApiUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'register', ...newUser, password: pass })
-                }).catch(err => console.error("Error posting to GAS:", err));
-            }
-
-            toggleModal('registerModal');
-            showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}. Hãy nhấn 'BẮT ĐẦU THI NGAY' để làm bài.`);
-        }
-
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const userKey = document.getElementById('loginUser').value.trim();
-            const pass = document.getElementById('loginPass').value;
-
-            let registeredUsers = [];
-            try {
-                registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-            } catch(err) { registeredUsers = []; }
-
-            // Kiểm tra danh sách đã đăng ký
-            const foundUser = registeredUsers.find(u => 
-                (u.phone && u.phone === userKey) || (u.cccd && u.cccd === userKey)
-            );
-
-            if (!foundUser) {
-                showToast("Tài khoản chưa được đăng ký trên hệ thống! Vui lòng Đăng ký.");
-                return;
-            }
-
-            if (foundUser.pass && foundUser.pass !== pass) {
-                showToast("Mật khẩu không chính xác! Vui lòng kiểm tra lại.");
-                return;
-            }
-
-            currentUser = foundUser;
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
-            updateUserUI();
-            toggleModal('loginModal');
-            showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
-        }
-
-        // HÀM RÚT NGẪU NHIÊN 20 CÂU TỪ 100 CÂU & BẮT ĐẦU BÀI THI 10 PHÚT
-        function startExamFlow() {
-            if (!currentUser) {
-                showToast("Vui lòng Đăng ký hoặc Đăng nhập trước!");
-                toggleModal('loginModal');
-                return;
-            }
-
-            // Kiểm tra thời gian bắt đầu cuộc thi (00h00 ngày 15/08/2026)
-            const contestStartDate = new Date("2026-07-29T00:00:00").getTime();
-            const now = new Date().getTime();
-            if (now < contestStartDate) {
-                showToast("Cuộc thi chưa bắt đầu! Thời gian mở cổng thi từ 00h00 ngày 29/7/2026.");
-                return;
-            }
-
-            // Kiểm tra giới hạn 2 lượt thi
-            const attempts = currentUser.attempts || 0;
-            if (attempts >= 2) {
-                showToast("Bạn đã hoàn thành tối đa 02/02 lượt thi theo quy định!");
-                return;
-            }
-
-            // Rút ngẫu nhiên 20 câu hỏi từ ngân hàng 100 câu
-            const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
-            activeQuestions = shuffled.slice(0, 20);
-
-            currentQuestionIdx = 0;
-            userAnswers = {};
-            flaggedQuestions = {};
-            examTimeLeft = 600; // 10 phút = 600 giây
-
-            document.getElementById('examCandidateName').innerText = `Thí sinh: ${currentUser.name}`;
-            document.getElementById('examCandidateUnit').innerText = `Đơn vị: ${currentUser.village} (Lượt thi: ${attempts + 1}/2)`;
-
-            renderQuestionMatrix();
-            loadQuestion(0);
-            startExamTimer();
-            toggleModal('examModal');
-        }
-
-        function renderQuestionMatrix() {
-            const matrix = document.getElementById('questionMatrix');
-            matrix.innerHTML = '';
-            activeQuestions.forEach((q, idx) => {
-                const btn = document.createElement('button');
-                btn.id = `qMatrixBtn_${idx}`;
-                btn.onclick = () => loadQuestion(idx);
-                btn.className = 'w-9 h-9 rounded-xl font-bold text-xs border border-slate-300 bg-white text-slate-700 hover:bg-slate-100';
-                btn.innerText = idx + 1;
-                matrix.appendChild(btn);
-            });
-        }
-
-        function loadQuestion(idx) {
-            currentQuestionIdx = idx;
-            const q = activeQuestions[idx];
-
-            document.getElementById('qCurrentIndexText').innerText = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
-            document.getElementById('qTitle').innerText = `${idx + 1}. ${q.title}`;
-            document.getElementById('examProgressBar').style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
-
-            const container = document.getElementById('qOptions');
-            container.innerHTML = '';
-
-            q.options.forEach((opt, optIdx) => {
-                const isSelected = userAnswers[idx] === optIdx;
-                const optDiv = document.createElement('div');
-                optDiv.onclick = () => selectOption(idx, optIdx);
-                optDiv.className = `p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between ${
-                    isSelected ? 'border-gov bg-blue-50/80 text-gov font-bold' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                }`;
-                optDiv.innerHTML = `
+            if (currentUser) {
+                const userMarkup = `
                     <div class="flex items-center space-x-3">
-                        <div class="w-6 h-6 rounded-full border flex items-center justify-center text-xs ${isSelected ? 'border-gov bg-gov text-white' : 'border-slate-300 bg-slate-100'}">
-                            ${String.fromCharCode(65 + optIdx)}
+                        <div class="text-right">
+                            <div class="text-xs font-bold text-gov">${currentUser.name}</div>
+                            <div class="text-[10px] text-slate-500">${currentUser.village} (Lượt thi: ${currentUser.attempts || 0}/2)</div>
                         </div>
-                        <span>${opt}</span>
+                        <button onclick="logoutUser()" class="text-slate-500 hover:text-red-600 text-sm p-2" title="Đăng xuất">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
                     </div>
                 `;
-                container.appendChild(optDiv);
-            });
-            updateMatrixStyles();
+                if (navArea) navArea.innerHTML = userMarkup;
+
+                if (mobileArea) {
+                    mobileArea.innerHTML = `
+                        <div class="p-3 bg-blue-50 rounded-xl mb-2 text-center">
+                            <p class="font-bold text-sm text-gov">${currentUser.name}</p>
+                            <p class="text-xs text-slate-500">${currentUser.village} | Đã thi: ${currentUser.attempts || 0}/2 lần</p>
+                        </div>
+                        <button onclick="toggleMobileMenu(); startExamFlow()" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
+                            <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
+                        </button>
+                        <button onclick="logoutUser()" class="w-full bg-slate-100 text-red-600 py-2 rounded-xl font-semibold text-xs border border-slate-200">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i>Đăng xuất tài khoản
+                        </button>
+                    `;
+                }
+            } else {
+                if (navArea) {
+                    navArea.innerHTML = `
+                        <button onclick="toggleModal('loginModal')" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                            <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Đăng nhập
+                        </button>
+                        <button onclick="toggleModal('registerModal')" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
+                            <i class="fa-solid fa-user-plus mr-1.5"></i>Đăng ký
+                        </button>
+                    `;
+                }
+                if (mobileArea) {
+                    mobileArea.innerHTML = `
+                        <button onclick="toggleMobileMenu(); toggleModal('registerModal')" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
+                            <i class="fa-solid fa-pen-to-square mr-1.5"></i>Đăng ký tham gia
+                        </button>
+                        <button onclick="toggleMobileMenu(); startExamFlow()" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
+                            <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
+                        </button>
+                    `;
+                }
+            }
         }
 
-        function selectOption(qIdx, optIdx) {
-            userAnswers[qIdx] = optIdx;
-            loadQuestion(qIdx);
+        // Registration Handler
+        function handleRegisterSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const dob = document.getElementById('regDob').value;
+            const cccd = document.getElementById('regCccd').value.trim();
+            const village = document.getElementById('regVillage').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const pass = document.getElementById('regPass').value;
+
+            const userData = {
+                name, dob, cccd, village, phone, pass, attempts: 0, bestScore: 0
+            };
+
+            let users = JSON.parse(localStorage.getItem('mocay_users')) || [];
+            const exists = users.find(u => u.phone === phone || u.cccd === cccd);
+            
+            if (exists) {
+                alert('Số điện thoại hoặc CCCD này đã được đăng ký tài khoản!');
+                return;
+            }
+
+            users.push(userData);
+            localStorage.setItem('mocay_users', JSON.stringify(users));
+            
+            currentUser = userData;
+            localStorage.setItem('mocay_logged_user', JSON.stringify(currentUser));
+
+            alert('Đăng ký tài khoản dự thi thành công!');
+            toggleModal('registerModal');
+            updateUserNavUI();
         }
 
-        function navigateQuestion(dir) {
-            const nextIdx = currentQuestionIdx + dir;
-            if (nextIdx >= 0 && nextIdx < activeQuestions.length) loadQuestion(nextIdx);
+        // Login Handler
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const loginId = document.getElementById('loginId').value.trim();
+            const loginPass = document.getElementById('loginPass').value;
+            const errDiv = document.getElementById('loginError');
+
+            let users = JSON.parse(localStorage.getItem('mocay_users')) || [];
+            const found = users.find(u => (u.phone === loginId || u.cccd === loginId) && u.pass === loginPass);
+
+            if (found) {
+                currentUser = found;
+                if (currentUser.attempts === undefined) currentUser.attempts = 0;
+                localStorage.setItem('mocay_logged_user', JSON.stringify(currentUser));
+                errDiv.classList.add('hidden');
+                toggleModal('loginModal');
+                updateUserNavUI();
+                alert(`Xin chào ${currentUser.name}, chúc bạn làm bài thi đạt kết quả xuất sắc!`);
+            } else {
+                errDiv.innerText = 'Thông tin tài khoản hoặc mật khẩu không chính xác!';
+                errDiv.classList.remove('hidden');
+            }
         }
 
-        function toggleFlagQuestion() {
-            flaggedQuestions[currentQuestionIdx] = !flaggedQuestions[currentQuestionIdx];
-            loadQuestion(currentQuestionIdx);
+        function logoutUser() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất tài khoản?')) {
+                currentUser = null;
+                localStorage.removeItem('mocay_logged_user');
+                updateUserNavUI();
+            }
         }
 
-        function updateMatrixStyles() {
-            activeQuestions.forEach((_, idx) => {
-                const btn = document.getElementById(`qMatrixBtn_${idx}`);
-                if (!btn) return;
-                if (flaggedQuestions[idx]) btn.className = 'w-9 h-9 rounded-xl font-bold text-xs bg-yellow-400 text-slate-900';
-                else if (userAnswers[idx] !== undefined) btn.className = 'w-9 h-9 rounded-xl font-bold text-xs bg-gov text-white';
-                else btn.className = 'w-9 h-9 rounded-xl font-bold text-xs border border-slate-300 bg-white text-slate-700';
-            });
+        // GAS Config Handler
+        function checkGasConfig() {
+            if (config.gasUrl) {
+                document.getElementById('gasUrlInput').value = config.gasUrl;
+            }
+        }
+
+        function handleGasConfigSubmit(e) {
+            e.preventDefault();
+            const url = document.getElementById('gasUrlInput').value.trim();
+            config.gasUrl = url;
+            localStorage.setItem('mocay_gas_url', url);
+            alert('Đã lưu cấu hình kết nối Google Apps Script!');
+            toggleModal('gasConfigModal');
+        }
+
+        // Helper: Shuffle Array for Question Randomization
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Exam Flow Entrypoint
+        function startExamFlow() {
+            if (!currentUser) {
+                alert('Vui lòng Đăng ký hoặc Đăng nhập tài khoản trước khi vào làm bài thi!');
+                toggleModal('loginModal');
+                return;
+            }
+
+            const currentAttempts = currentUser.attempts || 0;
+            if (currentAttempts >= 2) {
+                alert('Bạn đã hoàn thành đủ số lượt thi tối đa (02 lần). Cảm ơn bạn đã tham gia!');
+                return;
+            }
+
+            if (confirm(`Thí sinh: ${currentUser.name}\nLượt thi: Lần ${currentAttempts + 1}/2\n\nBạn có sẵn sàng bắt đầu thời gian 10 phút làm bài thi?`)) {
+                initExamSession();
+            }
+        }
+
+        // Init Exam State
+        function initExamSession() {
+            isReviewMode = false;
+            // Shuffle question bank for randomized order
+            currentExamQuestions = shuffleArray(questionBank);
+            userAnswers = {};
+            currentQIndex = 0;
+            examTimeLeft = 600; // 10 minutes
+
+            // UI adjustments for live exam mode
+            document.getElementById('examHeaderTitle').innerText = 'BÀI THI TRẮC NGHIỆM CHUYỂN ĐỔI SỐ 2026';
+            document.getElementById('examUserInfo').innerText = `Thí sinh: ${currentUser.name} (${currentUser.village})`;
+            document.getElementById('examTimerContainer').classList.remove('hidden');
+            document.getElementById('btnExamSubmit').classList.remove('hidden');
+            document.getElementById('btnExamExitReview').classList.add('hidden');
+            document.getElementById('qInstruction').innerText = 'Chọn 01 đáp án đúng nhất';
+            document.getElementById('qExplanationBox').classList.add('hidden');
+
+            document.getElementById('examPaletteLegend').classList.remove('hidden');
+            document.getElementById('reviewPaletteLegend').classList.add('hidden');
+
+            document.getElementById('examArena').classList.remove('hidden');
+
+            renderQuestionGrid();
+            renderCurrentQuestion();
+            startExamTimer();
         }
 
         function startExamTimer() {
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
+            clearInterval(examTimerInterval);
+            examTimerInterval = setInterval(() => {
                 examTimeLeft--;
-                const mins = String(Math.floor(examTimeLeft / 60)).padStart(2, '0');
-                const secs = String(examTimeLeft % 60).padStart(2, '0');
-                document.getElementById('examTimer').innerText = `${mins}:${secs}`;
+                const m = Math.floor(examTimeLeft / 60);
+                const s = examTimeLeft % 60;
+                document.getElementById('examTimer').innerText = 
+                    `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 
                 if (examTimeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    finishExam();
+                    clearInterval(examTimerInterval);
+                    alert('Đã hết thời gian 10 phút! Hệ thống đang tự động nộp bài thi của bạn.');
+                    submitExam();
                 }
             }, 1000);
         }
 
-        function confirmExitExam() {
-            if (confirm("Thoát bài thi ngay bây giờ?")) {
-                clearInterval(timerInterval);
-                toggleModal('examModal');
-            }
-        }
+        function renderQuestionGrid() {
+            const grid = document.getElementById('questionGrid');
+            grid.innerHTML = '';
+            
+            currentExamQuestions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `qGridBtn_${idx}`;
 
-        function submitExamConfirmation() {
-            if (confirm("Bạn có chắc chắn muốn nộp bài thi?")) {
-                clearInterval(timerInterval);
-                finishExam();
-            }
-        }
+                if (!isReviewMode) {
+                    // Exam mode styling
+                    const isAnswered = userAnswers[idx] !== undefined;
+                    btn.className = `w-full aspect-square rounded-xl text-xs font-bold transition-all flex items-center justify-center ${
+                        isAnswered 
+                        ? 'bg-gov text-white shadow-md' 
+                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-300'
+                    } ${idx === currentQIndex ? 'ring-2 ring-yellow-400 ring-offset-2' : ''}`;
+                } else {
+                    // Review mode styling
+                    const userAns = userAnswers[idx];
+                    const isCorrect = userAns === q.correct;
+                    const isUnanswered = userAns === undefined;
 
-        function finishExam() {
-            let correctCount = 0;
-            activeQuestions.forEach((q, idx) => {
-                if (userAnswers[idx] === q.correct) correctCount++;
-            });
+                    let reviewBg = 'bg-rose-500 text-white';
+                    if (isCorrect) reviewBg = 'bg-emerald-500 text-white';
+                    else if (isUnanswered) reviewBg = 'bg-amber-400 text-slate-900';
 
-            const durationSeconds = 600 - examTimeLeft;
-
-            // Cập nhật số lượt thi đã dùng của thí sinh
-            currentUser.attempts = (currentUser.attempts || 0) + 1;
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
-
-            // Lưu lịch sử bài thi để tính số liệu thực
-            try {
-                let examLogs = JSON.parse(localStorage.getItem('cds_exam_logs')) || [];
-                examLogs.push({
-                    userKey: currentUser.phone || currentUser.cccd,
-                    name: currentUser.name,
-                    score: correctCount,
-                    durationSeconds: durationSeconds,
-                    date: new Date().toLocaleDateString('vi-VN')
-                });
-                localStorage.setItem('cds_exam_logs', JSON.stringify(examLogs));
-            } catch(e) {}
-
-            // Cập nhật lượt thi trong danh sách tất cả tài khoản đã đăng ký
-            try {
-                let registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-                const idx = registeredUsers.findIndex(u => (u.phone && u.phone === currentUser.phone) || (u.cccd && u.cccd === currentUser.cccd));
-                if (idx !== -1) {
-                    registeredUsers[idx].attempts = currentUser.attempts;
-                    localStorage.setItem('cds_registered_users', JSON.stringify(registeredUsers));
+                    btn.className = `w-full aspect-square rounded-xl text-xs font-bold transition-all flex items-center justify-center ${reviewBg} ${idx === currentQIndex ? 'ring-2 ring-slate-900 ring-offset-2 scale-105' : ''}`;
                 }
-            } catch(err) {}
 
-            updateUserUI();
-            updateRealStats();
-
-            document.getElementById('resScoreText').innerText = `${correctCount}/${activeQuestions.length}`;
-            document.getElementById('resCorrectText').innerText = correctCount;
-            document.getElementById('resTimeText').innerText = `${Math.floor(durationSeconds / 60)}:${String(durationSeconds % 60).padStart(2, '0')}`;
-
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-
-            if (gasApiUrl) {
-                fetch(gasApiUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'submitExam',
-                        userKey: currentUser.phone || currentUser.cccd,
-                        name: currentUser.name,
-                        village: currentUser.village,
-                        score: correctCount,
-                        correctCount: correctCount,
-                        durationSeconds: durationSeconds
-                    })
-                }).catch(err => console.error("Error submitting exam to GAS:", err));
-            }
-
-            toggleModal('examModal');
-            toggleModal('resultModal');
-        }
-
-        function renderLeaderboard(data) {
-            const tbody = document.getElementById('leaderboardBody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            data.forEach((row, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="py-4 px-4 text-center font-bold">${idx + 1}</td>
-                    <td class="py-4 px-6 font-bold text-slate-900">${row.name}</td>
-                    <td class="py-4 px-6 text-slate-600">${row.village}</td>
-                    <td class="py-4 px-6 text-center font-black text-gov">${row.score} / 20</td>
-                    <td class="py-4 px-6 text-center text-slate-500">${Math.floor(row.duration / 60)}p ${row.duration % 60}s</td>
-                    <td class="py-4 px-6 text-center text-xs text-slate-400">${row.date}</td>
-                `;
-                tbody.appendChild(tr);
+                btn.innerText = idx + 1;
+                btn.onclick = () => jumpToQuestion(idx);
+                grid.appendChild(btn);
             });
         }
 
-        function filterLeaderboard() {
-            const query = document.getElementById('lbSearchInput').value.toLowerCase();
-            renderLeaderboard(mockLeaderboard.filter(i => i.name.toLowerCase().includes(query) || i.village.toLowerCase().includes(query)));
-        }
+        function renderCurrentQuestion() {
+            const q = currentExamQuestions[currentQIndex];
+            document.getElementById('qNumberBadge').innerText = `Câu ${currentQIndex + 1} / ${currentExamQuestions.length}`;
+            document.getElementById('qTitle').innerText = q.question;
 
-        function fetchLeaderboard() {
-            if (gasApiUrl) {
-                fetch(`${gasApiUrl}?action=getLeaderboard`)
-                    .then(res => res.json())
-                    .then(res => {
-                        if (res.status === 'success') {
-                            const formatted = res.data.map(i => ({ name: i[2], village: i[3], score: i[4], duration: i[6], date: i[7] }));
-                            renderLeaderboard(formatted);
-                            showToast("Đã làm mới bảng xếp hạng!");
-                        }
-                    }).catch(() => showToast("Dùng dữ liệu mẫu local."));
+            const optsDiv = document.getElementById('qOptions');
+            optsDiv.innerHTML = '';
+
+            const expBox = document.getElementById('qExplanationBox');
+            if (isReviewMode) {
+                expBox.classList.remove('hidden');
+                document.getElementById('qExplanationText').innerText = q.explanation || "Không có giải thích thêm.";
+            } else {
+                expBox.classList.add('hidden');
+            }
+
+            q.options.forEach((opt, optIdx) => {
+                const isUserSelected = userAnswers[currentQIndex] === optIdx;
+                const isCorrectOpt = q.correct === optIdx;
+
+                let borderStyle = 'border-slate-200 hover:border-slate-300 bg-white text-slate-700';
+                let iconBadge = '';
+
+                if (!isReviewMode) {
+                    if (isUserSelected) {
+                        borderStyle = 'border-gov bg-blue-50/80 text-gov font-bold shadow-sm';
+                    }
+                } else {
+                    // In review mode: highlight correct in green, user wrong selection in red
+                    if (isCorrectOpt) {
+                        borderStyle = 'border-emerald-500 bg-emerald-50 text-emerald-900 font-bold';
+                        iconBadge = `<span class="ml-auto text-emerald-600 font-extrabold text-xs"><i class="fa-solid fa-circle-check mr-1"></i>Đáp án đúng</span>`;
+                    } else if (isUserSelected && !isCorrectOpt) {
+                        borderStyle = 'border-rose-500 bg-rose-50 text-rose-900 font-bold';
+                        iconBadge = `<span class="ml-auto text-rose-600 font-extrabold text-xs"><i class="fa-solid fa-circle-xmark mr-1"></i>Lựa chọn của bạn</span>`;
+                    }
+                }
+
+                const optEl = document.createElement('label');
+                optEl.className = `flex items-center p-4 rounded-2xl border transition-all ${borderStyle} ${isReviewMode ? 'cursor-default' : 'cursor-pointer'}`;
+                
+                optEl.innerHTML = `
+                    <input type="radio" name="qOptionRadio" class="w-4 h-4 text-gov focus:ring-gov" ${isUserSelected ? 'checked' : ''} ${isReviewMode ? 'disabled' : ''} onchange="selectOption(${optIdx})">
+                    <span class="ml-3 text-sm">${opt}</span>
+                    ${iconBadge}
+                `;
+                optsDiv.appendChild(optEl);
+            });
+
+            // Update Palette highlight
+            renderQuestionGrid();
+
+            // Button controls
+            document.getElementById('btnPrevQ').style.visibility = currentQIndex === 0 ? 'hidden' : 'visible';
+            
+            if (currentQIndex === currentExamQuestions.length - 1) {
+                document.getElementById('btnNextQ').innerHTML = isReviewMode ? 'Quay lại Câu 1 <i class="fa-solid fa-rotate-left ml-2"></i>' : 'Rà soát bài <i class="fa-solid fa-rotate-left ml-2"></i>';
+            } else {
+                document.getElementById('btnNextQ').innerHTML = 'Câu Tiếp Theo <i class="fa-solid fa-arrow-right ml-2"></i>';
             }
         }
 
-        function handleLookup(e) {
-            e.preventDefault();
-            const query = document.getElementById('lookupQuery').value.trim();
-            const box = document.getElementById('lookupResultBox');
-            box.classList.remove('hidden');
-            box.innerHTML = `
-                <div class="bg-blue-50 p-6 rounded-2xl border border-blue-200">
-                    <h4 class="font-extrabold text-base text-slate-900">Mã tra cứu: ${query}</h4>
-                    <p class="text-xs text-slate-600">Thí sinh: Nguyễn Văn An - Đơn vị: Thôn Mỏ Cày</p>
-                    <div class="mt-4 pt-4 border-t border-blue-200 flex justify-between text-sm">
-                        <span>Điểm số: <strong class="text-gov text-lg">19 / 20</strong></span>
-                        <span>Thời gian: <strong>05 phút 20 giây</strong></span>
-                    </div>
-                </div>
-            `;
+        function selectOption(optIdx) {
+            if (isReviewMode) return; // Prevent selection in review mode
+            userAnswers[currentQIndex] = optIdx;
+            renderCurrentQuestion();
         }
 
-        function saveGasUrl() {
-            const url = document.getElementById('gasApiUrlInput').value.trim();
-            localStorage.setItem('gas_api_url', url);
-            gasApiUrl = url;
-            showToast("Đã lưu URL kết nối Google Apps Script!");
-            toggleModal('gasConfigModal');
+        function navigateQuestion(direction) {
+            if (currentQIndex === currentExamQuestions.length - 1 && direction === 1) {
+                // Return to Q1 if clicking next on last question
+                currentQIndex = 0;
+            } else {
+                currentQIndex += direction;
+                if (currentQIndex < 0) currentQIndex = 0;
+                if (currentQIndex >= currentExamQuestions.length) {
+                    currentQIndex = currentExamQuestions.length - 1;
+                }
+            }
+            renderCurrentQuestion();
+        }
+
+        function jumpToQuestion(idx) {
+            currentQIndex = idx;
+            renderCurrentQuestion();
+        }
+
+        function confirmSubmitExam() {
+            if (isReviewMode) return;
+
+            const answeredCount = Object.keys(userAnswers).length;
+            const total = currentExamQuestions.length;
+            if (answeredCount < total) {
+                if (!confirm(`Bạn mới hoàn thành ${answeredCount}/${total} câu hỏi. Bạn có chắc chắn muốn nộp bài sớm?`)) {
+                    return;
+                }
+            } else {
+                if (!confirm('Bạn có chắc chắn muốn hoàn tất và nộp bài thi?')) {
+                    return;
+                }
+            }
+            submitExam();
+        }
+
+        function submitExam() {
+            clearInterval(examTimerInterval);
+
+            // Calculate Score
+            let correctCount = 0;
+            currentExamQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.correct) {
+                    correctCount++;
+                }
+            });
+
+            const timeSpentSeconds = 600 - examTimeLeft;
+            const mins = Math.floor(timeSpentSeconds / 60);
+            const secs = timeSpentSeconds % 60;
+            const timeFormatted = `${mins} phút ${secs} giây`;
+
+            // Update user state
+            currentUser.attempts = (currentUser.attempts || 0) + 1;
+            if (correctCount > (currentUser.bestScore || 0)) {
+                currentUser.bestScore = correctCount;
+            }
+
+            // Sync updated user locally
+            localStorage.setItem('mocay_logged_user', JSON.stringify(currentUser));
+            let users = JSON.parse(localStorage.getItem('mocay_users')) || [];
+            const uIdx = users.findIndex(u => u.phone === currentUser.phone || u.cccd === currentUser.cccd);
+            if (uIdx !== -1) {
+                users[uIdx] = currentUser;
+                localStorage.setItem('mocay_users', JSON.stringify(users));
+            }
+
+            // Fire confetti animation
+            try {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            } catch(e){}
+
+            // Sync to GAS API if configured
+            postToGoogleSheets({
+                name: currentUser.name,
+                phone: currentUser.phone,
+                cccd: currentUser.cccd,
+                village: currentUser.village,
+                score: correctCount,
+                timeSpent: timeFormatted,
+                submittedAt: new Date().toLocaleString('vi-VN')
+            });
+
+            // Show Result Modal
+            document.getElementById('examArena').classList.add('hidden');
+            document.getElementById('resultUserName').innerText = `Thí sinh: ${currentUser.name} (${currentUser.village})`;
+            document.getElementById('resultScore').innerText = correctCount;
+            document.getElementById('resultTime').innerText = timeFormatted;
+            toggleModal('resultModal');
+            updateUserNavUI();
+        }
+
+        function postToGoogleSheets(data) {
+            if (!config.gasUrl) return;
+
+            fetch(config.gasUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => {
+                console.log('Successfully posted result to Google Sheets');
+            }).catch(err => {
+                console.error('GAS Post error:', err);
+            });
+        }
+
+        // Review Answers Mode Logic
+        function reviewAnswers() {
+            isReviewMode = true;
+            toggleModal('resultModal');
+
+            document.getElementById('examHeaderTitle').innerText = 'XEM LẠI ĐÁP ÁN BÀI THI';
+            document.getElementById('examTimerContainer').classList.add('hidden');
+            document.getElementById('btnExamSubmit').classList.add('hidden');
+            document.getElementById('btnExamExitReview').classList.remove('hidden');
+            document.getElementById('qInstruction').innerText = 'Chế độ xem lại đáp án & giải thích';
+
+            document.getElementById('examPaletteLegend').classList.add('hidden');
+            document.getElementById('reviewPaletteLegend').classList.remove('hidden');
+
+            document.getElementById('examArena').classList.remove('hidden');
+            
+            currentQIndex = 0;
+            renderCurrentQuestion();
+        }
+
+        function exitReviewMode() {
+            isReviewMode = false;
+            document.getElementById('examArena').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function closeResultAndReset() {
+            toggleModal('resultModal');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
 </body>
