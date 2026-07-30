@@ -13,6 +13,7 @@
     <!-- Canvas Confetti for Exam Success Fireworks -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <!-- STREAMING_CHUNK:Configuring Tailwind Theme and Glassmorphism Styles... -->
     <script>
         tailwind.config = {
             theme: {
@@ -48,6 +49,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans custom-scrollbar selection:bg-blue-200 selection:text-gov">
 
+    <!-- STREAMING_CHUNK:Rendering Top Bar Notice and Main Navigation Bar... -->
     <!-- Top Bar Notice -->
     <div class="bg-yellow-500 text-slate-900 text-xs font-semibold py-1.5 px-4 text-center flex items-center justify-center space-x-2 shadow-inner">
         <span class="bg-red-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full animate-pulse">Thông báo</span>
@@ -112,6 +114,7 @@
         </div>
     </nav>
 
+    <!-- STREAMING_CHUNK:Rendering Hero Banner Section and Countdown Timer... -->
     <!-- Hero Banner Section -->
     <header id="home" class="relative hero-gradient text-white pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -184,6 +187,7 @@
         </div>
     </header>
 
+    <!-- STREAMING_CHUNK:Rendering Live Realtime Statistics Cards Section... -->
     <!-- Live Statistics Cards -->
     <section class="relative -mt-12 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -226,6 +230,7 @@
         </div>
     </section>
 
+    <!-- STREAMING_CHUNK:Rendering About and Contest Rules Sections... -->
     <!-- About Section -->
     <section id="about" class="py-16 md:py-24 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -334,6 +339,7 @@
         </div>
     </section>
 
+    <!-- STREAMING_CHUNK:Rendering FAQ Section and Footer... -->
     <!-- FAQ Section -->
     <section id="faq" class="py-16 bg-slate-50 border-t border-slate-200">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -373,6 +379,7 @@
         </div>
     </footer>
 
+    <!-- STREAMING_CHUNK:Rendering Interactive Modals (Register, Login, Exam Interface with Prediction Input, Result, Confirm)... -->
     <!-- MODAL 1: Registration Modal -->
     <div id="registerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8">
@@ -611,7 +618,8 @@
     <!-- MODAL 6: GOOGLE APPS SCRIPT CONFIG -->
     <div id="gasConfigModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8 p-6">
-            <h3 class="font-bold text-lg text-gov mb-4"><i class="fa-solid fa-link mr-2"></i>Cấu hình URL Google Apps Script</h3>
+            <h3 class="font-bold text-lg text-gov mb-2"><i class="fa-solid fa-link mr-2"></i>Cấu hình URL Google Apps Script</h3>
+            <p class="text-xs text-slate-500 mb-4">Dán đĩnh dạng URL Web App từ Google Sheets của bạn vào đây để nhận dữ liệu thí sinh và bài thi thực tế.</p>
             <input type="text" id="gasApiUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-4 py-3 border border-slate-300 rounded-xl text-xs font-mono mb-4">
             <div class="flex justify-end space-x-2">
                 <button onclick="toggleModal('gasConfigModal')" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs">Đóng</button>
@@ -626,6 +634,7 @@
         <span id="toastMessage">Thông báo ứng dụng</span>
     </div>
 
+    <!-- STREAMING_CHUNK:Defining Question Bank (100 Questions) and Complete Main Application Logic... -->
     <script>
         // ⏱️ TÙY CHỈNH THỜI GIAN THI TẠI ĐÂY (Đơn vị: Giây)
         const TOTAL_EXAM_SECONDS = 600; // 600 = 10 phút
@@ -985,7 +994,7 @@
                 return;
             }
 
-            // Rút ngẫu nhiên 20 câu hỏi từ bộ 100 câu
+            // Rút ngẫu nhiên 20 câu từ ngân hàng 100 câu
             const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
             activeQuestions = shuffled.slice(0, Math.min(20, questionBank.length));
 
@@ -1180,7 +1189,8 @@
             });
 
             const durationSeconds = TOTAL_EXAM_SECONDS - examTimeLeft;
-            const prediction = parseInt(document.getElementById('examPredictionInput')?.value) || 0;
+            const predInput = document.getElementById('examPredictionInput');
+            const prediction = predInput ? (parseInt(predInput.value) || 0) : 0;
 
             currentUser.attempts = (currentUser.attempts || 0) + 1;
             localStorage.setItem('cds_user', JSON.stringify(currentUser));
@@ -1241,7 +1251,9 @@
                         durationSeconds: durationSeconds,
                         prediction: prediction
                     })
-                }).catch(err => console.error("Error submitting exam to GAS:", err));
+                })
+                .then(() => showToast("Đã lưu bài thi và con số dự đoán về Google Sheets!"))
+                .catch(err => console.error("Error submitting exam to GAS:", err));
             }
 
             toggleModal('examModal');
