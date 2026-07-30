@@ -13,7 +13,7 @@
     <!-- Canvas Confetti for Exam Success Fireworks -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <!-- STREAMING_CHUNK:Configuring Tailwind Theme and Custom Styles... -->
+    <!-- STREAMING_CHUNK:Configuring Tailwind Theme and Glassmorphism Styles... -->
     <script>
         tailwind.config = {
             theme: {
@@ -49,7 +49,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans custom-scrollbar selection:bg-blue-200 selection:text-gov">
 
-    <!-- STREAMING_CHUNK:Rendering Top Bar Notice and Main Navbar... -->
+    <!-- STREAMING_CHUNK:Rendering Top Bar Notice and Main Navigation Bar... -->
     <!-- Top Bar Notice -->
     <div class="bg-yellow-500 text-slate-900 text-xs font-semibold py-1.5 px-4 text-center flex items-center justify-center space-x-2 shadow-inner">
         <span class="bg-red-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full animate-pulse">Thông báo</span>
@@ -114,7 +114,7 @@
         </div>
     </nav>
 
-    <!-- STREAMING_CHUNK:Rendering Hero Section with Countdown Timer... -->
+    <!-- STREAMING_CHUNK:Rendering Hero Banner Section and Countdown Timer... -->
     <!-- Hero Banner Section -->
     <header id="home" class="relative hero-gradient text-white pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -187,7 +187,7 @@
         </div>
     </header>
 
-    <!-- STREAMING_CHUNK:Rendering Live Statistics Cards Section... -->
+    <!-- STREAMING_CHUNK:Rendering Live Realtime Statistics Cards Section... -->
     <!-- Live Statistics Cards -->
     <section class="relative -mt-12 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -291,9 +291,9 @@
                         </h3>
                         <ul class="text-slate-600 text-sm leading-relaxed space-y-2 list-disc list-inside">
                             <li><strong>Hình thức:</strong> Thi trắc nghiệm trực tuyến 100% trên thiết bị di động hoặc máy tính.</li>
-                            <li><strong>Cấu trúc đề:</strong> 20 câu hỏi trắc nghiệm rút ngẫu nhiên từ bộ 100 câu hỏi chuẩn hóa.</li>
+                            <li><strong>Cấu trúc đề:</strong> 20 câu hỏi trắc nghiệm rút ngẫu nhiên từ bộ 100 câu hỏi + 01 câu dự đoán lượt tham gia.</li>
                             <li><strong>Thời gian làm bài:</strong> Tối đa 10 phút (600 giây).</li>
-                            <li><strong>Số lượt thi:</strong> Tối đa 02 lượt/thí sinh. Lấy điểm số cao nhất.</li>
+                            <li><strong>Số lượt thi:</strong> Tối đa 02 lượt/thí sinh. Lấy kết quả cao nhất.</li>
                         </ul>
                     </div>
                 </div>
@@ -379,7 +379,7 @@
         </div>
     </footer>
 
-    <!-- STREAMING_CHUNK:Rendering Interactive Modals (Register, Login, Exam, Result, Confirm)... -->
+    <!-- STREAMING_CHUNK:Rendering Interactive Modals (Register, Login, Exam Interface with Prediction Input, Result, Confirm)... -->
     <!-- MODAL 1: Registration Modal -->
     <div id="registerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8">
@@ -409,7 +409,7 @@
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Cơ quan / Thôn <span class="text-red-500">*</span></label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Cơ quan/ Đơn vị/ Thôn <span class="text-red-500">*</span></label>
                         <input type="text" id="regVillage" required placeholder="Ví dụ: Thôn 1 hoặc Cơ quan..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                     </div>
                     <div>
@@ -473,7 +473,7 @@
         </div>
     </div>
 
-    <!-- MODAL 3: EXAM INTERFACE -->
+    <!-- MODAL 3: EXAM INTERFACE WITH PREDICTION INPUT -->
     <div id="examModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[92vh] border border-slate-100">
             <div class="bg-gov text-white px-6 py-4 flex justify-between items-center border-b border-blue-700 flex-shrink-0">
@@ -540,6 +540,17 @@
                     </div>
 
                     <div class="pt-6 border-t border-slate-200">
+                        <div class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200 mb-3 text-left">
+                            <label class="block text-xs font-bold text-amber-900 mb-1">
+                                <i class="fa-solid fa-users-viewfinder text-amber-600 mr-1"></i>
+                                Câu hỏi dự đoán (Bắt buộc):
+                            </label>
+                            <p class="text-[11px] text-amber-800 leading-snug mb-2">
+                                Dự đoán tổng số lượt người tham gia cuộc thi (tiêu chí phụ khi xét giải):
+                            </p>
+                            <input type="number" id="examPredictionInput" min="1" placeholder="Nhập số dự đoán (VD: 1500)..." class="w-full px-3 py-2 border border-amber-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-gov bg-white">
+                        </div>
+
                         <button onclick="submitExamConfirmation()" class="w-full bg-cta hover:bg-cta-hover text-white py-3.5 rounded-xl font-extrabold text-sm shadow-xl shadow-orange-500/20 transition-all flex items-center justify-center space-x-2">
                             <i class="fa-solid fa-paper-plane"></i>
                             <span>NỘP BÀI THI NGAY</span>
@@ -561,7 +572,7 @@
             </div>
 
             <div class="p-8 space-y-6">
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
                         <span class="text-xs font-bold text-slate-500 uppercase block">Điểm Số</span>
                         <span id="resScoreText" class="text-3xl font-black text-gov">0/20</span>
@@ -574,6 +585,10 @@
                         <span class="text-xs font-bold text-slate-500 uppercase block">Thời Gian</span>
                         <span id="resTimeText" class="text-2xl font-black text-orange-600">00:00</span>
                     </div>
+                    <div class="bg-purple-50 p-4 rounded-2xl border border-purple-100">
+                        <span class="text-xs font-bold text-slate-500 uppercase block">Dự Đoán</span>
+                        <span id="resPredictionText" class="text-2xl font-black text-purple-600">0</span>
+                    </div>
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-3 pt-2">
@@ -585,7 +600,7 @@
         </div>
     </div>
 
-    <!-- MODAL 5: CUSTOM CONFIRMATION MODAL (Replaces browser confirm) -->
+    <!-- MODAL 5: CUSTOM CONFIRMATION MODAL -->
     <div id="confirmModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 text-center border border-slate-100">
             <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
@@ -618,15 +633,14 @@
         <span id="toastMessage">Thông báo ứng dụng</span>
     </div>
 
-    <!-- STREAMING_CHUNK:Defining Question Bank (100 Questions) and Main Application Logic... -->
+    <!-- STREAMING_CHUNK:Defining Question Bank (100 Questions) and Complete Main Application Logic... -->
     <script>
         // ⏱️ TÙY CHỈNH THỜI GIAN THI TẠI ĐÂY (Đơn vị: Giây)
-        const TOTAL_EXAM_SECONDS = 600; // 600 = 10 phút (Có thể thay đổi thành 300, 900, v.v.)
+        const TOTAL_EXAM_SECONDS = 600; // 600 = 10 phút
 
         // 📅 TÙY CHỈNH THỜI GIAN MỞ & KẾT THÚC CUỘC THI TẠI ĐÂY
-        // Định dạng: "YYYY-MM-DDTHH:mm:ss"
-        const CONTEST_START_DATE = "2026-07-15T00:00:00"; // Ngày bắt đầu cuộc thi
-        const CONTEST_END_DATE   = "2026-08-31T23:59:59"; // Ngày kết thúc cuộc thi
+        const CONTEST_START_DATE = "2026-07-15T00:00:00"; 
+        const CONTEST_END_DATE   = "2026-08-31T23:59:59"; 
 
         // 📚 BỘ 100 CÂU HỎI CHUẨN HÓA VỀ CCHC & CHUYỂN ĐỔI SỐ
         const questionBank = [
@@ -730,6 +744,7 @@
             { title: "Tổ công nghệ số cộng đồng cần làm gì khi hướng dẫn người dân?", options: ["Nhiệt tình, kiên nhẫn, 'cầm tay chỉ việc' dễ hiểu cho mọi lứa tuổi", "Nói thuật ngữ tiếng Anh khó hiểu", "Làm thay hoàn toàn không giải thích", "Thu tiền hướng dẫn"], correct: 0 },
             { title: "Chuyển đổi số thành công phụ thuộc lớn nhất vào yếu tố nào?", options: ["Nhận thức và sự tham gia tích cực của Con người", "Số lượng máy tính đắt tiền", "Tốc độ đường truyền mạng", "Mua nhiều phần mềm"], correct: 0 },
             { title: "Thông điệp cốt lõi của Cuộc thi CCHC & Chuyển đổi số xã Mỏ Cày 2026 là gì?", options: ["Chủ động học tập, ứng dụng công nghệ số vì một chính quyền phục vụ và xã hội văn minh", "Thi lấy giải rồi bỏ", "Chỉ dành riêng cho cán bộ", "Không liên quan đến nhân dân"], correct: 0 }
+
         ];
 
         // 🟢 GLOBAL VARIABLES
@@ -748,7 +763,7 @@
             initCountdown();
             loadUserSession();
             updateRealStats();
-            setInterval(updateRealStats, 20000); // Update stats every 20s
+            setInterval(updateRealStats, 20000); 
             
             const localGasUrl = localStorage.getItem('gas_api_url');
             if(localGasUrl) gasApiUrl = localGasUrl;
@@ -961,7 +976,6 @@
                 return;
             }
 
-            // Check start date
             const startDate = new Date(CONTEST_START_DATE).getTime();
             const now = new Date().getTime();
             if (now < startDate) {
@@ -980,7 +994,7 @@
                 return;
             }
 
-            // 🎲 Rút ngẫu nhiên 20 câu hỏi từ bộ 100 câu
+            // Rút ngẫu nhiên 20 câu từ ngân hàng 100 câu
             const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
             activeQuestions = shuffled.slice(0, Math.min(20, questionBank.length));
 
@@ -988,6 +1002,9 @@
             userAnswers = {};
             flaggedQuestions = {};
             examTimeLeft = TOTAL_EXAM_SECONDS;
+
+            const predInput = document.getElementById('examPredictionInput');
+            if (predInput) predInput.value = '';
 
             document.getElementById('examCandidateName').innerText = `Thí sinh: ${currentUser.name}`;
             document.getElementById('examCandidateUnit').innerText = `Đơn vị: ${currentUser.village} (Lượt thi: ${attempts + 1}/2)`;
@@ -1119,6 +1136,15 @@
             const msg = document.getElementById('confirmMessage');
             const actionBtn = document.getElementById('confirmActionBtn');
 
+            if (action === 'submit') {
+                const predVal = parseInt(document.getElementById('examPredictionInput')?.value);
+                if (isNaN(predVal) || predVal <= 0) {
+                    showToast("Vui lòng nhập số dự đoán người tham gia cuộc thi trước khi nộp bài!");
+                    document.getElementById('examPredictionInput')?.focus();
+                    return;
+                }
+            }
+
             if (!modal || !title || !msg || !actionBtn) {
                 if (action === 'submit') { clearInterval(timerInterval); finishExam(); }
                 else if (action === 'exit') { clearInterval(timerInterval); toggleModal('examModal'); }
@@ -1137,8 +1163,9 @@
                 };
             } else if (action === 'submit') {
                 const answeredCount = Object.keys(userAnswers).length;
+                const predictionVal = document.getElementById('examPredictionInput')?.value || 0;
                 title.innerText = "Xác nhận nộp bài?";
-                msg.innerText = `Bạn đã trả lời ${answeredCount}/${activeQuestions.length} câu hỏi. Bạn có chắc chắn muốn nộp bài thi ngay?`;
+                msg.innerText = `Bạn đã làm ${answeredCount}/${activeQuestions.length} câu và dự đoán ${predictionVal} người tham gia. Bạn có chắc chắn muốn nộp bài thi ngay?`;
                 actionBtn.innerText = "Nộp bài ngay";
                 actionBtn.className = "flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md transition-all";
                 actionBtn.onclick = () => {
@@ -1162,6 +1189,7 @@
             });
 
             const durationSeconds = TOTAL_EXAM_SECONDS - examTimeLeft;
+            const prediction = parseInt(document.getElementById('examPredictionInput')?.value) || 0;
 
             currentUser.attempts = (currentUser.attempts || 0) + 1;
             localStorage.setItem('cds_user', JSON.stringify(currentUser));
@@ -1173,6 +1201,7 @@
                     name: currentUser.name,
                     score: correctCount,
                     durationSeconds: durationSeconds,
+                    prediction: prediction,
                     date: new Date().toLocaleDateString('vi-VN')
                 });
                 localStorage.setItem('cds_exam_logs', JSON.stringify(examLogs));
@@ -1199,6 +1228,9 @@
             const resTime = document.getElementById('resTimeText');
             if (resTime) resTime.innerText = `${Math.floor(durationSeconds / 60)}:${String(durationSeconds % 60).padStart(2, '0')}`;
 
+            const resPrediction = document.getElementById('resPredictionText');
+            if (resPrediction) resPrediction.innerText = `${prediction} người`;
+
             if (typeof confetti === 'function') {
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
             }
@@ -1215,7 +1247,8 @@
                         village: currentUser.village,
                         score: correctCount,
                         correctCount: correctCount,
-                        durationSeconds: durationSeconds
+                        durationSeconds: durationSeconds,
+                        prediction: prediction
                     })
                 }).catch(err => console.error("Error submitting exam to GAS:", err));
             }
@@ -1297,3 +1330,6 @@
     </script>
 </body>
 </html>
+```eof
+
+File `index.html` mới này đã tổng hợp toàn bộ các tính năng từ trước đến nay: ngân hàng 100 câu hỏi ngẫu nhiên, câu hỏi dự đoán lượt người tham gia bắt buộc, đếm ngược thời gian, hiển thị kết quả và gửi trực tiếp về sheet **`Bài Thi`** của Google Sheets qua API.
