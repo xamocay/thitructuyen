@@ -13,31 +13,742 @@
     <!-- Canvas Confetti for Exam Success Fireworks -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <!-- STREAMING_CHUNK:Configuring Tailwind Theme and Custom Styles... -->
     <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gov: {
+                            DEFAULT: '#005BAC',
+                            dark: '#004382',
+                            light: '#0073DC',
+                            accent: '#E6F0FA'
+                        },
+                        cta: {
+                            DEFAULT: '#F97316',
+                            hover: '#EA580C'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Be Vietnam Pro', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .hero-gradient { background: linear-gradient(135deg, #003B73 0%, #005BAC 50%, #0073DC 100%); }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 12px 25px -5px rgba(0, 91, 172, 0.15); }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #005BAC; border-radius: 4px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans custom-scrollbar selection:bg-blue-200 selection:text-gov">
+
+    <!-- STREAMING_CHUNK:Rendering Top Bar Notice and Main Navbar... -->
+    <!-- Top Bar Notice -->
+    <div class="bg-yellow-500 text-slate-900 text-xs font-semibold py-1.5 px-4 text-center flex items-center justify-center space-x-2 shadow-inner">
+        <span class="bg-red-600 text-white text-[10px] uppercase font-bold px-2 py-0.5 rounded-full animate-pulse">Thông báo</span>
+        <span>Cuộc thi CCHC & Chuyển đổi số xã Mỏ Cày năm 2026 chính thức diễn ra. Hãy đăng ký tham gia ngay!</span>
+        <button onclick="toggleModal('gasConfigModal')" class="underline hover:text-white ml-3 text-[11px] font-bold"><i class="fa-solid fa-gear mr-1"></i> Tích hợp Google Sheets API</button>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="sticky top-0 z-40 glass shadow-md transition-all duration-300" id="mainNav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo & Brand -->
+                <a href="#home" class="flex items-center space-x-3 group">
+                    <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="Quốc huy Việt Nam" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform drop-shadow">
+                    <div>
+                        <div class="text-xs font-bold text-gray-500 uppercase tracking-wider">UBND XÃ MỎ CÀY</div>
+                        <div class="font-extrabold text-base md:text-lg text-gov leading-tight">CẢI CÁCH HÀNH CHÍNH & CHUYỂN ĐỔI SỐ 2026</div>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden xl:flex items-center space-x-5 text-sm font-medium text-slate-700">
+                    <a href="#home" class="hover:text-gov transition-colors py-2">Trang chủ</a>
+                    <a href="#about" class="hover:text-gov transition-colors py-2">Giới thiệu</a>
+                    <a href="#rules" class="hover:text-gov transition-colors py-2">Thể lệ</a>
+                    <a href="#faq" class="hover:text-gov transition-colors py-2">Hỏi đáp</a>
+                </div>
+
+                <!-- CTA Action Buttons -->
+                <div class="hidden sm:flex items-center space-x-3" id="navUserArea">
+                    <button onclick="toggleModal('loginModal')" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                        <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Đăng nhập
+                    </button>
+                    <button onclick="toggleModal('registerModal')" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
+                        <i class="fa-solid fa-user-plus mr-1.5"></i>Đăng ký
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="xl:hidden flex items-center">
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="text-slate-700 hover:text-gov p-2 focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenu" class="hidden xl:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3">
+            <a href="#home" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Trang chủ</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Giới thiệu</a>
+            <a href="#rules" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Thể lệ & Giải thưởng</a>
+            <a href="#faq" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Hỏi đáp</a>
+            <div class="pt-2 flex flex-col space-y-2">
+                <button onclick="toggleMobileMenu(); toggleModal('registerModal')" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
+                    <i class="fa-solid fa-pen-to-square mr-1.5"></i>Đăng ký tham gia
+                </button>
+                <button onclick="toggleMobileMenu(); startExamFlow()" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
+                    <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- STREAMING_CHUNK:Rendering Hero Section with Countdown Timer... -->
+    <!-- Hero Banner Section -->
+    <header id="home" class="relative hero-gradient text-white pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div class="lg:w-7/12 text-center lg:text-left space-y-6">
+                    <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-yellow-300 text-xs sm:text-sm font-semibold">
+                        <i class="fa-solid fa-star"></i>
+                        <span>Chào mừng Ngày chuyển đổi số Quốc gia 2026</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                        CUỘC THI TRỰC TUYẾN<br>
+                        <span class="text-yellow-400 drop-shadow-md">TÌM HIỂU CẢI CÁCH HÀNH CHÍNH & CHUYỂN ĐỔI SỐ</span><br>
+                        <span class="text-2xl sm:text-4xl font-bold opacity-90">XÃ MỎ CÀY NĂM 2026</span>
+                    </h1>
+
+                    <p class="text-base sm:text-lg text-slate-100 font-light leading-relaxed">
+                        Nâng cao kiến thức kỹ năng số, dịch vụ công trực tuyến, ứng dụng VNeID và an toàn thông tin cho cán bộ, công chức, đoàn viên và nhân dân xã Mỏ Cày.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
+                        <button onclick="startExamFlow()" class="bg-cta hover:bg-cta-hover text-white px-8 py-4 rounded-2xl font-extrabold text-base sm:text-lg shadow-xl shadow-orange-500/40 hover:scale-105 transition-all flex items-center justify-center space-x-3">
+                            <i class="fa-solid fa-circle-play text-xl"></i>
+                            <span>BẮT ĐẦU THI NGAY</span>
+                        </button>
+                        <a href="#rules" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 px-8 py-4 rounded-2xl font-bold text-base shadow-lg backdrop-blur-sm transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span>Xem Thể Lệ Cuộc Thi</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:w-5/12 w-full flex flex-col items-center">
+                    <div class="relative w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 p-6 sm:p-8 rounded-3xl shadow-2xl text-center">
+                        <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-yellow-400 text-slate-900 font-black px-6 py-1.5 rounded-full text-xs uppercase tracking-wider shadow-md">
+                            Đồng hồ đếm ngược
+                        </div>
+                        
+                        <p id="cdLabel" class="text-sm font-semibold text-blue-100 mb-4 mt-2">Thời gian còn lại của cuộc thi</p>
+
+                        <div class="grid grid-cols-4 gap-2 sm:gap-3 text-slate-900 mb-6">
+                            <div class="bg-white p-3 rounded-2xl shadow-md">
+                                <span id="cdDays" class="block text-2xl sm:text-3xl font-black text-gov">00</span>
+                                <span class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Ngày</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl shadow-md">
+                                <span id="cdHours" class="block text-2xl sm:text-3xl font-black text-gov">00</span>
+                                <span class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Giờ</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl shadow-md">
+                                <span id="cdMinutes" class="block text-2xl sm:text-3xl font-black text-gov">00</span>
+                                <span class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Phút</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-2xl shadow-md">
+                                <span id="cdSeconds" class="block text-2xl sm:text-3xl font-black text-red-500">00</span>
+                                <span class="text-[10px] sm:text-xs font-bold text-slate-500 uppercase">Giây</span>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-white/15 pt-4 flex items-center justify-center space-x-3 text-xs text-blue-100">
+                            <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="UBND Mỏ Cày" class="w-10 h-10 object-contain">
+                            <div class="text-left">
+                                <p class="font-bold text-white">UBND xã Mỏ Cày</p>
+                                <p class="text-[11px] text-slate-200">Ban Tổ Chức Cuộc Thi 2026</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- STREAMING_CHUNK:Rendering Live Statistics Cards Section... -->
+    <!-- Live Statistics Cards -->
+    <section class="relative -mt-12 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
+                <div class="w-10 h-10 bg-blue-100 text-gov rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div id="statUsers" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
+                <div class="text-xs font-medium text-slate-500 mt-1">Người tham gia</div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
+                <div class="w-10 h-10 bg-green-100 text-green-700 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
+                    <i class="fa-solid fa-file-pen"></i>
+                </div>
+                <div id="statAttempts" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
+                <div class="text-xs font-medium text-slate-500 mt-1">Lượt làm bài</div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
+                <div class="w-10 h-10 bg-yellow-100 text-yellow-700 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div id="statCompleted" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
+                <div class="text-xs font-medium text-slate-500 mt-1">Bài thi hoàn thành</div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
+                <div class="w-10 h-10 bg-purple-100 text-purple-700 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <div id="statAvgScore" class="text-2xl sm:text-3xl font-black text-slate-800">0.0 <span class="text-xs font-normal text-slate-400">/20</span></div>
+                <div class="text-xs font-medium text-slate-500 mt-1">Điểm trung bình</div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center col-span-2 md:col-span-1 card-hover">
+                <div class="w-10 h-10 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg relative">
+                    <i class="fa-solid fa-signal"></i>
+                    <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
+                </div>
+                <div id="statOnline" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
+                <div class="text-xs font-medium text-slate-500 mt-1">Đang trực tuyến</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STREAMING_CHUNK:Rendering About and Contest Rules Sections... -->
+    <!-- About Section -->
+    <section id="about" class="py-16 md:py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Tổng quan cuộc thi</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Mục Đích & Ý Nghĩa Chuyển Đổi Số</h2>
+                <div class="w-20 h-1.5 bg-gov mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 card-hover">
+                    <div class="w-14 h-14 bg-blue-50 text-gov rounded-2xl flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Mục tiêu tuyên truyền</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Tuyên truyền sâu rộng các chủ trương của Đảng, chính sách pháp luật của Nhà nước về Cải cách hành chính, Chính phủ số, Kinh tế số và Xã hội số đến đông đảo nhân dân.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 card-hover">
+                    <div class="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-hand-holding-hand"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Phổ cập Kỹ năng số</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Hướng dẫn người dân làm quen với các ứng dụng công nghệ thiết thực: Dịch vụ công trực tuyến, Định danh điện tử VNeID, Thanh toán không dùng tiền mặt, An toàn thông tin mạng.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 card-hover">
+                    <div class="w-14 h-14 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Thi đua Sôi nổi</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Tạo phong trào học tập, tìm hiểu công nghệ số rộng khắp trong toàn bộ cán bộ, công chức, đoàn viên thanh niên, học sinh và bà con nhân dân tại các thôn.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contest Rules Section -->
+    <section id="rules" class="py-16 md:py-24 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Quy định cuộc thi</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Thể Lệ & Giải Thưởng</h2>
+                <div class="w-20 h-1.5 bg-gov mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                <div class="space-y-6">
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                        <h3 class="text-lg font-bold text-gov flex items-center mb-3">
+                            <i class="fa-solid fa-clock-rotate-left mr-2.5 text-xl"></i> Hình thức & Thời gian thi
+                        </h3>
+                        <ul class="text-slate-600 text-sm leading-relaxed space-y-2 list-disc list-inside">
+                            <li><strong>Hình thức:</strong> Thi trắc nghiệm trực tuyến 100% trên thiết bị di động hoặc máy tính.</li>
+                            <li><strong>Cấu trúc đề:</strong> 20 câu hỏi trắc nghiệm rút ngẫu nhiên từ bộ 100 câu hỏi chuẩn hóa.</li>
+                            <li><strong>Thời gian làm bài:</strong> Tối đa 10 phút (600 giây).</li>
+                            <li><strong>Số lượt thi:</strong> Tối đa 02 lượt/thí sinh. Lấy điểm số cao nhất.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-blue-900 to-gov text-white p-8 rounded-3xl shadow-xl relative overflow-hidden">
+                    <h3 class="text-2xl font-black text-yellow-400 mb-6 flex items-center">
+                        <i class="fa-solid fa-crown mr-3"></i> Cơ Cấu Giải Thưởng 2026
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-3xl">🥇</span>
+                                <div>
+                                    <h4 class="font-bold text-base text-yellow-300">01 Giải Nhất</h4>
+                                    <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
+                                </div>
+                            </div>
+                            <span class="font-extrabold text-lg text-yellow-300">500.000 VNĐ</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-3xl">🥈</span>
+                                <div>
+                                    <h4 class="font-bold text-base text-slate-200">02 Giải Nhì</h4>
+                                    <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
+                                </div>
+                            </div>
+                            <span class="font-extrabold text-lg text-slate-200">400.000 VNĐ</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-3xl">🥉</span>
+                                <div>
+                                    <h4 class="font-bold text-base text-amber-300">03 Giải Ba</h4>
+                                    <p class="text-xs text-blue-100">Giấy khen UBND xã + Tiền thưởng</p>
+                                </div>
+                            </div>
+                            <span class="font-extrabold text-lg text-amber-300">300.000 VNĐ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STREAMING_CHUNK:Rendering FAQ Section and Footer... -->
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Giải đáp thắc mắc</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 mt-3">Câu Hỏi Thường Gặp (FAQ)</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button onclick="toggleFaq(1)" class="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none">
+                        <span>1. Ai được phép đăng ký tham gia cuộc thi?</span>
+                        <i id="faqIcon1" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
+                    </button>
+                    <div id="faqAnswer1" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Tất cả công dân Việt Nam đang sinh sống, làm việc, học tập trên địa bàn xã Mỏ Cày đều được phép đăng ký tham gia.
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                    <button onclick="toggleFaq(2)" class="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none">
+                        <span>2. Mỗi thí sinh được làm bài thi bao nhiêu lần?</span>
+                        <i id="faqIcon2" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
+                    </button>
+                    <div id="faqAnswer2" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                        Mỗi tài khoản được dự thi tối đa 02 lần. Hệ thống tự động ghi nhận kết quả ở lượt thi đạt điểm cao nhất.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gov-dark text-white py-12 border-t border-blue-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-blue-200">
+            <p>Bản quyền © 2026 - Ủy ban nhân dân xã Mỏ Cày, tỉnh Quảng Ngãi.</p>
+        </div>
+    </footer>
+
+    <!-- STREAMING_CHUNK:Rendering Interactive Modals (Register, Login, Exam, Result, Confirm)... -->
+    <!-- MODAL 1: Registration Modal -->
+    <div id="registerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8">
+            <div class="bg-gov px-6 py-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-base flex items-center">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Đăng Ký Tài Khoản Dự Thi
+                </h3>
+                <button onclick="toggleModal('registerModal')" class="text-white/80 hover:text-white text-xl focus:outline-none">&times;</button>
+            </div>
+
+            <form onsubmit="handleRegisterSubmit(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Họ và tên thí sinh <span class="text-red-500">*</span></label>
+                    <input type="text" id="regName" required placeholder="Ví dụ: Nguyễn Văn An" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Ngày sinh <span class="text-red-500">*</span></label>
+                        <input type="date" id="regDob" required class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Số CCCD / Định danh <span class="text-red-500">*</span></label>
+                        <input type="text" id="regCccd" required placeholder="0250xxxxxxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Cơ quan / Thôn <span class="text-red-500">*</span></label>
+                        <input type="text" id="regVillage" required placeholder="Ví dụ: Thôn 1 hoặc Cơ quan..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Số điện thoại <span class="text-red-500">*</span></label>
+                        <input type="tel" id="regPhone" required placeholder="09xxxxxxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Địa chỉ Email (Không bắt buộc)</label>
+                    <input type="email" id="regEmail" placeholder="nguyenvana@gmail.com" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu <span class="text-red-500">*</span></label>
+                        <input type="password" id="regPass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Xác nhận mật khẩu <span class="text-red-500">*</span></label>
+                        <input type="password" id="regPassConfirm" required placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 pt-1">
+                    <input type="checkbox" id="regAgree" required class="w-4 h-4 text-gov rounded border-slate-300 focus:ring-gov">
+                    <label for="regAgree" class="text-xs text-slate-600">Tôi đồng ý với <a href="#rules" class="text-gov font-bold underline">Thể lệ cuộc thi</a>.</label>
+                </div>
+
+                <button type="submit" class="w-full bg-cta hover:bg-cta-hover text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all mt-2">
+                    <i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Login Modal -->
+    <div id="loginModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100">
+            <div class="bg-gov px-6 py-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-base flex items-center">
+                    <i class="fa-solid fa-right-to-bracket mr-2"></i> Đăng Nhập Hệ Thống Thi
+                </h3>
+                <button onclick="toggleModal('loginModal')" class="text-white/80 hover:text-white text-xl focus:outline-none">&times;</button>
+            </div>
+
+            <form onsubmit="handleLoginSubmit(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Số CCCD hoặc Số điện thoại</label>
+                    <input type="text" id="loginUser" required placeholder="Nhập CCCD hoặc SĐT..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu</label>
+                    <input type="password" id="loginPass" required placeholder="Mật khẩu của bạn..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                </div>
+
+                <button type="submit" class="w-full bg-gov hover:bg-gov-dark text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all mt-2">
+                    <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i>Đăng Nhập
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: EXAM INTERFACE -->
+    <div id="examModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[92vh] border border-slate-100">
+            <div class="bg-gov text-white px-6 py-4 flex justify-between items-center border-b border-blue-700 flex-shrink-0">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center font-bold text-sm text-yellow-300">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-sm sm:text-base leading-tight" id="examCandidateName">Thí sinh: Nguyễn Văn A</h3>
+                        <p class="text-[11px] text-blue-200" id="examCandidateUnit">Đơn vị: Thôn 1 - Xã Mỏ Cày</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <div id="examTimerBox" class="bg-white/10 px-4 py-2 rounded-2xl border border-white/20 flex items-center space-x-2 text-yellow-300">
+                        <i class="fa-regular fa-clock text-lg animate-pulse"></i>
+                        <div>
+                            <span class="text-[10px] block text-blue-200 leading-none">Thời gian</span>
+                            <span id="examTimer" class="font-mono font-black text-lg sm:text-xl leading-none">10:00</span>
+                        </div>
+                    </div>
+                    <button onclick="confirmExitExam()" class="text-white/80 hover:text-white text-2xl font-bold px-2">&times;</button>
+                </div>
+            </div>
+
+            <div class="w-full bg-slate-200 h-2">
+                <div id="examProgressBar" class="bg-cta h-2 w-0 transition-all duration-300"></div>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 custom-scrollbar">
+                <div class="lg:col-span-8 space-y-6 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="bg-blue-100 text-gov font-extrabold text-xs px-3 py-1.5 rounded-lg" id="qCurrentIndexText">Câu hỏi 1 / 20</span>
+                            <button onclick="toggleFlagQuestion()" id="flagBtn" class="text-xs font-semibold text-slate-500 hover:text-yellow-600 flex items-center space-x-1">
+                                <i class="fa-regular fa-flag"></i>
+                                <span id="flagBtnText">Đánh dấu xem lại</span>
+                            </button>
+                        </div>
+
+                        <h4 id="qTitle" class="text-base sm:text-lg font-extrabold text-slate-900 leading-relaxed mb-6">
+                            Đang tải câu hỏi...
+                        </h4>
+
+                        <div id="qOptions" class="space-y-3">
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t border-slate-100">
+                        <button onclick="navigateQuestion(-1)" id="prevQBtn" class="px-5 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition-colors">
+                            <i class="fa-solid fa-chevron-left mr-1.5"></i> Câu trước
+                        </button>
+                        <button onclick="navigateQuestion(1)" id="nextQBtn" class="px-5 py-2.5 bg-gov text-white font-bold text-xs rounded-xl hover:bg-gov-dark transition-colors">
+                            Câu tiếp <i class="fa-solid fa-chevron-right ml-1.5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-4 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <h5 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-3">Danh sách câu hỏi</h5>
+                        <div id="questionMatrix" class="grid grid-cols-5 gap-2">
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-slate-200">
+                        <button onclick="submitExamConfirmation()" class="w-full bg-cta hover:bg-cta-hover text-white py-3.5 rounded-xl font-extrabold text-sm shadow-xl shadow-orange-500/20 transition-all flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>NỘP BÀI THI NGAY</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: RESULT MODAL -->
+    <div id="resultModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 text-center my-8">
+            <div class="bg-gov p-8 text-white relative">
+                <div class="w-20 h-20 bg-yellow-400 text-slate-900 rounded-full flex items-center justify-center text-4xl mx-auto shadow-xl border-4 border-white mb-3">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h3 class="text-2xl font-black">HOÀN THÀNH BÀI THI!</h3>
+            </div>
+
+            <div class="p-8 space-y-6">
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                        <span class="text-xs font-bold text-slate-500 uppercase block">Điểm Số</span>
+                        <span id="resScoreText" class="text-3xl font-black text-gov">0/20</span>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-2xl border border-green-100">
+                        <span class="text-xs font-bold text-slate-500 uppercase block">Số Câu Đúng</span>
+                        <span id="resCorrectText" class="text-3xl font-black text-green-600">0</span>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-2xl border border-orange-100">
+                        <span class="text-xs font-bold text-slate-500 uppercase block">Thời Gian</span>
+                        <span id="resTimeText" class="text-2xl font-black text-orange-600">00:00</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button onclick="toggleModal('resultModal')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded-xl font-bold text-sm transition-all">
+                        Đóng cửa sổ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 5: CUSTOM CONFIRMATION MODAL (Replaces browser confirm) -->
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 text-center border border-slate-100">
+            <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h3 id="confirmTitle" class="text-lg font-bold text-slate-900 mb-2">Xác nhận</h3>
+            <p id="confirmMessage" class="text-xs text-slate-600 mb-6 leading-relaxed">Nội dung xác nhận...</p>
+            <div class="flex space-x-3">
+                <button onclick="closeConfirmDialog()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">Hủy bỏ</button>
+                <button id="confirmActionBtn" class="flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md transition-all">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 6: GOOGLE APPS SCRIPT CONFIG -->
+    <div id="gasConfigModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8 p-6">
+            <h3 class="font-bold text-lg text-gov mb-4"><i class="fa-solid fa-link mr-2"></i>Cấu hình URL Google Apps Script</h3>
+            <input type="text" id="gasApiUrlInput" placeholder="https://script.google.com/macros/s/.../exec" class="w-full px-4 py-3 border border-slate-300 rounded-xl text-xs font-mono mb-4">
+            <div class="flex justify-end space-x-2">
+                <button onclick="toggleModal('gasConfigModal')" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-bold text-xs">Đóng</button>
+                <button onclick="saveGasUrl()" class="px-5 py-2 bg-gov text-white rounded-xl font-bold text-xs">Lưu cấu hình</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center space-x-3 transition-all duration-300 text-xs font-semibold">
+        <i id="toastIcon" class="fa-solid fa-circle-info text-yellow-400 text-base"></i>
+        <span id="toastMessage">Thông báo ứng dụng</span>
+    </div>
+
+    <!-- STREAMING_CHUNK:Defining Question Bank (100 Questions) and Main Application Logic... -->
+    <script>
+        // ⏱️ TÙY CHỈNH THỜI GIAN THI TẠI ĐÂY (Đơn vị: Giây)
+        const TOTAL_EXAM_SECONDS = 600; // 600 = 10 phút (Có thể thay đổi thành 300, 900, v.v.)
+
+        // 📅 TÙY CHỈNH THỜI GIAN MỞ & KẾT THÚC CUỘC THI TẠI ĐÂY
+        // Định dạng: "YYYY-MM-DDTHH:mm:ss"
+        const CONTEST_START_DATE = "2026-07-15T00:00:00"; // Ngày bắt đầu cuộc thi
+        const CONTEST_END_DATE   = "2026-08-31T23:59:59"; // Ngày kết thúc cuộc thi
+
+        // 📚 BỘ 100 CÂU HỎI CHUẨN HÓA VỀ CCHC & CHUYỂN ĐỔI SỐ
+        const questionBank = [
+            { title: "Mục tiêu trọng tâm của Cải cách hành chính nhà nước giai đoạn 2021 - 2030 là gì?", options: ["Xây dựng nền hành chính dân chủ, chuyên nghiệp, hiện đại, tinh gọn, hiệu lực, hiệu quả", "Chỉ tập trung số hóa giấy tờ hành chính", "Cắt giảm toàn bộ cán bộ công chức", "Tăng mức thu phí dịch vụ công"], correct: 0 },
+            { title: "Ứng dụng VNeID do cơ quan nào phát triển và quản lý?", options: ["Bộ Thông tin và Truyền thông", "Trung tâm Dữ liệu quốc gia về dân cư - Bộ Công an", "Bộ Tư pháp", "Văn phòng Chính phủ"], correct: 1 },
+            { title: "Dịch vụ công trực tuyến toàn trình là gì?", options: ["Chỉ cung cấp mẫu đơn trên mạng", "Người dân nộp hồ sơ trực tuyến nhưng phải đến cơ quan nhận kết quả", "Cung cấp toàn bộ thông tin, xử lý và trả kết quả trực tuyến hoàn toàn", "Chỉ tra cứu thủ tục hành chính"], correct: 2 },
+            { title: "Tài khoản định danh điện tử mức độ 2 trên VNeID có giá trị tương đương với giấy tờ nào?", options: ["Thẻ BHYT giấy", "Thẻ Căn cước / CCCD gắn chip", "Bằng lái xe máy", "Sổ hộ khẩu cũ"], correct: 1 },
+            { title: "Ngày Chuyển đổi số quốc gia được Chính phủ chọn là ngày nào hằng năm?", options: ["Ngày 10 tháng 10", "Ngày 02 tháng 09", "Ngày 30 tháng 04", "Ngày 19 tháng 05"], correct: 0 },
+            { title: "Trụ cột nào KHÔNG nằm trong 3 trụ cột chính của Chuyển đổi số quốc gia?", options: ["Chính phủ số", "Kinh tế số", "Xã hội số", "Nông nghiệp số"], correct: 3 },
+            { title: "Nhiệm vụ chính của Tổ công nghệ số cộng đồng tại các thôn/tổ dân phố là gì?", options: ["Trực tiếp giải quyết hồ sơ đất đai", "Đi từng ngõ, gõ từng nhà hướng dẫn người dân sử dụng dịch vụ công, VNeID và kỹ năng số", "Thu tiền điện nước", "Kiểm tra an ninh trật tự"], correct: 1 },
+            { title: "Khi nghi ngờ tài khoản ngân hàng hoặc mạng xã hội bị hack, hành động ĐÚNG NẤT là gì?", options: ["Báo ngay cho ngân hàng/nhà mạng, đổi mật khẩu và nhờ hỗ trợ", "Chờ vài ngày xem sao", "Chuyển thêm tiền vào tài khoản", "Đăng tải lên mạng xã hội để nhờ cộng đồng mạng khóa hộ"], correct: 0 },
+            { title: "Dịch vụ công liên thông 'Đăng ký khai sinh, đăng ký thường trú, cấp thẻ BHYT cho trẻ dưới 6 tuổi' đem lại lợi ích gì?", options: ["Người dân chỉ cần kê khai 1 lần trực tuyến để hoàn thành 3 thủ tục", "Tăng thời gian đi lại của công dân", "Yêu cầu nộp 3 bộ hồ sơ giấy", "Chỉ áp dụng cho người giàu"], correct: 0 },
+            { title: "Số tổng đài hỗ trợ Dịch vụ công Quốc gia là số nào?", options: ["113", "1800 1096", "115", "114"], correct: 1 },
+            { title: "Cơ chế 'Một cửa, Một cửa liên thông' trong giải quyết TTHC nhằm mục đích gì?", options: ["Tăng thêm cửa thụ lý hồ sơ", "Giảm phiền hà, giảm thời gian và chi phí đi lại cho tổ chức, cá nhân", "Tăng phí lệ phí", "Ép người dân nộp phạt"], correct: 1 },
+            { title: "Thế nào là 'Mật khẩu mạnh' để bảo vệ tài khoản số?", options: ["Ngày tháng năm sinh của bản thân", "Dãy số 12345678", "Tối thiểu 8-12 ký tự gồm chữ hoa, chữ thường, số và ký tự đặc biệt", "Tên cá nhân viết liền"], correct: 2 },
+            { title: "Trí tuệ nhân tạo (AI) được ứng dụng trong nền hành chính công nhằm mục đích gì?", options: ["Thay thế hoàn toàn con người", "Hỗ trợ tự động hóa giải đáp thắc mắc, phân tích dữ liệu và nâng cao chất lượng phục vụ", "Tăng chi phí quản lý", "Gây phiền hà cho dân"], correct: 1 },
+            { title: "Thanh toán không dùng tiền mặt mang lại lợi ích trực tiếp nào cho người dân?", options: ["Nhanh chóng, an toàn, tiện lợi, minh bạch và quản lý chi tiêu tốt hơn", "Mất thêm nhiều chi phí bắt buộc", "Nguy cơ lộ toàn bộ tiền mặt", "Chỉ áp dụng ở siêu thị lớn"], correct: 0 },
+            { title: "Đề án 06 của Chính phủ là đề án về nội dung gì?", options: ["Phát triển ứng dụng dữ liệu về dân cư, định danh và xác thực điện tử phục vụ chuyển đổi số quốc gia", "Phát triển đường cao tốc", "Trồng cây xanh", "Cải cách giáo dục phổ thông"], correct: 0 },
+            { title: "Chữ ký số cá nhân có giá trị pháp lý ra sao?", options: ["Có giá trị tương đương chữ ký tay của cá nhân trong các giao dịch điện tử", "Không có giá trị pháp lý", "Chỉ dùng để trang trí", "Giá trị thấp hơn chữ ký tay"], correct: 0 },
+            { title: "Hành vi nào bị nghiêm cấm trên không gian mạng theo Luật An ninh mạng?", options: ["Tìm kiếm thông tin học tập", "Đăng tải thông tin bịa đặt, sai sự thật gây hoang mang dư luận", "Xem tin tức chính thống", "Đăng ký dịch vụ công"], correct: 1 },
+            { title: "Mô hình 'Thôn thông minh' tập trung vào yếu tố nào?", options: ["Chỉ lắp wifi miễn phí", "Ứng dụng CNTT trong quản lý thôn, nhóm Zalo cộng đồng, thanh toán số và camera an ninh", "Xây nhà cao tầng", "Nâng cấp chợ truyền thống"], correct: 1 },
+            { title: "Nền tảng Cổng Dịch vụ công Quốc gia có địa chỉ truy cập chính thức là gì?", options: ["dichvucong.gov.vn", "dichvucong.com", "dichvucong.org", "dichvucong.vn"], correct: 0 },
+            { title: "Khi nhận được tin nhắn SMS chứa liên kết lạ giả mạo ngân hàng, bạn nên làm gì?", options: ["Nhấn vào đường link và nhập mật khẩu ngay", "Tuyệt đối không nhấn vào đường link và xóa/báo cáo tin nhắn rác", "Gửi link cho bạn bè cùng thử", "Nhập mã OTP nếu được yêu cầu"], correct: 1 },
+            { title: "Bộ chỉ số 766 của Chính phủ dùng để làm gì?", options: ["Đánh giá chất lượng phục vụ người dân, doanh nghiệp trong thực hiện TTHC, dịch vụ công", "Đánh giá sĩ số học sinh", "Đo lường lượng mưa", "Xếp hạng doanh nghiệp tư nhân"], correct: 0 },
+            { title: "Chỉ số PAPI là chỉ số đo lường điều gì?", options: ["Hiệu quả quản trị và hành chính công cấp tỉnh", "Chỉ số giá tiêu dùng", "Chỉ số phát triển con người", "Chỉ số năng lực cạnh tranh"], correct: 0 },
+            { title: "Chỉ số PAR INDEX là chỉ số gì?", options: ["Chỉ số Cải cách hành chính", "Chỉ số lạm phát", "Chỉ số chứng khoán", "Chỉ số sẵn sàng CNTT"], correct: 0 },
+            { title: "Thời hạn giải quyết thủ tục hành chính được tính như thế nào?", options: ["Tính theo ngày làm việc (không tính thứ 7, CN và ngày lễ trừ quy định khác)", "Tính liên tục kể cả ngày lễ", "Tính theo tuần", "Do cán bộ tự quyết định"], correct: 0 },
+            { title: "Mã QR trên thẻ Căn cước công dân chứa thông tin gì?", options: ["Thông tin nhân thân cơ bản và số CMND 9 số cũ (nếu có)", "Toàn bộ tài sản ngân hàng", "Lịch sử khám chữa bệnh chi tiết", "Mật khẩu mạng xã hội"], correct: 0 },
+            { title: "Để thực hiện phản ánh, kiến nghị về thủ tục hành chính, người dân gửi qua đâu?", options: ["Cổng Dịch vụ công Quốc gia hoặc Ứng dụng Công dân số", "Đăng lên tài khoản Tiktok cá nhân", "Nhắn tin cho bạn bè", "Gửi thư tay không ghi địa chỉ"], correct: 0 },
+            { title: "Bảo mật thông tin cá nhân trên mạng bao gồm việc KHÔNG làm điều gì?", options: ["Chia sẻ công khai số CCCD, số điện thoại, mã OTP lên mạng xã hội", "Đặt mật khẩu phức tạp", "Bật xác thực 2 bước", "Cập nhật ứng dụng thường xuyên"], correct: 0 },
+            { title: "Chuyển đổi số khác với Tin học hóa ở điểm cốt lõi nào?", options: ["Chuyển đổi số thay đổi quy trình, mô hình hoạt động dựa trên dữ liệu và công nghệ số", "Chuyển đổi số tốn ít tiền hơn", "Tin học hóa không dùng máy tính", "Chuyển đổi số chỉ dành cho công ty phần mềm"], correct: 0 },
+            { title: "Nền tảng VNeID tích hợp được những giấy tờ nào của công dân?", options: ["Bảo hiểm y tế, Giấy phép lái xe, Đăng ký xe, Thông tin cư trú, Mã số thuế", "Chỉ duy nhất thẻ BHYT", "Thẻ học sinh", "Thẻ ngân hàng nội bộ"], correct: 0 },
+            { title: "Trang web chính thức của chính quyền có đuôi tên miền là gì?", options: [".gov.vn", ".com.vn", ".net", ".org"], correct: 0 },
+            { title: "Khái niệm 'Kinh tế số' bao gồm những hoạt động nào?", options: ["Toàn bộ hoạt động kinh tế dựa trên công nghệ số và dữ liệu số", "Chỉ là mua bán hàng trực tuyến", "Chỉ là lập trình phần mềm", "Chỉ là rút tiền ATM"], correct: 0 },
+            { title: "Cổng Dịch vụ công trực tuyến giúp người dân tiết kiệm điều gì lớn nhất?", options: ["Thời gian, chi phí đi lại và minh bạch hóa quá trình xử lý hồ sơ", "Tiền điện thoại", "Dung lượng bộ nhớ máy tính", "Giấy in ảnh"], correct: 0 },
+            { title: "Nâng cao chỉ số SIPAS là nâng cao chỉ số gì?", options: ["Chỉ số hài lòng của người dân, tổ chức đối với sự phục vụ của cơ quan hành chính nhà nước", "Chỉ số xanh cấp tỉnh", "Chỉ số hạ tầng giao thông", "Chỉ số năng suất lao động"], correct: 0 },
+            { title: "Một trong các nguyên tắc thực hiện TTHC trên môi trường điện tử là gì?", options: ["Lấy người dân, doanh nghiệp làm trung tâm phục vụ", "Gây khó khăn cho người không có smartphone", "Yêu cầu nộp kèm bản sao chứng thực giấy", "Tăng lệ phí gấp đôi"], correct: 0 },
+            { title: "Sổ sức khỏe điện tử tích hợp trên VNeID giúp ích gì?", options: ["Lưu trữ lịch sử khám chữa bệnh, giảm thủ tục giấy tờ khi đi khám bệnh", "Thay thế hoàn toàn bác sĩ", "Tự động phát thuốc", "Chỉ xem lịch tiêm chủng"], correct: 0 },
+            { title: "Thực hiện 'Không gian mạng an toàn' là trách nhiệm của ai?", options: ["Của toàn thể cơ quan, tổ chức và mọi cá nhân khi tham gia mạng", "Chỉ của Công an", "Chỉ của nhà mạng Viettel/VNPT", "Chỉ của người lớn tuổi"], correct: 0 },
+            { title: "Mục tiêu đến 2025-2030, tỷ lệ hồ sơ thủ tục hành chính xử lý trực tuyến đạt tối thiểu bao nhiêu?", options: ["Từ 70% đến 80% trở lên", "10%", "30%", "50%"], correct: 0 },
+            { title: "Dữ liệu mở (Open Data) của cơ quan nhà nước là gì?", options: ["Dữ liệu được công khai rộng rãi cho người dân, doanh nghiệp tự do truy cập, khai thác", "Dữ liệu mật quốc gia", "Dữ liệu mua bán lấy tiền", "Dữ liệu cá nhân cán bộ"], correct: 0 },
+            { title: "Dịch vụ bưu chính công ích hỗ trợ người dân điều gì trong làm TTHC?", options: ["Chuyển phát hồ sơ và kết quả TTHC tận nhà người dân", "Làm hộ hoàn toàn hồ sơ giả", "Cho vay tiền làm thủ tục", "Tư vấn pháp luật tự do"], correct: 0 },
+            { title: "Khi gặp mã độc ransomware khóa dữ liệu máy tính, việc KHÔNG nên làm là gì?", options: ["Trả tiền chuộc ngay cho hacker mà không báo cơ quan chuyên môn", "Cách ly máy tính khỏi mạng", "Báo bộ phận IT/An ninh mạng", "Khôi phục từ bản sao lưu an toàn"], correct: 0 },
+            { title: "Hệ thống thông tin giải quyết TTHC cấp tỉnh là gì?", options: ["Nền tảng hợp nhất Cổng dịch vụ công và Hệ thống một cửa điện tử cấp tỉnh", "Website tin tức thời sự", "Phần mềm kế toán", "Mạng xã hội nội bộ"], correct: 0 },
+            { title: "Trí tuệ nhân tạo Chatbot trên cổng dịch vụ công đóng vai trò gì?", options: ["Hỗ trợ tư vấn, hướng dẫn TTHC 24/7 tự động cho người dân", "Quyết định cấp sổ đỏ", "Xử phạt vi phạm", "Thu tiền phí lệ phí"], correct: 0 },
+            { title: "Công dân có thể sử dụng VNeID thay thế Giấy phép lái xe khi nào?", options: ["Khi đã tích hợp thành công GPX và được xác thực trên hệ thống", "Mới tải app về chưa đăng ký", "Khi đi xe không đội mũ bảo hiểm", "Chỉ dùng khi ban đêm"], correct: 0 },
+            { title: "Phương thức thanh toán trực tuyến trên Cổng dịch vụ công hỗ trợ hình thức nào?", options: ["Ví điện tử, Ví VNPT Money, Thẻ ngân hàng, Mã QR Code", "Chỉ nhận tiền mặt", "Đổi quà tặng", "Thẻ cào điện thoại"], correct: 0 },
+            { title: "Kỹ năng cơ bản của một Công dân số bao gồm những gì?", options: ["Khả năng truy cập, giao tiếp, bảo mật, mua sắm và ứng xử văn minh trên môi trường số", "Chỉ cần biết chơi game", "Biết quay video TikTok", "Biết gõ phím nhanh"], correct: 0 },
+            { title: "Hệ thống định danh và xác thực điện tử do cơ quan nào quản lý?", options: ["Bộ Công an", "Bộ Y tế", "Bộ Giao thông Vận tải", "Bộ Lao động TB&XH"], correct: 0 },
+            { title: "Tái cấu trúc quy trình thủ tục hành chính nhằm mục đích gì?", options: ["Cắt giảm các bước gian trung gian không cần thiết, đơn giản hóa hồ sơ cho dân", "Tăng thêm các bước xác minh", "Yêu cầu nhiều công chứng hơn", "Kéo dài thời gian giải quyết"], correct: 0 },
+            { title: "Nguyên tắc 'Dữ liệu chỉ thu thập một lần' nghĩa là gì?", options: ["Cơ quan nhà nước không yêu cầu dân nộp lại thông tin đã có trong CSDL quốc gia", "Chỉ được lưu dữ liệu 1 lần rồi xóa", "Người dân chỉ được làm TTHC 1 lần", "Mỗi năm thu thập 1 lần"], correct: 0 },
+            { title: "Điểm khác biệt của Căn cước công dân gắn chip so với CMND cũ?", options: ["Độ bảo mật cao, lưu trữ dữ liệu sinh trắc học và tích hợp nhiều thông tin", "Dễ làm giả hơn", "Kích thước to hơn", "Không có ảnh"], correct: 0 },
+            { title: "Mục tiêu 'Mỗi hộ gia đình một đường truyền cáp quang' thuộc chiến lược nào?", options: ["Phát triển Hạ tầng số quốc gia", "Phát triển du lịch", "Xây dựng nông thôn mới về giao thông", "Phát triển năng lượng mặt trời"], correct: 0 },
+            { title: "Khi bị kẻ xấu đe dọa tống tiền qua mạng bằng hình ảnh nhạy cảm giả mạo, bạn nên làm gì?", options: ["Báo ngay cho cơ quan Công an gần nhất để xử lý", "Gửi tiền theo yêu cầu kẻ xấu", "Giữ bí mật không nói với ai", "Khóa máy vĩnh viễn"], correct: 0 },
+            { title: "Ứng dụng công nghệ Big Data (Dữ liệu lớn) trong cơ quan nhà nước giúp ích gì?", options: ["Phân tích xu hướng, dự báo và ra quyết định chỉ đạo điều hành chính xác hơn", "Tốn dung lượng ổ cứng", "Tăng công việc chân tay", "Tạo thêm thủ tục"], correct: 0 },
+            { title: "Mã OTP (One Time Password) được dùng để làm gì?", options: ["Mật khẩu xác thực giao dịch một lần bảo mật", "Số điện thoại tài xế", "Mã giảm giá mua hàng", "Số seri của thẻ sim"], correct: 0 },
+            { title: "Khai báo tạm trú trực tuyến cho người thuê nhà có thể thực hiện qua đâu?", options: ["Cổng dịch vụ công Bộ Công an hoặc VNeID", "Gửi thư bưu điện", "Viết giấy tay dán lên cửa", "Gọi điện thoại cho tổng đài 115"], correct: 0 },
+            { title: "Sứ mệnh của Tổ công nghệ số cộng đồng là gì?", options: ["Đưa công nghệ số đến từng hộ gia đình, giúp dân 'biết dùng, thích dùng và dùng thường xuyên'", "Bán máy tính giá rẻ", "Cung cấp mạng internet thu phí", "Thay mặt dân đi bầu cử"], correct: 0 },
+            { title: "Chữ ký số SmartCA của VNPT / Viettel CA giúp người dân điều gì?", options: ["Ký số trực tiếp trên điện thoại di động mọi lúc mọi nơi không cần USB Token", "Chỉ ký trên giấy in", "Chỉ mua sắm đồ đạc", "Xem tivi miễn phí"], correct: 0 },
+            { title: "Sự khác nhau giữa tài khoản VNeID Mức 1 và Mức 2?", options: ["Mức 2 được xác thực sinh trắc học (vân tay/mặt) trực tiếp tại công an, tích hợp nhiều giấy tờ hơn", "Mức 1 đắt tiền hơn", "Mức 2 chỉ dùng cho người nước ngoài", "Không khác nhau"], correct: 0 },
+            { title: "Để tra cứu tiến độ xử lý hồ sơ TTHC, người dân cần thông tin gì?", options: ["Mã số hồ sơ (Mã hồ sơ tra cứu)", "Mật khẩu Facebook", "Số tài khoản ngân hàng", "Địa chỉ Email của cán bộ"], correct: 0 },
+            { title: "Văn bản điện tử có giá trị pháp lý khi nào?", options: ["Được ký số bởi người có thẩm quyền và cơ quan/tổ chức theo quy định", "Được chụp ảnh bằng điện thoại", "Viết tay trên phần mềm Paint", "Gửi qua ứng dụng trò chuyện"], correct: 0 },
+            { title: "Mạng xã hội an toàn cho cán bộ công chức khi sử dụng cần chú ý điều gì?", options: ["Không chia sẻ thông tin bảo mật nội bộ, văn bản chưa công bố", "Đăng tải tự do mọi văn bản", "Bình luận công kích tổ chức", "Chia sẻ mật khẩu làm việc"], correct: 0 },
+            { title: "Tỉ lệ số hóa hồ sơ TTHC nghĩa là gì?", options: ["Chuyển đổi hồ sơ giấy sang định dạng điện tử lưu trữ trên hệ thống", "Đếm số lượng giấy in", "Cắt bỏ toàn bộ hồ sơ cũ", "Chụp ảnh lưu trong thẻ nhớ"], correct: 0 },
+            { title: "Dịch vụ công 'Đổi giấy phép lái xe' trực tuyến thuộc cơ quan nào?", options: ["Cục Đường bộ Việt Nam - Bộ Giao thông Vận tải", "Bộ Giáo dục", "Bộ Ngoại giao", "Bộ Y tế"], correct: 0 },
+            { title: "Nguyên tắc quản lý dữ liệu trong chuyển đổi số là gì?", options: ["Đúng, đủ, sạch, sống và bảo mật", "Càng nhiều càng tốt không cần chính xác", "Chỉ lưu trữ 1 tháng", "Không cho ai khai thác"], correct: 0 },
+            { title: "Trung tâm Giám sát an ninh mạng (SOC) có vai trò gì?", options: ["Phát hiện, giám sát và cảnh báo sớm các sự cố tấn công mạng 24/7", "Lắp đặt camera đường phố", "Thu phí tiền mạng", "Sửa chữa máy in"], correct: 0 },
+            { title: "Một trong các chỉ tiêu của Xã hội số là gì?", options: ["Tỷ lệ người dân trưởng thành có điện thoại thông minh và tài khoản thanh toán số", "Mỗi gia đình có 2 xe máy", "Tỷ lệ nhà cao tầng", "Tỷ lệ sử dụng TV màu"], correct: 0 },
+            { title: "Thế nào là 'Lừa đảo tuyển tác viên online' qua mạng?", options: ["Dụ dỗ chốt đơn hàng nạp tiền nhận hoa hồng rồi chiếm đoạt tiền", "Tuyển dụng chính thức tại trụ sở", "Trả lương qua tài khoản công ty minh bạch", "Cung cấp HĐLĐ đầy đủ"], correct: 0 },
+            { title: "Trang web chính thức của UBND xã Mỏ Cày có đuôi tên miền hợp lệ là gì?", options: [".gov.vn", ".com", ".net", ".info"], correct: 0 },
+            { title: "Kế hoạch Cải cách hành chính hàng năm do cơ quan nào ban hành?", options: ["Ủy ban nhân dân các cấp", "Doanh nghiệp tư nhân", "Các câu lạc bộ thể thao", "Hội người cao tuổi"], correct: 0 },
+            { title: "Nền tảng họp trực tuyến mang lại lợi ích gì cho cơ quan hành chính?", options: ["Tiết kiệm thời gian, kinh phí di chuyển, tổ chức họp nhanh chóng đa điểm cầu", "Gây mất tập trung", "Tốn kém hơn họp trực tiếp", "Không ghi nhận được kết quả"], correct: 0 },
+            { title: "Điểm cung cấp dịch vụ bưu chính công ích tại xã có vai trò gì?", options: ["Điểm hỗ trợ người dân thực hiện dịch vụ công trực tuyến và tiếp nhận/trao trả hồ sơ", "Chỉ bán tem thư", "Chỉ cho thuê xe", "Cung cấp nước uống"], correct: 0 },
+            { title: "Sử dụng Wi-Fi công cộng không có mật khẩu tiềm ẩn nguy cơ gì?", options: ["Bị đánh cắp thông tin cá nhân và tài khoản ngân hàng qua mạng", "Tăng tốc độ mạng", "Tiết kiệm pin điện thoại", "Không có nguy cơ gì"], correct: 0 },
+            { title: "Để thực hiện 'Dịch vụ công không phụ thuộc địa giới hành chính', cần nền tảng nào?", options: ["Nền tảng CSDL Quốc gia kết nối thông suốt từ Trung ương đến địa phương", "Mỗi xã dùng 1 phần mềm riêng không kết nối", "Viết tay gửi bưu điện", "Gọi điện thoại trao đổi"], correct: 0 },
+            { title: "Mục tiêu tối thiểu tỷ lệ hài lòng của người dân đối với TTHC đạt bao nhiêu %?", options: ["Tối thiểu 90% trở lên", "50%", "60%", "75%"], correct: 0 },
+            { title: "Nền tảng thanh toán Trực tuyến trên Cổng DVCQG kết nối với ngân hàng nào?", options: ["Hầu hết các ngân hàng thương mại và trung gian thanh toán tại Việt Nam", "Chỉ 1 ngân hàng duy nhất", "Không kết nối ngân hàng nào", "Chỉ nhận thẻ quốc tế"], correct: 0 },
+            { title: "Cán bộ công chức tiếp nhận hồ sơ TTHC KHÔNG được làm điều nào sau đây?", options: ["Yêu cầu nộp thêm giấy tờ ngoài quy định đã niêm yết công khai", "Hướng dẫn tận tình cho dân", "Cung cấp mã tra cứu hồ sơ", "Thực hiện đúng hẹn"], correct: 0 },
+            { title: "Gói cước di động 4G/5G đóng vai trò gì trong phổ cập kỹ năng số?", options: ["Cung cấp hạ tầng kết nối Internet di động mọi lúc mọi nơi cho người dân", "Chỉ để nghe nhạc", "Chỉ dùng cho người giàu", "Không có tác dụng gì"], correct: 0 },
+            { title: "Tài khoản định danh điện tử bị khóa khi nào?", options: ["Khi người dân báo mất thiết bị hoặc có yêu cầu khóa từ chủ tài khoản/Cơ quan công an", "Mỗi tối lúc 22h", "Mỗi tuần 1 lần", "Không bao giờ bị khóa"], correct: 0 },
+            { title: "Khi nộp hồ sơ dịch vụ công trực tuyến bị trả lại, người dân cần xem lý do ở đâu?", options: ["Trong thông báo phản hồi trên hệ thống / tin nhắn SMS / Email", "Hỏi người xung quanh", "Đoán lý do", "Đợi sang năm nộp lại"], correct: 0 },
+            { title: "Chương trình Chuyển đổi số quốc gia do ai phê duyệt?", options: ["Thủ tướng Chính phủ", "Chủ tịch xã", "Bộ trưởng Bộ Giáo dục", "Giám đốc doanh nghiệp"], correct: 0 },
+            { title: "Dịch vụ công cấp hộ chiếu phổ thông trực tuyến thực hiện tại đâu?", options: ["Cổng dịch vụ công Bộ Công an", "Cổng thông tin Bộ Y tế", "UBND Xã", "Trường học"], correct: 0 },
+            { title: "Thiết bị bảo mật USB Token thường dùng để làm gì?", options: ["Lưu trữ chứng thư số để thực hiện chữ ký số", "Chứa nhạc mp3", "Tăng tốc độ mạng", "Sạc pin điện thoại"], correct: 0 },
+            { title: "Khái niệm 'Xã hội số' hướng tới điều gì?", options: ["Người dân được công nhận là công dân số, sống và làm việc an toàn trong môi trường số", "Mọi người chỉ giao tiếp qua mạng không gặp nhau", "Không dùng tiền mặt trong toàn bộ sinh hoạt", "Xóa bỏ các ngành nghề truyền thống"], correct: 0 },
+            { title: "Cơ quan nào có trách nhiệm niêm yết công khai TTHC?", options: ["Bộ phận Một cửa của UBND các cấp và trên Cổng thông tin điện tử", "Công ty tư nhân", "Trường học", "Chợ dân sinh"], correct: 0 },
+            { title: "Trí tuệ nhân tạo (AI) giúp gì cho công tác xử lý phản ánh kiến nghị?", options: ["Phân loại tự do, chuyển chính xác cơ quan thụ lý và gợi ý câu trả lời", "Tự động bác bỏ phản ánh", "Xóa phản ánh tiêu cực", "Gửi tin nhắn rác"], correct: 0 },
+            { title: "Mục đích của việc cấp mã số định danh cá nhân 12 số là gì?", options: ["Quản lý thông tin công dân thống nhất trên toàn quốc", "Để cấp số may mắn", "Thay thế số điện thoại", "Dùng làm số tài khoản ngân hàng"], correct: 0 },
+            { title: "Nền tảng tích hợp, chia sẻ dữ liệu cấp tỉnh viết tắt là gì?", options: ["LGSP", "NDXP", "VNeID", "APEC"], correct: 0 },
+            { title: "Nền tảng tích hợp chia sẻ dữ liệu quốc gia viết tắt là gì?", options: ["NDXP", "LGSP", "ICT", "HTTP"], correct: 0 },
+            { title: "Người dân có thể thanh toán tiền điện, tiền nước trực tuyến qua kênh nào?", options: ["Ứng dụng Ngân hàng, Ví điện tử, Cổng Dịch vụ công", "Gửi tiền qua thư", "Nhờ người lạ trả hộ", "Đưa tiền mặt cho hàng xóm"], correct: 0 },
+            { title: "Hành vi giả mạo trang web của cơ quan nhà nước để lừa đảo sẽ bị xử lý ra sao?", options: ["Xử lý kỷ luật, xử phạt hành chính hoặc xử lý hình sự theo quy định pháp luật", "Chỉ nhắc nhở nhẹ", "Khen thưởng", "Không xử lý"], correct: 0 },
+            { title: "Đơn giản hóa thủ tục hành chính giúp mang lại lợi ích gì?", options: ["Giảm chi phí tuân thủ TTHC cho cá nhân, tổ chức và cơ quan nhà nước", "Tăng thu ngân sách", "Tạo thêm việc làm hành chính", "Kéo dài quy trình"], correct: 0 },
+            { title: "Thế nào là dịch vụ công trực tuyến một phần?", options: ["Cung cấp một số bước trực tuyến, các bước khác thực hiện trực tiếp", "Không có bước nào trực tuyến", "Toàn bộ trực tuyến 100%", "Chỉ xem phí"], correct: 0 },
+            { title: "Khi đăng ảnh trẻ em lên mạng xã hội, cha mẹ cần chú ý điều gì?", options: ["Bảo vệ riêng tư, không lộ thông tin trường lớp, địa chỉ nhà để tránh nguy cơ kẻ xấu lợi dụng", "Đăng công khai kèm vị trí GPS", "Đăng đầy đủ giấy khai sinh", "Đăng mã số BHYT của bé"], correct: 0 },
+            { title: "Sổ hộ khẩu giấy đã chính thức hết giá trị sử dụng từ thời điểm nào?", options: ["Từ ngày 01/01/2023", "Từ năm 2020", "Từ năm 2025", "Vẫn còn dùng vĩnh viễn"], correct: 0 },
+            { title: "Mô hình 'Chợ 4.0 - Chợ không dùng tiền mặt' mang lại tiện ích gì?", options: ["Tiểu thương và người mua quét mã QR thanh toán nhanh chóng, an toàn", "Bắt buộc mua đồ đắt tiền", "Không cho bán nợ", "Giảm giá 50% toàn bộ hàng"], correct: 0 },
+            { title: "Cơ quan nhà nước có bắt buộc phải trả lời phản ánh kiến nghị của dân không?", options: ["Có, phải xử lý và công khai kết quả theo đúng thời hạn quy định", "Không cần trả lời", "Chỉ trả lời nếu thích", "Chỉ trả lời qua điện thoại riêng"], correct: 0 },
+            { title: "Ứng dụng công nghệ GIS (Bản đồ số) trong quản lý đất đai giúp ích gì?", options: ["Quản lý ranh giới, quy hoạch đất đai minh bạch, chính xác trên bản đồ điện tử", "Thay thế việc cấp sổ đỏ", "Tự động tăng giá đất", "Không có tác dụng"], correct: 0 },
+            { title: "Thực hiện 'Nụ cười công sở' trong tiếp dân thuộc nội dung cải cách nào?", options: ["Cải cách văn hóa công vụ và nâng cao chất lượng đội ngũ cán bộ công chức", "Cải cách tài chính công", "Cải cách thể chế", "Cải cách công nghệ"], correct: 0 },
+            { title: "Tổ công nghệ số cộng đồng cần làm gì khi hướng dẫn người dân?", options: ["Nhiệt tình, kiên nhẫn, 'cầm tay chỉ việc' dễ hiểu cho mọi lứa tuổi", "Nói thuật ngữ tiếng Anh khó hiểu", "Làm thay hoàn toàn không giải thích", "Thu tiền hướng dẫn"], correct: 0 },
+            { title: "Chuyển đổi số thành công phụ thuộc lớn nhất vào yếu tố nào?", options: ["Nhận thức và sự tham gia tích cực của Con người", "Số lượng máy tính đắt tiền", "Tốc độ đường truyền mạng", "Mua nhiều phần mềm"], correct: 0 },
+            { title: "Thông điệp cốt lõi của Cuộc thi CCHC & Chuyển đổi số xã Mỏ Cày 2026 là gì?", options: ["Chủ động học tập, ứng dụng công nghệ số vì một chính quyền phục vụ và xã hội văn minh", "Thi lấy giải rồi bỏ", "Chỉ dành riêng cho cán bộ", "Không liên quan đến nhân dân"], correct: 0 }
+        ];
+
+        // 🟢 GLOBAL VARIABLES
         let currentUser = null;
         let gasApiUrl = 'https://script.google.com/macros/s/AKfycbyBK2jtG5vfgBJvjGqfI92Pd0OQaLvlDTNGZI82NSR1m24SxnT1WXcvb4nUb9lF0IKz/exec';
         let timerInterval = null;
-        
-        // ⏱️ TÙY CHỈNH THỜI GIAN THI (Đơn vị: Giây)
-        const TOTAL_EXAM_SECONDS = 600; // 600 = 10 phút
-
-        // 📅 TÙY CHỈNH THỜI GIAN MỞ & KẾT THÚC CUỘC THI TẠI ĐÂY
-        // Định dạng: "YYYY-MM-DDTHH:mm:ss" (Năm-Tháng-NgàyTHi:Phút:Giây)
-        const CONTEST_START_DATE = "2026-08-15T00:00:00"; // Ngày bắt đầu (Ví dụ: 00h00 ngày 15/08/2026)
-        const CONTEST_END_DATE   = "2026-08-31T23:59:59"; // Ngày kết thúc (Ví dụ: 23h59 ngày 31/08/2026)
-        
         let examTimeLeft = TOTAL_EXAM_SECONDS;
         let currentQuestionIdx = 0;
         let userAnswers = {};
         let flaggedQuestions = {};
-        let activeQuestions = []; // Lưu 20 câu ngẫu nhiên được chọn cho lượt thi này
-        let pendingAction = null; // Dùng cho Modal Xác nhận tùy biến
+        let activeQuestions = [];
+        let pendingAction = null;
 
+        // 🟢 INITIALIZATION ON WINDOW LOAD
         window.onload = function() {
             initCountdown();
             loadUserSession();
             updateRealStats();
-            setInterval(updateRealStats, 20000); // Tự động cập nhật số liệu mỗi 20 giây
+            setInterval(updateRealStats, 20000); // Update stats every 20s
             
             const localGasUrl = localStorage.getItem('gas_api_url');
             if(localGasUrl) gasApiUrl = localGasUrl;
@@ -46,22 +757,18 @@
             }
         };
 
+        // 📊 STATS LOGIC
         function updateRealStats() {
             let registeredUsers = [];
             let examLogs = [];
-            try {
-                registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-            } catch(e) { registeredUsers = []; }
-            try {
-                examLogs = JSON.parse(localStorage.getItem('cds_exam_logs')) || [];
-            } catch(e) { examLogs = []; }
+            try { registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || []; } catch(e) {}
+            try { examLogs = JSON.parse(localStorage.getItem('cds_exam_logs')) || []; } catch(e) {}
 
             let totalUsers = registeredUsers.length;
             let totalAttempts = registeredUsers.reduce((sum, u) => sum + (u.attempts || 0), 0);
             let completedExams = examLogs.length;
             let totalScore = examLogs.reduce((sum, e) => sum + (e.score || 0), 0);
             let avgScore = completedExams > 0 ? (totalScore / completedExams).toFixed(1) : "0.0";
-            
             let onlineBase = Math.max(1, Math.floor(totalUsers * 0.15) + Math.floor(Math.random() * 5));
 
             if (gasApiUrl && gasApiUrl.startsWith('http')) {
@@ -79,9 +786,7 @@
                             renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
                         }
                     })
-                    .catch(() => {
-                        renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
-                    });
+                    .catch(() => renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase));
             } else {
                 renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
             }
@@ -100,13 +805,12 @@
             const el = document.getElementById(elementId);
             if (!el) return;
             const currentVal = parseInt(el.innerText) || 0;
-            if (currentVal === targetVal) {
-                if (el) el.innerText = targetVal;
-                return;
-            }
+            if (currentVal === targetVal) { el.innerText = targetVal; return; }
             let start = currentVal;
             let step = Math.ceil(Math.abs(targetVal - start) / 10) || 1;
             let timer = setInterval(() => {
+                const currentEl = document.getElementById(elementId);
+                if (!currentEl) { clearInterval(timer); return; }
                 if (start < targetVal) {
                     start += step;
                     if (start >= targetVal) { start = targetVal; clearInterval(timer); }
@@ -114,12 +818,11 @@
                     start -= step;
                     if (start <= targetVal) { start = targetVal; clearInterval(timer); }
                 }
-                const currentEl = document.getElementById(elementId);
-                if (currentEl) currentEl.innerText = start;
-                else clearInterval(timer);
+                currentEl.innerText = start;
             }, 30);
         }
 
+        // 👤 USER SESSION & AUTH LOGIC
         function loadUserSession() {
             const saved = localStorage.getItem('cds_user');
             if (saved) {
@@ -171,113 +874,6 @@
             showToast("Đã đăng xuất tài khoản!");
         }
 
-        function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) modal.classList.toggle('hidden');
-        }
-
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMessage');
-            if (toastMsg) toastMsg.innerText = msg;
-            if (toast) toast.classList.remove('hidden');
-            setTimeout(() => { 
-                if (toast) toast.classList.add('hidden'); 
-            }, 3500);
-        }
-
-        function initCountdown() {
-            const startDate = new Date(CONTEST_START_DATE).getTime();
-            const endDate = new Date(CONTEST_END_DATE).getTime();
-
-            setInterval(() => {
-                const now = new Date().getTime();
-                let targetDate = startDate;
-                let labelText = "Thời gian đếm ngược đến lúc mở cổng thi";
-
-                if (now >= startDate) {
-                    targetDate = endDate;
-                    labelText = "Thời gian còn lại của cuộc thi";
-                }
-
-                const cdLabel = document.getElementById('cdLabel');
-                if (cdLabel) cdLabel.innerText = labelText;
-
-                const diff = targetDate - now;
-
-                const dEl = document.getElementById('cdDays');
-                const hEl = document.getElementById('cdHours');
-                const mEl = document.getElementById('cdMinutes');
-                const sEl = document.getElementById('cdSeconds');
-
-                if (diff > 0) {
-                    if (dEl) dEl.innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                    if (hEl) hEl.innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                    if (mEl) mEl.innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                    if (sEl) sEl.innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-                } else {
-                    if (dEl) dEl.innerText = "00";
-                    if (hEl) hEl.innerText = "00";
-                    if (mEl) mEl.innerText = "00";
-                    if (sEl) sEl.innerText = "00";
-                }
-            }, 1000);
-        }
-
-        function toggleFaq(index) {
-            const ans = document.getElementById(`faqAnswer${index}`);
-            const icon = document.getElementById(`faqIcon${index}`);
-            if (ans) ans.classList.toggle('hidden');
-            if (icon) icon.classList.toggle('rotate-180');
-        }
-
-        function initCountdown() {
-            const startDate = new Date(CONTEST_START_DATE).getTime();
-            const endDate = new Date(CONTEST_END_DATE).getTime();
-
-            setInterval(() => {
-                const now = new Date().getTime();
-                let targetDate = startDate;
-                let labelText = "Thời gian đếm ngược đến lúc mở cổng thi";
-
-                if (now >= startDate) {
-                    targetDate = endDate;
-                    labelText = "Thời gian còn lại của cuộc thi";
-                }
-
-                const cdLabel = document.getElementById('cdLabel');
-                if (cdLabel) cdLabel.innerText = labelText;
-
-                const diff = targetDate - now;
-
-                const dEl = document.getElementById('cdDays');
-                const hEl = document.getElementById('cdHours');
-                const mEl = document.getElementById('cdMinutes');
-                const sEl = document.getElementById('cdSeconds');
-
-                if (diff > 0) {
-                    if (dEl) dEl.innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                    if (hEl) hEl.innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                    if (mEl) mEl.innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                    if (sEl) sEl.innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-                } else {
-                    if (dEl) dEl.innerText = "00";
-                    if (hEl) hEl.innerText = "00";
-                    if (mEl) mEl.innerText = "00";
-                    if (sEl) sEl.innerText = "00";
-                }
-            }, 1000);
-        }
-
-        function toggleFaq(index) {
-            document.getElementById(`faqAnswer${index}`).classList.toggle('hidden');
-            document.getElementById(`faqIcon${index}`).classList.toggle('rotate-180');
-        }
-
         function handleRegisterSubmit(e) {
             e.preventDefault();
             const pass = document.getElementById('regPass').value;
@@ -296,13 +892,11 @@
             const email = document.getElementById('regEmail') ? document.getElementById('regEmail').value : '';
 
             let registeredUsers = [];
-            try {
-                registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-            } catch(err) { registeredUsers = []; }
+            try { registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || []; } catch(err) {}
 
             const existingUser = registeredUsers.find(u => (u.phone && u.phone === phone) || (u.cccd && u.cccd === cccd));
             if (existingUser) {
-                showToast("Số điện thoại hoặc CCCD này đã được đăng ký! Vui lòng Đăng nhập.");
+                showToast("Số điện thoại hoặc CCCD này đã đăng ký! Vui lòng Đăng nhập.");
                 toggleModal('registerModal');
                 toggleModal('loginModal');
                 return;
@@ -327,7 +921,7 @@
             }
 
             toggleModal('registerModal');
-            showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}. Hãy nhấn 'BẮT ĐẦU THI NGAY' để làm bài.`);
+            showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}. Bạn có thể BẮT ĐẦU THI NGAY.`);
         }
 
         function handleLoginSubmit(e) {
@@ -336,21 +930,19 @@
             const pass = document.getElementById('loginPass').value;
 
             let registeredUsers = [];
-            try {
-                registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-            } catch(err) { registeredUsers = []; }
+            try { registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || []; } catch(err) {}
 
             const foundUser = registeredUsers.find(u => 
                 (u.phone && u.phone === userKey) || (u.cccd && u.cccd === userKey)
             );
 
             if (!foundUser) {
-                showToast("Tài khoản chưa được đăng ký trên hệ thống! Vui lòng Đăng ký.");
+                showToast("Tài khoản chưa đăng ký trên hệ thống! Vui lòng Đăng ký.");
                 return;
             }
 
             if (foundUser.pass && foundUser.pass !== pass) {
-                showToast("Mật khẩu không chính xác! Vui lòng kiểm tra lại.");
+                showToast("Mật khẩu không chính xác!");
                 return;
             }
 
@@ -361,10 +953,19 @@
             showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
         }
 
+        // 📝 EXAM FLOW & LOGIC
         function startExamFlow() {
             if (!currentUser) {
-                showToast("Vui lòng Đăng ký hoặc Đăng nhập trước!");
+                showToast("Vui lòng Đăng ký hoặc Đăng nhập trước khi vào thi!");
                 toggleModal('loginModal');
+                return;
+            }
+
+            // Check start date
+            const startDate = new Date(CONTEST_START_DATE).getTime();
+            const now = new Date().getTime();
+            if (now < startDate) {
+                showToast("Cuộc thi chưa bắt đầu!");
                 return;
             }
 
@@ -379,15 +980,13 @@
                 return;
             }
 
-            // Xáo trộn ngẫu nhiên toàn bộ bộ 100 câu hỏi và chọn ra 20 câu duy nhất
+            // 🎲 Rút ngẫu nhiên 20 câu hỏi từ bộ 100 câu
             const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
             activeQuestions = shuffled.slice(0, Math.min(20, questionBank.length));
 
             currentQuestionIdx = 0;
             userAnswers = {};
             flaggedQuestions = {};
-            
-            // Đặt thời gian làm bài theo hằng số TOTAL_EXAM_SECONDS
             examTimeLeft = TOTAL_EXAM_SECONDS;
 
             document.getElementById('examCandidateName').innerText = `Thí sinh: ${currentUser.name}`;
@@ -401,6 +1000,7 @@
 
         function renderQuestionMatrix() {
             const matrix = document.getElementById('questionMatrix');
+            if (!matrix) return;
             matrix.innerHTML = '';
             activeQuestions.forEach((q, idx) => {
                 const btn = document.createElement('button');
@@ -427,13 +1027,7 @@
 
             const flagText = document.getElementById('flagBtnText');
             if (flagText) {
-                if (flaggedQuestions[idx]) {
-                    flagText.innerText = "Đã đánh dấu";
-                    if (flagText.parentElement) flagText.parentElement.className = "text-xs font-bold text-yellow-600 flex items-center space-x-1";
-                } else {
-                    flagText.innerText = "Đánh dấu xem lại";
-                    if (flagText.parentElement) flagText.parentElement.className = "text-xs font-semibold text-slate-500 hover:text-yellow-600 flex items-center space-x-1";
-                }
+                flagText.innerText = flaggedQuestions[idx] ? "Đã đánh dấu" : "Đánh dấu xem lại";
             }
 
             const container = document.getElementById('qOptions');
@@ -481,9 +1075,7 @@
                 if (!btn) return;
                 
                 let baseStyle = 'w-9 h-9 rounded-xl font-bold text-xs transition-all ';
-                if (idx === currentQuestionIdx) {
-                    baseStyle += 'ring-2 ring-gov ring-offset-1 ';
-                }
+                if (idx === currentQuestionIdx) baseStyle += 'ring-2 ring-gov ring-offset-1 ';
 
                 if (flaggedQuestions[idx]) {
                     btn.className = baseStyle + 'bg-yellow-400 text-slate-900 border-yellow-500';
@@ -511,6 +1103,15 @@
             }, 1000);
         }
 
+        // 🔘 EXAM CONFIRMATION HANDLERS (Exit & Submit)
+        function confirmExitExam() {
+            openConfirmDialog('exit');
+        }
+
+        function submitExamConfirmation() {
+            openConfirmDialog('submit');
+        }
+
         function openConfirmDialog(action) {
             pendingAction = action;
             const modal = document.getElementById('confirmModal');
@@ -519,19 +1120,14 @@
             const actionBtn = document.getElementById('confirmActionBtn');
 
             if (!modal || !title || !msg || !actionBtn) {
-                if (action === 'submit') {
-                    clearInterval(timerInterval);
-                    finishExam();
-                } else if (action === 'exit') {
-                    clearInterval(timerInterval);
-                    toggleModal('examModal');
-                }
+                if (action === 'submit') { clearInterval(timerInterval); finishExam(); }
+                else if (action === 'exit') { clearInterval(timerInterval); toggleModal('examModal'); }
                 return;
             }
 
             if (action === 'exit') {
                 title.innerText = "Thoát bài thi?";
-                msg.innerText = "Kết quả bài thi sẽ không được lưu. Bạn có chắc chắn muốn thoát?";
+                msg.innerText = "Kết quả làm bài sẽ không được lưu. Bạn có chắc chắn muốn thoát?";
                 actionBtn.innerText = "Thoát bài thi";
                 actionBtn.className = "flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md transition-all";
                 actionBtn.onclick = () => {
@@ -541,8 +1137,8 @@
                 };
             } else if (action === 'submit') {
                 const answeredCount = Object.keys(userAnswers).length;
-                title.innerText = "Xác nhận nộp bài thi?";
-                msg.innerText = `Bạn đã làm ${answeredCount}/${activeQuestions.length} câu hỏi. Bạn có chắc chắn muốn nộp bài thi ngay bây giờ?`;
+                title.innerText = "Xác nhận nộp bài?";
+                msg.innerText = `Bạn đã trả lời ${answeredCount}/${activeQuestions.length} câu hỏi. Bạn có chắc chắn muốn nộp bài thi ngay?`;
                 actionBtn.innerText = "Nộp bài ngay";
                 actionBtn.className = "flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md transition-all";
                 actionBtn.onclick = () => {
@@ -626,6 +1222,69 @@
 
             toggleModal('examModal');
             toggleModal('resultModal');
+        }
+
+        // 🛠️ HELPER FUNCTIONS
+        function initCountdown() {
+            const startDate = new Date(CONTEST_START_DATE).getTime();
+            const endDate = new Date(CONTEST_END_DATE).getTime();
+
+            setInterval(() => {
+                const now = new Date().getTime();
+                let targetDate = startDate;
+                let labelText = "Thời gian đếm ngược đến lúc mở cổng thi";
+
+                if (now >= startDate) {
+                    targetDate = endDate;
+                    labelText = "Thời gian còn lại của cuộc thi";
+                }
+
+                const cdLabel = document.getElementById('cdLabel');
+                if (cdLabel) cdLabel.innerText = labelText;
+
+                const diff = targetDate - now;
+                const dEl = document.getElementById('cdDays');
+                const hEl = document.getElementById('cdHours');
+                const mEl = document.getElementById('cdMinutes');
+                const sEl = document.getElementById('cdSeconds');
+
+                if (diff > 0) {
+                    if (dEl) dEl.innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                    if (hEl) hEl.innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                    if (mEl) mEl.innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                    if (sEl) sEl.innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+                } else {
+                    if (dEl) dEl.innerText = "00";
+                    if (hEl) hEl.innerText = "00";
+                    if (mEl) mEl.innerText = "00";
+                    if (sEl) sEl.innerText = "00";
+                }
+            }, 1000);
+        }
+
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.toggle('hidden');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        function toggleFaq(index) {
+            const ans = document.getElementById(`faqAnswer${index}`);
+            const icon = document.getElementById(`faqIcon${index}`);
+            if (ans) ans.classList.toggle('hidden');
+            if (icon) icon.classList.toggle('rotate-180');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            if (toastMsg) toastMsg.innerText = msg;
+            if (toast) toast.classList.remove('hidden');
+            setTimeout(() => { if (toast) toast.classList.add('hidden'); }, 3500);
         }
 
         function saveGasUrl() {
