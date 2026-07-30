@@ -49,7 +49,7 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans custom-scrollbar selection:bg-blue-200 selection:text-gov">
 
-    <!-- STREAMING_CHUNK:Rendering Clean Top Bar Notice and Main Navbar... -->
+    <!-- STREAMING_CHUNK:Rendering Top Bar Notice and Main Navigation Bar... -->
     <!-- Top Bar Notice -->
     <div class="bg-yellow-500 text-slate-900 text-xs font-semibold py-2 px-4 text-center flex items-center justify-center space-x-2 shadow-inner">
         <span class="bg-red-600 text-white text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full animate-pulse">Thông báo</span>
@@ -113,7 +113,7 @@
         </div>
     </nav>
 
-    <!-- STREAMING_CHUNK:Rendering Hero Banner and Countdown Section... -->
+    <!-- STREAMING_CHUNK:Rendering Hero Banner Section and Countdown Timer... -->
     <!-- Hero Banner Section -->
     <header id="home" class="relative hero-gradient text-white pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -378,7 +378,7 @@
         </div>
     </footer>
 
-    <!-- STREAMING_CHUNK:Rendering Interactive Modals (Register, Login, Exam Interface with Prediction Input, Result, Confirm)... -->
+    <!-- STREAMING_CHUNK:Rendering Modals (Register, Login, Exam Interface, Result, Confirm)... -->
     <!-- MODAL 1: Registration Modal -->
     <div id="registerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8">
@@ -620,10 +620,10 @@
         <span id="toastMessage">Thông báo ứng dụng</span>
     </div>
 
-    <!-- STREAMING_CHUNK:Defining Question Bank (100 Questions) and Fully Automated Logic... -->
+    <!-- STREAMING_CHUNK:Defining Question Bank (100 Questions) and Main Application Logic... -->
     <script>
-        // 🔗 GOOGLE APPS SCRIPT URL CỐ ĐỊNH (Hệ thống tự động đồng bộ 100% cho mọi thí sinh)
-        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbyBK2jtG5vfgBJvjGqfI92Pd0OQaLvlDTNGZI82NSR1m24SxnT1WXcvb4nUb9lF0IKz/exec';
+        // ⚠️ DÁN ĐƯỜNG DẪN WEB APP GOOGLE APPS SCRIPT CỦA BẠN VÀO DÒNG NÀY:
+        let GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxekUKfT-6UrTKlOmBec9lkMKWl7J5pM2vT0W6ZNQGWQx9gxhV0KOX4rEugZK394j0d/exec';
 
         // ⏱️ TÙY CHỈNH THỜI GIAN THI (Đơn vị: Giây)
         const TOTAL_EXAM_SECONDS = 600; // 600 = 10 phút
@@ -768,21 +768,25 @@
             let avgScore = completedExams > 0 ? (totalScore / completedExams).toFixed(1) : "0.0";
             let onlineBase = Math.max(1, Math.floor(totalUsers * 0.15) + Math.floor(Math.random() * 5));
 
-            fetch(`${GAS_API_URL}?action=getStats`)
-                .then(res => res.json())
-                .then(res => {
-                    if (res.status === 'success') {
-                        animateNumber('statUsers', res.users || totalUsers);
-                        animateNumber('statAttempts', res.attempts || totalAttempts);
-                        animateNumber('statCompleted', res.completed || completedExams);
-                        const avgEl = document.getElementById('statAvgScore');
-                        if (avgEl) avgEl.innerHTML = `${res.avgScore || avgScore} <span class="text-xs font-normal text-slate-400">/20</span>`;
-                        animateNumber('statOnline', res.online || onlineBase);
-                    } else {
-                        renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
-                    }
-                })
-                .catch(() => renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase));
+            if (GAS_API_URL && GAS_API_URL.startsWith('http')) {
+                fetch(`${GAS_API_URL}?action=getStats`)
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.status === 'success') {
+                            animateNumber('statUsers', res.users || totalUsers);
+                            animateNumber('statAttempts', res.attempts || totalAttempts);
+                            animateNumber('statCompleted', res.completed || completedExams);
+                            const avgEl = document.getElementById('statAvgScore');
+                            if (avgEl) avgEl.innerHTML = `${res.avgScore || avgScore} <span class="text-xs font-normal text-slate-400">/20</span>`;
+                            animateNumber('statOnline', res.online || onlineBase);
+                        } else {
+                            renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
+                        }
+                    })
+                    .catch(() => renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase));
+            } else {
+                renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
+            }
         }
 
         function renderLocalStats(users, attempts, completed, avg, online) {
@@ -905,12 +909,14 @@
             updateRealStats();
 
             // TỰ ĐỘNG ĐỒNG BỘ ĐĂNG KÝ VỀ GOOGLE SHEET
-            fetch(GAS_API_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'register', ...newUser, password: pass })
-            }).catch(err => console.error("Error posting to GAS:", err));
+            if (GAS_API_URL && GAS_API_URL.startsWith('http')) {
+                fetch(GAS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'register', ...newUser, password: pass })
+                }).catch(err => console.error("Error posting to GAS:", err));
+            }
 
             toggleModal('registerModal');
             showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}. Bạn có thể BẮT ĐẦU THI NGAY.`);
@@ -1114,10 +1120,11 @@
             const actionBtn = document.getElementById('confirmActionBtn');
 
             if (action === 'submit') {
-                const predVal = parseInt(document.getElementById('examPredictionInput')?.value);
+                const predInput = document.getElementById('examPredictionInput');
+                const predVal = predInput ? parseInt(predInput.value, 10) : NaN;
                 if (isNaN(predVal) || predVal <= 0) {
                     showToast("Vui lòng nhập số dự đoán người tham gia cuộc thi trước khi nộp bài!");
-                    document.getElementById('examPredictionInput')?.focus();
+                    if (predInput) predInput.focus();
                     return;
                 }
             }
@@ -1167,7 +1174,7 @@
 
             const durationSeconds = TOTAL_EXAM_SECONDS - examTimeLeft;
             const predInput = document.getElementById('examPredictionInput');
-            const prediction = predInput ? (parseInt(predInput.value) || 0) : 0;
+            const prediction = predInput ? (parseInt(predInput.value, 10) || 0) : 0;
 
             currentUser.attempts = (currentUser.attempts || 0) + 1;
             localStorage.setItem('cds_user', JSON.stringify(currentUser));
@@ -1214,22 +1221,24 @@
             }
 
             // TỰ ĐỘNG ĐỒNG BỘ BÀI THI & CON SỐ DỰ ĐOÁN VỀ GOOGLE SHEET (NGẦM)
-            fetch(GAS_API_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    action: 'submitExam',
-                    userKey: currentUser.phone || currentUser.cccd,
-                    name: currentUser.name,
-                    village: currentUser.village,
-                    score: correctCount,
-                    correctCount: correctCount,
-                    durationSeconds: durationSeconds,
-                    prediction: prediction
+            if (GAS_API_URL && GAS_API_URL.startsWith('http')) {
+                fetch(GAS_API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'submitExam',
+                        userKey: currentUser.phone || currentUser.cccd,
+                        name: currentUser.name,
+                        village: currentUser.village,
+                        score: correctCount,
+                        correctCount: correctCount,
+                        durationSeconds: durationSeconds,
+                        prediction: prediction
+                    })
                 })
-            })
-            .catch(err => console.error("Error submitting exam to GAS:", err));
+                .catch(err => console.error("Error submitting exam to GAS:", err));
+            }
 
             toggleModal('examModal');
             toggleModal('resultModal');
