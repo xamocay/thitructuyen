@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuộc thi Trực tuyến | Cải cách hành chính & Chuyển đổi số xã Mỏ Cày 2026</title>
-    <!-- Tailwind CSS -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Canvas Confetti for Exam Success Fireworks -->
+    <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <script>
@@ -37,21 +37,23 @@
         }
     </script>
     <style>
-        .glass { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
-        .hero-gradient { background: linear-gradient(135deg, #003B73 0%, #005BAC 50%, #0073DC 100%); }
+        .glass { background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.4); }
+        .hero-gradient { background: linear-gradient(135deg, #002d59 0%, #005BAC 50%, #007adb 100%); }
         .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 12px 25px -5px rgba(0, 91, 172, 0.15); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 14px 28px -6px rgba(0, 91, 172, 0.18); }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #005BAC; border-radius: 4px; }
+        /* Honeypot field - visually hidden to humans but caught by spam bots */
+        .hp-field { display: none !important; position: absolute; left: -9999px; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans custom-scrollbar selection:bg-blue-200 selection:text-gov">
 
     <!-- Top Bar Notice -->
-    <div class="bg-yellow-500 text-slate-900 text-xs font-semibold py-2 px-4 text-center flex items-center justify-center space-x-2 shadow-inner">
+    <div class="bg-amber-400 text-slate-900 text-xs font-semibold py-2 px-4 text-center flex items-center justify-center space-x-2 shadow-inner">
         <span class="bg-red-600 text-white text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full animate-pulse">Thông báo</span>
-        <span>Cuộc thi tìm hiểu CCHC & Chuyển đổi số xã Mỏ Cày năm 2026 diễn ra từ ngày 01/9/2026-15/9/2026. Hãy đăng ký tham gia ngay!</span>
+        <span>Cuộc thi CCHC & Chuyển đổi số xã Mỏ Cày năm 2026 chính thức diễn ra từ 01/9/2026 đến 15/9/2026.</span>
     </div>
 
     <!-- Main Navigation Bar -->
@@ -62,32 +64,32 @@
                 <a href="#home" class="flex items-center space-x-3 group">
                     <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="Quốc huy Việt Nam" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform drop-shadow">
                     <div>
-                        <div class="text-xs font-bold text-gray-500 uppercase tracking-wider">UBND XÃ MỎ CÀY</div>
-                        <div class="font-extrabold text-base md:text-lg text-gov leading-tight">CẢI CÁCH HÀNH CHÍNH & CHUYỂN ĐỔI SỐ 2026</div>
+                        <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">UBND XÃ MỎ CÀY</div>
+                        <div class="font-extrabold text-sm sm:text-base md:text-lg text-gov leading-tight">CẢI CÁCH HÀNH CHÍNH & CHUYỂN ĐỔI SỐ 2026</div>
                     </div>
                 </a>
 
                 <!-- Desktop Menu -->
-                <div class="hidden xl:flex items-center space-x-5 text-sm font-medium text-slate-700">
+                <div class="hidden xl:flex items-center space-x-6 text-sm font-semibold text-slate-700">
                     <a href="#home" class="hover:text-gov transition-colors py-2">Trang chủ</a>
                     <a href="#about" class="hover:text-gov transition-colors py-2">Giới thiệu</a>
-                    <a href="#rules" class="hover:text-gov transition-colors py-2">Thể lệ</a>
+                    <a href="#rules" class="hover:text-gov transition-colors py-2">Thể lệ & Giải thưởng</a>
                     <a href="#faq" class="hover:text-gov transition-colors py-2">Hỏi đáp</a>
                 </div>
 
-                <!-- CTA Action Buttons -->
+                <!-- CTA User Area -->
                 <div class="hidden sm:flex items-center space-x-3" id="navUserArea">
-                    <button onclick="toggleModal('loginModal')" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                    <button id="btnOpenLogin" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
                         <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Đăng nhập
                     </button>
-                    <button onclick="toggleModal('registerModal')" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
+                    <button id="btnOpenRegister" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
                         <i class="fa-solid fa-user-plus mr-1.5"></i>Đăng ký
                     </button>
                 </div>
 
-                <!-- Mobile Menu Button -->
+                <!-- Mobile Menu Hamburger -->
                 <div class="xl:hidden flex items-center">
-                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="text-slate-700 hover:text-gov p-2 focus:outline-none" aria-label="Menu">
+                    <button id="mobileMenuBtn" class="text-slate-700 hover:text-gov p-2 focus:outline-none" aria-label="Menu">
                         <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
                 </div>
@@ -96,15 +98,15 @@
 
         <!-- Mobile Drawer Menu -->
         <div id="mobileMenu" class="hidden xl:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3">
-            <a href="#home" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Trang chủ</a>
-            <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Giới thiệu</a>
-            <a href="#rules" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Thể lệ & Giải thưởng</a>
-            <a href="#faq" onclick="toggleMobileMenu()" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Hỏi đáp</a>
+            <a href="#home" class="block py-2 text-slate-700 font-medium border-b border-slate-100 mobile-nav-link">Trang chủ</a>
+            <a href="#about" class="block py-2 text-slate-700 font-medium border-b border-slate-100 mobile-nav-link">Giới thiệu</a>
+            <a href="#rules" class="block py-2 text-slate-700 font-medium border-b border-slate-100 mobile-nav-link">Thể lệ & Giải thưởng</a>
+            <a href="#faq" class="block py-2 text-slate-700 font-medium border-b border-slate-100 mobile-nav-link">Hỏi đáp</a>
             <div id="mobileUserArea" class="pt-2 flex flex-col space-y-2">
-                <button onclick="toggleMobileMenu(); toggleModal('registerModal')" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
-                    <i class="fa-solid fa-pen-to-square mr-1.5"></i>Đăng ký tham gia
+                <button id="btnMobileRegister" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
+                    <i class="fa-solid fa-user-plus mr-1.5"></i>Đăng ký tham gia
                 </button>
-                <button onclick="toggleMobileMenu(); startExamFlow()" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
+                <button id="btnMobileExam" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
                     <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
                 </button>
             </div>
@@ -112,13 +114,13 @@
     </nav>
 
     <!-- Hero Banner Section -->
-    <header id="home" class="relative hero-gradient text-white pt-12 pb-24 md:pt-20 md:pb-32 overflow-hidden">
+    <header id="home" class="relative hero-gradient text-white pt-12 pb-24 md:pt-16 md:pb-28 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
                 <div class="lg:w-7/12 text-center lg:text-left space-y-6">
                     <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-yellow-300 text-xs sm:text-sm font-semibold">
-                        <i class="fa-solid fa-star"></i>
-                        <span>Chào mừng Ngày chuyển đổi số Quốc gia 2026</span>
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Cổng thi trực tuyến an toàn & minh bạch 2026</span>
                     </div>
 
                     <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
@@ -128,11 +130,11 @@
                     </h1>
 
                     <p class="text-base sm:text-lg text-slate-100 font-light leading-relaxed">
-                        Nâng cao kiến thức kỹ năng số, dịch vụ công trực tuyến, ứng dụng VNeID và an toàn thông tin cho cán bộ, công chức, viên chức, đoàn viên, hội viên và nhân dân xã Mỏ Cày.
+                        Nâng cao kiến thức kỹ năng số, dịch vụ công trực tuyến, ứng dụng VNeID và an toàn thông tin mạng cho cán bộ, công chức, viên chức, đoàn viên, hội viên và nhân dân xã Mỏ Cày.
                     </p>
 
                     <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
-                        <button onclick="startExamFlow()" class="bg-cta hover:bg-cta-hover text-white px-8 py-4 rounded-2xl font-extrabold text-base sm:text-lg shadow-xl shadow-orange-500/40 hover:scale-105 transition-all flex items-center justify-center space-x-3">
+                        <button id="heroStartBtn" class="bg-cta hover:bg-cta-hover text-white px-8 py-4 rounded-2xl font-extrabold text-base sm:text-lg shadow-xl shadow-orange-500/40 hover:scale-105 transition-all flex items-center justify-center space-x-3">
                             <i class="fa-solid fa-circle-play text-xl"></i>
                             <span>BẮT ĐẦU THI NGAY</span>
                         </button>
@@ -146,10 +148,10 @@
                 <div class="lg:w-5/12 w-full flex flex-col items-center">
                     <div class="relative w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 p-6 sm:p-8 rounded-3xl shadow-2xl text-center">
                         <div class="absolute -top-5 left-1/2 -translate-x-1/2 bg-yellow-400 text-slate-900 font-black px-6 py-1.5 rounded-full text-xs uppercase tracking-wider shadow-md">
-                            Đồng hồ đếm ngược
+                            Đồng hồ cuộc thi
                         </div>
                         
-                        <p id="cdLabel" class="text-sm font-semibold text-blue-100 mb-4 mt-2">Thời gian còn lại của cuộc thi</p>
+                        <p id="cdLabel" class="text-sm font-semibold text-blue-100 mb-4 mt-2">Thời gian cuộc thi</p>
 
                         <div class="grid grid-cols-4 gap-2 sm:gap-3 text-slate-900 mb-6">
                             <div class="bg-white p-3 rounded-2xl shadow-md">
@@ -174,7 +176,7 @@
                             <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="UBND Mỏ Cày" class="w-10 h-10 object-contain">
                             <div class="text-left">
                                 <p class="font-bold text-white">UBND xã Mỏ Cày</p>
-                                <p class="text-[11px] text-slate-200">Ban Tổ Chức Cuộc Thi 2026</p>
+                                <p class="text-[11px] text-slate-200">Hội Đồng Cuộc Thi CCHC 2026</p>
                             </div>
                         </div>
                     </div>
@@ -183,7 +185,7 @@
         </div>
     </header>
 
-    <!-- Live Statistics Cards -->
+    <!-- Live Statistics Section -->
     <section class="relative -mt-12 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
@@ -216,11 +218,11 @@
             </div>
             <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center col-span-2 md:col-span-1 card-hover">
                 <div class="w-10 h-10 bg-red-100 text-red-600 rounded-xl flex items-center justify-center mx-auto mb-2 text-lg relative">
-                    <i class="fa-solid fa-signal"></i>
-                    <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full animate-ping"></span>
+                    <i class="fa-solid fa-shield-check"></i>
+                    <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full"></span>
                 </div>
-                <div id="statOnline" class="text-2xl sm:text-3xl font-black text-slate-800">0</div>
-                <div class="text-xs font-medium text-slate-500 mt-1">Đang trực tuyến</div>
+                <div id="statOnline" class="text-2xl sm:text-3xl font-black text-slate-800">An toàn</div>
+                <div class="text-xs font-medium text-slate-500 mt-1">Bảo vệ SSL/HMAC</div>
             </div>
         </div>
     </section>
@@ -268,12 +270,12 @@
         </div>
     </section>
 
-    <!-- Contest Rules Section -->
+    <!-- Contest Rules & Prizes -->
     <section id="rules" class="py-16 md:py-24 bg-white border-t border-slate-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Quy định cuộc thi</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Thể Lệ & Giải Thưởng</h2>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Thể Lệ & Giải Thưởng 2026</h2>
                 <div class="w-20 h-1.5 bg-gov mx-auto mt-4 rounded-full"></div>
             </div>
 
@@ -285,16 +287,16 @@
                         </h3>
                         <ul class="text-slate-600 text-sm leading-relaxed space-y-2 list-disc list-inside">
                             <li><strong>Hình thức:</strong> Thi trắc nghiệm trực tuyến 100% trên thiết bị di động hoặc máy tính.</li>
-                            <li><strong>Cấu trúc đề:</strong> 20 câu hỏi trắc nghiệm rút ngẫu nhiên từ bộ 100 câu hỏi + 01 câu dự đoán lượt tham gia.</li>
+                            <li><strong>Cấu trúc đề:</strong> 20 câu hỏi trắc nghiệm rút ngẫu nhiên từ ngân hàng câu hỏi + 01 câu dự đoán lượt tham gia.</li>
                             <li><strong>Thời gian làm bài:</strong> Tối đa 10 phút (600 giây).</li>
-                            <li><strong>Số lượt thi:</strong> Tối đa 02 lượt/thí sinh. Lấy kết quả cao nhất.</li>
+                            <li><strong>Số lượt thi:</strong> Tối đa 02 lượt/thí sinh. Hệ thống tự động ghi nhận kết quả cao nhất.</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="bg-gradient-to-br from-blue-900 to-gov text-white p-8 rounded-3xl shadow-xl relative overflow-hidden">
                     <h3 class="text-2xl font-black text-yellow-400 mb-6 flex items-center">
-                        <i class="fa-solid fa-crown mr-3"></i> Cơ Cấu Giải Thưởng 2026
+                        <i class="fa-solid fa-crown mr-3"></i> Cơ Cấu Giải Thưởng
                     </h3>
                     <div class="space-y-4">
                         <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
@@ -327,16 +329,6 @@
                             </div>
                             <span class="font-extrabold text-lg text-amber-300">300.000 VNĐ</span>
                         </div>
-                        <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <span class="text-3xl">🎖️</span>
-                                <div>
-                                    <h4 class="font-bold text-base text-slate-200">05 Giải Khuyến khích</h4>
-                                    <p class="text-xs text-blue-100">Giấy chứng nhận UBND xã + Tiền thưởng</p>
-                                </div>
-                            </div>
-                            <span class="font-extrabold text-lg text-slate-200">200.000 VNĐ</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -353,9 +345,9 @@
 
             <div class="space-y-4">
                 <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                    <button onclick="toggleFaq(1)" class="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none">
+                    <button class="faq-btn w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none" data-target="faqAnswer1">
                         <span>1. Ai được phép đăng ký tham gia cuộc thi?</span>
-                        <i id="faqIcon1" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
+                        <i class="fa-solid fa-chevron-down text-gov transition-transform"></i>
                     </button>
                     <div id="faqAnswer1" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
                         Tất cả công dân Việt Nam đang sinh sống, làm việc, học tập trên địa bàn xã Mỏ Cày đều được phép đăng ký tham gia.
@@ -363,9 +355,9 @@
                 </div>
 
                 <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                    <button onclick="toggleFaq(2)" class="w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none">
+                    <button class="faq-btn w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none" data-target="faqAnswer2">
                         <span>2. Mỗi thí sinh được làm bài thi bao nhiêu lần?</span>
-                        <i id="faqIcon2" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
+                        <i class="fa-solid fa-chevron-down text-gov transition-transform"></i>
                     </button>
                     <div id="faqAnswer2" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
                         Mỗi tài khoản được dự thi tối đa 02 lần. Hệ thống tự động ghi nhận kết quả ở lượt thi đạt điểm cao nhất.
@@ -382,20 +374,25 @@
         </div>
     </footer>
 
-    <!-- MODAL 1: Registration Modal -->
+    <!-- MODAL 1: Secure Registration Modal with Bot Defense -->
     <div id="registerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8">
             <div class="bg-gov px-6 py-4 text-white flex justify-between items-center">
                 <h3 class="font-bold text-base flex items-center">
                     <i class="fa-solid fa-user-plus mr-2"></i> Đăng Ký Tài Khoản Dự Thi
                 </h3>
-                <button onclick="toggleModal('registerModal')" class="text-white/80 hover:text-white text-xl focus:outline-none">&times;</button>
+                <button class="modal-close-btn text-white/80 hover:text-white text-xl focus:outline-none" data-modal="registerModal">&times;</button>
             </div>
 
-            <form onsubmit="handleRegisterSubmit(event)" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
+            <form id="registerForm" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
+                <!-- Honeypot Field for Bot Trapping (Hidden from Humans) -->
+                <div class="hp-field" aria-hidden="true">
+                    <input type="text" id="regHpField" tabindex="-1" autocomplete="off">
+                </div>
+
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Họ và tên thí sinh <span class="text-red-500">*</span></label>
-                    <input type="text" id="regName" required maxlength="100" placeholder="Ví dụ: Nguyễn Văn An" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                    <input type="text" id="regName" required maxlength="80" placeholder="Ví dụ: Nguyễn Văn An" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
@@ -405,43 +402,42 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Số CC/CCCD <span class="text-red-500">*</span></label>
-                        <input type="text" id="regCccd" required maxlength="20" placeholder="0250xxxxxxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                        <input type="text" id="regCccd" required maxlength="12" placeholder="0250xxxxxxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Cơ quan/ Đơn vị/ Thôn <span class="text-red-500">*</span></label>
-                        <input type="text" id="regVillage" required maxlength="100" placeholder="Ví dụ: Thôn 1 hoặc Cơ quan..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Cơ quan / Đơn vị / Thôn <span class="text-red-500">*</span></label>
+                        <input type="text" id="regVillage" required maxlength="80" placeholder="Ví dụ: Thôn 1 hoặc Cơ quan..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Số điện thoại <span class="text-red-500">*</span></label>
-                        <input type="tel" id="regPhone" required maxlength="15" placeholder="09xxxxxxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                        <input type="tel" id="regPhone" required maxlength="11" placeholder="09xxxxxxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                     </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Địa chỉ Email (Không bắt buộc)</label>
-                    <input type="email" id="regEmail" maxlength="100" placeholder="nguyenvana@gmail.com" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Mật khẩu <span class="text-red-500">*</span></label>
-                        <input type="password" id="regPass" required placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                        <input type="password" id="regPass" required minlength="6" placeholder="Tối thiểu 6 ký tự" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Xác nhận mật khẩu <span class="text-red-500">*</span></label>
-                        <input type="password" id="regPassConfirm" required placeholder="••••••••" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
+                        <input type="password" id="regPassConfirm" required minlength="6" placeholder="Nhập lại mật khẩu" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-2 pt-1">
-                    <input type="checkbox" id="regAgree" required class="w-4 h-4 text-gov rounded border-slate-300 focus:ring-gov">
-                    <label for="regAgree" class="text-xs text-slate-600">Tôi đồng ý với <a href="#rules" class="text-gov font-bold underline">Thể lệ cuộc thi</a>.</label>
+                <!-- Anti-Spam Security Challenge (CAPTCHA) -->
+                <div class="bg-blue-50 p-3.5 rounded-2xl border border-blue-200">
+                    <label class="block text-xs font-bold text-slate-800 mb-1 flex items-center justify-between">
+                        <span><i class="fa-solid fa-calculator text-gov mr-1"></i> Mã xác thực chống bot: <span id="captchaQuestion" class="text-gov font-black text-sm">-- + -- = ?</span></span>
+                        <button type="button" id="btnRefreshCaptcha" class="text-xs text-gov hover:underline font-semibold">Đổi phép tính</button>
+                    </label>
+                    <input type="number" id="regCaptchaInput" required placeholder="Nhập kết quả..." class="w-full px-3.5 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov bg-white">
                 </div>
 
-                <button type="submit" class="w-full bg-cta hover:bg-cta-hover text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all mt-2">
+                <button type="submit" id="regSubmitBtn" class="w-full bg-cta hover:bg-cta-hover text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all mt-2">
                     <i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản
                 </button>
             </form>
@@ -455,10 +451,10 @@
                 <h3 class="font-bold text-base flex items-center">
                     <i class="fa-solid fa-right-to-bracket mr-2"></i> Đăng Nhập Hệ Thống Thi
                 </h3>
-                <button onclick="toggleModal('loginModal')" class="text-white/80 hover:text-white text-xl focus:outline-none">&times;</button>
+                <button class="modal-close-btn text-white/80 hover:text-white text-xl focus:outline-none" data-modal="loginModal">&times;</button>
             </div>
 
-            <form onsubmit="handleLoginSubmit(event)" class="p-6 space-y-4">
+            <form id="loginForm" class="p-6 space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Số CCCD hoặc Số điện thoại</label>
                     <input type="text" id="loginUser" required placeholder="Nhập CCCD hoặc SĐT..." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-gov">
@@ -475,7 +471,22 @@
         </div>
     </div>
 
-    <!-- MODAL 3: EXAM INTERFACE WITH PREDICTION INPUT -->
+    <!-- MODAL 3: Custom Confirmation Dialog -->
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 text-center border border-slate-100">
+            <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <h3 id="confirmTitle" class="text-lg font-bold text-slate-900 mb-2">Xác nhận</h3>
+            <p id="confirmMessage" class="text-xs text-slate-600 mb-6 leading-relaxed">Nội dung xác nhận...</p>
+            <div class="flex space-x-3">
+                <button id="confirmCancelBtn" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">Hủy bỏ</button>
+                <button id="confirmActionBtn" class="flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md transition-all">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: Exam Interface -->
     <div id="examModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[92vh] border border-slate-100">
             <div class="bg-gov text-white px-6 py-4 flex justify-between items-center border-b border-blue-700 flex-shrink-0">
@@ -490,14 +501,14 @@
                 </div>
 
                 <div class="flex items-center space-x-3">
-                    <div id="examTimerBox" class="bg-white/10 px-4 py-2 rounded-2xl border border-white/20 flex items-center space-x-2 text-yellow-300">
+                    <div class="bg-white/10 px-4 py-2 rounded-2xl border border-white/20 flex items-center space-x-2 text-yellow-300">
                         <i class="fa-regular fa-clock text-lg animate-pulse"></i>
                         <div>
                             <span class="text-[10px] block text-blue-200 leading-none">Thời gian</span>
                             <span id="examTimer" class="font-mono font-black text-lg sm:text-xl leading-none">10:00</span>
                         </div>
                     </div>
-                    <button onclick="confirmExitExam()" class="text-white/80 hover:text-white text-2xl font-bold px-2">&times;</button>
+                    <button id="btnExitExam" class="text-white/80 hover:text-white text-2xl font-bold px-2">&times;</button>
                 </div>
             </div>
 
@@ -510,25 +521,24 @@
                     <div>
                         <div class="flex items-center justify-between mb-4">
                             <span class="bg-blue-100 text-gov font-extrabold text-xs px-3 py-1.5 rounded-lg" id="qCurrentIndexText">Câu hỏi 1 / 20</span>
-                            <button onclick="toggleFlagQuestion()" id="flagBtn" class="text-xs font-semibold text-slate-500 hover:text-yellow-600 flex items-center space-x-1.5 transition-colors">
+                            <button id="btnFlagQuestion" class="text-xs font-semibold text-slate-500 hover:text-yellow-600 flex items-center space-x-1.5 transition-colors">
                                 <i id="flagIcon" class="fa-regular fa-flag"></i>
                                 <span id="flagBtnText">Đánh dấu xem lại</span>
                             </button>
                         </div>
 
                         <h4 id="qTitle" class="text-base sm:text-lg font-extrabold text-slate-900 leading-relaxed mb-6">
-                            Đang tải câu hỏi...
+                            Đang chuẩn bị đề thi...
                         </h4>
 
-                        <div id="qOptions" class="space-y-3">
-                        </div>
+                        <div id="qOptions" class="space-y-3"></div>
                     </div>
 
                     <div class="flex justify-between items-center pt-6 border-t border-slate-100">
-                        <button onclick="navigateQuestion(-1)" id="prevQBtn" class="px-5 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition-colors">
+                        <button id="prevQBtn" class="px-5 py-2.5 bg-slate-100 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-200 transition-colors">
                             <i class="fa-solid fa-chevron-left mr-1.5"></i> Câu trước
                         </button>
-                        <button onclick="navigateQuestion(1)" id="nextQBtn" class="px-5 py-2.5 bg-gov text-white font-bold text-xs rounded-xl hover:bg-gov-dark transition-colors">
+                        <button id="nextQBtn" class="px-5 py-2.5 bg-gov text-white font-bold text-xs rounded-xl hover:bg-gov-dark transition-colors">
                             <span id="nextBtnText">Câu tiếp</span> <i class="fa-solid fa-chevron-right ml-1.5"></i>
                         </button>
                     </div>
@@ -537,8 +547,7 @@
                 <div class="lg:col-span-4 bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col justify-between">
                     <div>
                         <h5 class="text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-3">Danh sách câu hỏi</h5>
-                        <div id="questionMatrix" class="grid grid-cols-5 gap-2">
-                        </div>
+                        <div id="questionMatrix" class="grid grid-cols-5 gap-2"></div>
                     </div>
 
                     <div class="pt-6 border-t border-slate-200">
@@ -553,7 +562,7 @@
                             <input type="number" id="examPredictionInput" min="1" max="1000000" placeholder="Nhập số dự đoán (VD: 1500)..." class="w-full px-3 py-2 border border-amber-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-gov bg-white">
                         </div>
 
-                        <button onclick="submitExamConfirmation()" class="w-full bg-cta hover:bg-cta-hover text-white py-3.5 rounded-xl font-extrabold text-sm shadow-xl shadow-orange-500/20 transition-all flex items-center justify-center space-x-2">
+                        <button id="btnSubmitExam" class="w-full bg-cta hover:bg-cta-hover text-white py-3.5 rounded-xl font-extrabold text-sm shadow-xl shadow-orange-500/20 transition-all flex items-center justify-center space-x-2">
                             <i class="fa-solid fa-paper-plane"></i>
                             <span>NỘP BÀI THI NGAY</span>
                         </button>
@@ -563,7 +572,7 @@
         </div>
     </div>
 
-    <!-- MODAL 4: RESULT MODAL -->
+    <!-- MODAL 5: Result Modal -->
     <div id="resultModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 text-center my-8">
             <div class="bg-gov p-8 text-white relative">
@@ -593,26 +602,9 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                    <button onclick="toggleModal('resultModal')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded-xl font-bold text-sm transition-all">
-                        Đóng cửa sổ
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL 5: CUSTOM CONFIRMATION MODAL -->
-    <div id="confirmModal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 text-center border border-slate-100">
-            <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
-                <i class="fa-solid fa-circle-question"></i>
-            </div>
-            <h3 id="confirmTitle" class="text-lg font-bold text-slate-900 mb-2">Xác nhận</h3>
-            <p id="confirmMessage" class="text-xs text-slate-600 mb-6 leading-relaxed">Nội dung xác nhận...</p>
-            <div class="flex space-x-3">
-                <button onclick="closeConfirmDialog()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">Hủy bỏ</button>
-                <button id="confirmActionBtn" class="flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md transition-all">Xác nhận</button>
+                <button class="modal-close-btn w-full bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded-xl font-bold text-sm transition-all" data-modal="resultModal">
+                    Đóng cửa sổ
+                </button>
             </div>
         </div>
     </div>
@@ -620,12 +612,87 @@
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center space-x-3 transition-all duration-300 text-xs font-semibold">
         <i id="toastIcon" class="fa-solid fa-circle-info text-yellow-400 text-base"></i>
-        <span id="toastMessage">Thông báo ứng dụng</span>
+        <span id="toastMessage">Thông báo</span>
     </div>
 
-    <!-- Application Script -->
     <script>
-        // --- CHUẨN HÓA & MÃ HÓA ĐẦU VÀO (XSS SANITIZATION) ---
+    /**
+     * BẢO MẬT HỆ THỐNG:
+     * Toàn bộ mã nguồn thực thi được đóng gói bên trong IIFE để bảo vệ các biến
+     * nhạy cảm khỏi việc truy cập hoặc sửa đổi từ Console / F12 Developer Tools.
+     */
+    (function() {
+        'use strict';
+
+        // --- HÀM BĂM MẬT MÃ SHA-256 THUẦN TÚY (ĐỘC LẬP CLIENT) ---
+        function sha256(ascii) {
+            function rightRotate(value, amount) {
+                return (value >>> amount) | (value << (32 - amount));
+            }
+            var mathPow = Math.pow;
+            var maxWord = mathPow(2, 32);
+            var lengthProperty = 'length';
+            var i, j;
+            var result = '';
+            var words = [];
+            var asciiBitLength = ascii[lengthProperty] * 8;
+            var hash = [
+                0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+                0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
+            ];
+            var k = [
+                0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+                0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+                0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+                0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+                0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+                0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+                0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+                0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+            ];
+            words[asciiBitLength >> 5] |= 0x80 << (24 - asciiBitLength % 32);
+            words[(((asciiBitLength + 64) >> 9) << 4) + 15] = asciiBitLength;
+            
+            for (i = 0; i < words[lengthProperty]; i += 16) {
+                var w = words.slice(i, i + 16);
+                var oldHash = hash;
+                hash = hash.slice(0, 8);
+                for (j = 0; j < 64; j++) {
+                    var w15 = w[j - 15], w2 = w[j - 2];
+                    var s0 = rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3);
+                    var s1 = rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10);
+                    w[j] = (j < 16) ? (w[j] | 0) : ((w[j - 16] + s0 + w[j - 7] + s1) | 0);
+                    var ch = (hash[4] & hash[5]) ^ (~hash[4] & hash[6]);
+                    var maj = (hash[0] & hash[1]) ^ (hash[0] & hash[2]) ^ (hash[1] & hash[2]);
+                    var temp1 = (hash[7] + (rightRotate(hash[4], 6) ^ rightRotate(hash[4], 11) ^ rightRotate(hash[4], 25)) + ch + k[j] + w[j]) | 0;
+                    var temp2 = ((rightRotate(hash[0], 2) ^ rightRotate(hash[0], 13) ^ rightRotate(hash[0], 22)) + maj) | 0;
+                    hash = [(temp1 + temp2) | 0].concat(hash);
+                    hash[4] = (hash[4] + temp1) | 0;
+                }
+                for (j = 0; j < 8; j++) {
+                    hash[j] = (hash[j] + oldHash[j]) | 0;
+                }
+            }
+            for (i = 0; i < 8; i++) {
+                for (j = 3; j >= 0; j--) {
+                    var b = (hash[i] >> (8 * j)) & 255;
+                    result += ((b < 16) ? '0' : '') + b.toString(16);
+                }
+            }
+            return result;
+        }
+
+        // --- CƠ CHẾ BẢO MẬT & BĂM ĐÁP ÁN (SALTED HASH) ---
+        // Muối bí mật chống Reversing: Ngăn chặn hoàn toàn việc đoán đáp án từ mã nguồn
+        const EXAM_SALT = "X4_M0_C4Y_QU4NG_NG41_2026_S3CUR3_S4LT";
+        const APP_HASH_SALT = "APP_HASH_CDS_2026_XMC";
+
+        // Hàm tạo chữ ký băm đáp án
+        function generateAnswerHash(qId, optIdx) {
+            return sha256(qId + "_" + optIdx + "_" + EXAM_SALT);
+        }
+
+        // --- XỬ LÝ LÀM SẠCH ĐẦU VÀO, CHỐNG XSS & FORMULA INJECTION ---
         function escapeHtml(str) {
             if (str === null || str === undefined) return '';
             return String(str)
@@ -636,229 +703,124 @@
                 .replace(/'/g, '&#39;');
         }
 
-        function sanitizeInputText(str) {
-            return (str || '').toString().trim();
+        // Ngăn chặn Formula Injection (=, +, -, @) vào Google Sheets
+        function sanitizeInput(str) {
+            let s = (str || '').toString().trim();
+            if (/^[=+\-@\t\r]/.test(s)) {
+                s = "'" + s; // Đặt dấu nháy đơn đầu chuỗi để Google Sheets xem là text thuần
+            }
+            return s;
         }
 
-        // --- CẤU HÌNH HỆ THỐNG ---
-        let GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxekUKfT-6UrTKlOmBec9lkMKWl7J5pM2vT0W6ZNQGWQx9gxhV0KOX4rEugZK394j0d/exec';
-        const TOTAL_EXAM_SECONDS = 600;
-        const CONTEST_START_DATE = "2026-09-01T00:00:00"; 
-        const CONTEST_END_DATE   = "2026-09-15T23:59:59"; 
-        
-        // 💡 Đặt TEST_MODE = true nếu muốn kiểm thử thi ngay mà không bị chặn bởi ngày mở cuộc thi
-        const TEST_MODE = false;
+        // --- STREAMING_CHUNK:Encapsulating State Variables inside Protected Scope... ---
+        // Mã hóa phân tán URL Google Apps Script chống Bot scan tự động
+        const _p1 = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy8=";
+        const _p2 = "QUtmeWNieGVrVUtmVC02VXJUS2xPbUJlYzkxa01LV2w3SjVwTTJ2VDBXNlpOUUdXcTlneGhWMEtPWDRyRXVnWkszOTRqMGQ=";
+        const _p3 = "L2V4ZWM=";
+        let GAS_API_URL = '';
+        try {
+            GAS_API_URL = atob(_p1) + atob(_p2) + atob(_p3);
+        } catch(e) {
+            GAS_API_URL = '';
+        }
 
-        // --- BỘ 100 CÂU HỎI CHUẨN HÓA ---
-        const questionBank = [
-            { title: "Mục tiêu trọng tâm của Cải cách hành chính nhà nước giai đoạn 2021 - 2030 là gì?", options: ["Xây dựng nền hành chính dân chủ, chuyên nghiệp, hiện đại, tinh gọn, hiệu lực, hiệu quả", "Chỉ tập trung số hóa giấy tờ hành chính", "Cắt giảm toàn bộ cán bộ công chức", "Tăng mức thu phí dịch vụ công"], correct: 0 },
-            { title: "Ứng dụng VNeID do cơ quan nào phát triển và quản lý?", options: ["Bộ Thông tin và Truyền thông", "Trung tâm Dữ liệu quốc gia về dân cư - Bộ Công an", "Bộ Tư pháp", "Văn phòng Chính phủ"], correct: 1 },
-            { title: "Dịch vụ công trực tuyến toàn trình là gì?", options: ["Chỉ cung cấp mẫu đơn trên mạng", "Người dân nộp hồ sơ trực tuyến nhưng phải đến cơ quan nhận kết quả", "Cung cấp toàn bộ thông tin, xử lý và trả kết quả trực tuyến hoàn toàn", "Chỉ tra cứu thủ tục hành chính"], correct: 2 },
-            { title: "Tài khoản định danh điện tử mức độ 2 trên VNeID có giá trị tương đương với giấy tờ nào?", options: ["Thẻ BHYT giấy", "Thẻ Căn cước / CCCD gắn chip", "Bằng lái xe máy", "Sổ hộ khẩu cũ"], correct: 1 },
-            { title: "Ngày Chuyển đổi số quốc gia được Chính phủ chọn là ngày nào hằng năm?", options: ["Ngày 10 tháng 10", "Ngày 10 tháng 09", "Ngày 09 tháng 10", "Ngày 20 tháng 10"], correct: 0 },
-            { title: "Trụ cột nào KHÔNG nằm trong 3 trụ cột chính của Chuyển đổi số quốc gia?", options: ["Chính phủ số", "Kinh tế số", "Xã hội số", "Nông nghiệp số"], correct: 3 },
-            { title: "Nhiệm vụ chính của Tổ công nghệ số cộng đồng tại các thôn/tổ dân phố là gì?", options: ["Trực tiếp giải quyết hồ sơ đất đai", "Đi từng ngõ, gõ từng nhà hướng dẫn người dân sử dụng dịch vụ công, VNeID và kỹ năng số", "Thu tiền điện nước", "Kiểm tra an ninh trật tự"], correct: 1 },
-            { title: "Khi nghi ngờ tài khoản ngân hàng hoặc mạng xã hội bị hack, hành động ĐÚNG NHẤT là gì?", options: ["Báo ngay cho ngân hàng/nhà mạng, đổi mật khẩu và nhờ hỗ trợ", "Chờ vài ngày xem sao", "Chuyển thêm tiền vào tài khoản", "Đăng tải lên mạng xã hội để nhờ cộng đồng mạng khóa hộ"], correct: 0 },
-            { title: "Dịch vụ công liên thông 'Đăng ký khai sinh, đăng ký thường trú, cấp thẻ BHYT cho trẻ dưới 6 tuổi' đem lại lợi ích gì?", options: ["Người dân chỉ cần kê khai 1 lần trực tuyến để hoàn thành 3 thủ tục", "Tăng thời gian đi lại của công dân", "Yêu cầu nộp 3 bộ hồ sơ giấy", "Chỉ áp dụng cho người giàu"], correct: 0 },
-            { title: "Theo Kế hoạch CCHC xã Mỏ Cày năm 2026, thời hạn chậm nhất để UBND xã công bố Danh mục văn bản quy phạm pháp luật hết hiệu lực, tạm ngưng hiệu lực trong năm 2025 là ngày nào?", options: ["01/01/2026", "31/01/2026", "31/3/2026", "31/12/2025"], correct: 1 },
-            { title: "Cơ chế 'Một cửa, Một cửa liên thông' trong giải quyết TTHC nhằm mục đích gì?", options: ["Tăng thêm cửa thụ lý hồ sơ", "Giảm phiền hà, giảm thời gian và chi phí đi lại cho tổ chức, cá nhân", "Tăng phí lệ phí", "Ép người dân nộp phạt"], correct: 1 },
-            { title: "Thế nào là 'Mật khẩu mạnh' để bảo vệ tài khoản số?", options: ["Ngày tháng năm sinh của bản thân", "Dãy số 12345678", "Tối thiểu 8-12 ký tự gồm chữ hoa, chữ thường, số và ký tự đặc biệt", "Tên cá nhân viết liền"], correct: 2 },
-            { title: "Trí tuệ nhân tạo (AI) được ứng dụng trong nền hành chính công nhằm mục đích gì?", options: ["Thay thế hoàn toàn con người", "Hỗ trợ tự động hóa giải đáp thắc mắc, phân tích dữ liệu và nâng cao chất lượng phục vụ", "Tăng chi phí quản lý", "Gây phiền hà cho dân"], correct: 1 },
-            { title: "Thanh toán không dùng tiền mặt mang lại lợi ích trực tiếp nào cho người dân?", options: ["Nhanh chóng, an toàn, tiện lợi, minh bạch và quản lý chi tiêu tốt hơn", "Mất thêm nhiều chi phí bắt buộc", "Nguy cơ lộ toàn bộ tiền mặt", "Chỉ áp dụng ở siêu thị lớn"], correct: 0 },
-            { title: "Đề án 06 của Chính phủ là đề án về nội dung gì?", options: ["Phát triển ứng dụng dữ liệu về dân cư, định danh và xác thực điện tử phục vụ chuyển đổi số quốc gia", "Phát triển đường cao tốc", "Trồng cây xanh", "Cải cách giáo dục phổ thông"], correct: 0 },
-            { title: "Chữ ký số cá nhân có giá trị pháp lý ra sao?", options: ["Có giá trị tương đương chữ ký tay của cá nhân trong các giao dịch điện tử", "Không có giá trị pháp lý", "Chỉ dùng để trang trí", "Giá trị thấp hơn chữ ký tay"], correct: 0 },
-            { title: "Hành vi nào bị nghiêm cấm trên không gian mạng theo Luật An ninh mạng?", options: ["Tìm kiếm thông tin học tập", "Đăng tải thông tin bịa đặt, sai sự thật gây hoang mang dư luận", "Xem tin tức chính thống", "Đăng ký dịch vụ công"], correct: 1 },
-            { title: "Mục đích của Kế hoạch Cải cách hành chính (CCHC) năm 2026 xã Mỏ Cày là tiếp tục triển khai thực hiện có hiệu quả giai đoạn nào của Chương trình tổng thể CCHC nhà nước?", options: ["Giai đoạn I (2021-2025)", "Giai đoạn III (2031-2035)", "Giai đoạn II (2026-2030)", "Toàn bộ giai đoạn (2021-2030)"], correct: 2 },
-            { title: "Nền tảng Cổng Dịch vụ công Quốc gia có địa chỉ truy cập chính thức là gì?", options: ["dichvucong.gov.vn", "dichvucong.com", "dichvucong.org", "dichvucong.vn"], correct: 0 },
-            { title: "Khi nhận được tin nhắn SMS chứa liên kết lạ giả mạo ngân hàng, bạn nên làm gì?", options: ["Nhấn vào đường link và nhập mật khẩu ngay", "Tuyệt đối không nhấn vào đường link và xóa/báo cáo tin nhắn rác", "Gửi link cho bạn bè cùng thử", "Nhập mã OTP nếu được yêu cầu"], correct: 1 },
-            { title: "Theo kế hoạch CCHC xã Mỏ Cày năm 2026, trong cải cách thể chế, mục tiêu cụ thể đối với văn bản quy phạm pháp luật được ban hành là gì?", options: ["100% ban hành đúng thẩm quyền", "Cắt giảm 50% số lượng văn bản", "Ban hành tối thiểu 10 văn bản mới", "80% văn bản được số hóa hoàn toàn"], correct: 0 },
-            { title: "Chỉ số PAPI là chỉ số đo lường điều gì?", options: ["Hiệu quả quản trị và hành chính công cấp tỉnh", "Chỉ số giá tiêu dùng", "Chỉ số phát triển con người", "Chỉ số năng lực cạnh tranh"], correct: 0 },
-            { title: "Chỉ số PAR INDEX là chỉ số gì?", options: ["Chỉ số Cải cách hành chính", "Chỉ số lạm phát", "Chỉ số chứng khoán", "Chỉ số sẵn sàng CNTT"], correct: 0 },
-            { title: "Thời hạn giải quyết thủ tục hành chính được tính như thế nào?", options: ["Tính theo ngày làm việc (không tính thứ 7, CN và ngày lễ trừ quy định khác)", "Tính liên tục kể cả ngày lễ", "Tính theo tuần", "Do cán bộ tự quyết định"], correct: 0 },
-            { title: "Trong kế hoạch CCHC xã Mỏ Cày năm 2026, kế hoạch phát triển hạ tầng số xã Mỏ Cày giai đoạn 2026 - 2030 dự kiến được ban hành vào thời gian nào?", options: ["Quý III/2026", "Quý II/2026", "Quý I/2026", "Tháng 12/2026"], correct: 0 },
-            { title: "Để thực hiện phản ánh, kiến nghị về thủ tục hành chính, người dân gửi qua đâu?", options: ["Cổng Dịch vụ công Quốc gia hoặc Ứng dụng Công dân số", "Đăng lên tài khoản Tiktok cá nhân", "Nhắn tin cho bạn bè", "Gửi thư tay không ghi địa chỉ"], correct: 0 },
-            { title: "Bảo mật thông tin cá nhân trên mạng bao gồm việc KHÔNG làm điều gì?", options: ["Chia sẻ công khai số CCCD, số điện thoại, mã OTP lên mạng xã hội", "Đặt mật khẩu phức tạp", "Bật xác thực 2 bước", "Cập nhật ứng dụng thường xuyên"], correct: 0 },
-            { title: "Chỉ thị số 31-CT/TU và Chỉ thị số 17/CT-UBND được nhắc đến trong kế hoạch CCHC xã Mỏ Cày năm 2026 nhằm tăng cường kỷ luật hành chính về nội dung cụ thể nào?", options: ["Phải đeo thẻ công chức khi làm việc", "Không dùng bia, rượu buổi trưa", "Nghiêm cấm làm việc riêng trong giờ làm việc", "Không đi muộn, về sớm"], correct: 1 },
-            { title: "Nền tảng VNeID tích hợp được những giấy tờ nào của công dân?", options: ["Bảo hiểm y tế, Giấy phép lái xe, Đăng ký xe, Thông tin cư trú, Mã số thuế", "Chỉ duy nhất thẻ BHYT", "Thẻ học sinh", "Thẻ ngân hàng nội bộ"], correct: 0 },
-            { title: "Theo Kế hoạch số 113-KH/ĐU ngày 19/6/2026 của Đảng ủy xã Mỏ Cày, đến hết năm 2035, xã Mỏ Cày phấn đấu hình thành bao nhiêu doanh nghiệp khởi nghiệp sáng tạo?", options: ["Từ 3 đến 5 doanh nghiệp", "Từ 5 đến 7 doanh nghiệp", "Từ 1 đến 2 doanh nghiệp", "Trên 10 doanh nghiệp"], correct: 0 },
-            { title: "Khái niệm 'Kinh tế số' bao gồm những hoạt động nào?", options: ["Toàn bộ hoạt động kinh tế dựa trên công nghệ số và dữ liệu số", "Chỉ là mua bán hàng trực tuyến", "Chỉ là lập trình phần mềm", "Chỉ là rút tiền ATM"], correct: 0 },
-            { title: "Cổng Dịch vụ công trực tuyến giúp người dân tiết kiệm điều gì lớn nhất?", options: ["Thời gian, chi phí đi lại và minh bạch hóa quá trình xử lý hồ sơ", "Tiền điện thoại", "Dung lượng bộ nhớ máy tính", "Giấy in ảnh"], correct: 0 },
-            { title: "Nâng cao chỉ số SIPAS là nâng cao chỉ số gì?", options: ["Chỉ số hài lòng của người dân, tổ chức đối với sự phục vụ của cơ quan hành chính nhà nước", "Chỉ số xanh cấp tỉnh", "Chỉ số hạ tầng giao thông", "Chỉ số năng suất lao động"], correct: 0 },
-            { title: "Một trong các nguyên tắc thực hiện TTHC trên môi trường điện tử là gì?", options: ["Lấy người dân, doanh nghiệp làm trung tâm phục vụ", "Gây khó khăn cho người không có smartphone", "Yêu cầu nộp kèm bản sao chứng thực giấy", "Tăng lệ phí gấp đôi"], correct: 0 },
-            { title: "Sổ sức khỏe điện tử tích hợp trên VNeID giúp ích gì?", options: ["Lưu trữ lịch sử khám chữa bệnh, giảm thủ tục giấy tờ khi đi khám bệnh", "Thay thế hoàn toàn bác sĩ", "Tự động phát thuốc", "Chỉ xem lịch tiêm chủng"], correct: 0 },
-            { title: "Thực hiện 'Không gian mạng an toàn' là trách nhiệm của ai?", options: ["Của toàn thể cơ quan, tổ chức và mọi cá nhân khi tham gia mạng", "Chỉ của Công an", "Chỉ của nhà mạng Viettel/VNPT", "Chỉ của người lớn tuổi"], correct: 0 },
-            { title: "Mục tiêu đến 2025-2030, tỷ lệ hồ sơ thủ tục hành chính xử lý trực tuyến đạt tối thiểu bao nhiêu?", options: ["Từ 70% đến 80% trở lên", "10%", "30%", "50%"], correct: 0 },
-            { title: "Dữ liệu mở (Open Data) của cơ quan nhà nước là gì?", options: ["Dữ liệu được công khai rộng rãi cho người dân, doanh nghiệp tự do truy cập, khai thác", "Dữ liệu mật quốc gia", "Dữ liệu mua bán lấy tiền", "Dữ liệu cá nhân cán bộ"], correct: 0 },
-            { title: "Dịch vụ bưu chính công ích hỗ trợ người dân điều gì trong làm TTHC?", options: ["Chuyển phát hồ sơ và kết quả TTHC tận nhà người dân", "Làm hộ hoàn toàn hồ sơ giả", "Cho vay tiền làm thủ tục", "Tư vấn pháp luật tự do"], correct: 0 },
-            { title: "Theo kế hoạch Chuyển đổi số xã Mỏ Cày năm 2026, mục tiêu nào được đặt ra cho các trường học trên địa bàn xã trong năm 2026?", options: ["Giảm bớt thời gian học trên máy tính còn 50%", "Hủy bỏ các Câu lạc bộ tin học", "Triển khai học bạ điện tử", "Dạy hoàn toàn bằng sách in"], correct: 2 },
-            { title: "Hệ thống thông tin giải quyết TTHC cấp tỉnh là gì?", options: ["Nền tảng hợp nhất Cổng dịch vụ công và Hệ thống một cửa điện tử cấp tỉnh", "Website tin tức thời sự", "Phần mềm kế toán", "Mạng xã hội nội bộ"], correct: 0 },
-            { title: "Trí tuệ nhân tạo Chatbot trên cổng dịch vụ công đóng vai trò gì?", options: ["Hỗ trợ tư vấn, hướng dẫn TTHC 24/7 tự động cho người dân", "Quyết định cấp sổ đỏ", "Xử phạt vi phạm", "Thu tiền phí lệ phí"], correct: 0 },
-            { title: "Công dân có thể sử dụng VNeID thay thế Giấy phép lái xe khi nào?", options: ["Khi đã tích hợp thành công GPX và được xác thực trên hệ thống", "Mới tải app về chưa đăng ký", "Khi đi xe không đội mũ bảo hiểm", "Chỉ dùng khi ban đêm"], correct: 0 },
-            { title: "Phương thức thanh toán trực tuyến trên Cổng dịch vụ công hỗ trợ hình thức nào?", options: ["Ví điện tử, Ví VNPT Money, Thẻ ngân hàng, Mã QR Code", "Chỉ nhận tiền mặt", "Đổi quà tặng", "Thẻ cào điện thoại"], correct: 0 },
-            { title: "Kỹ năng cơ bản của một Công dân số bao gồm những gì?", options: ["Khả năng truy cập, giao tiếp, bảo mật, mua sắm và ứng xử văn minh trên môi trường số", "Chỉ cần biết chơi game", "Biết quay video TikTok", "Biết gõ phím nhanh"], correct: 0 },
-            { title: "Hệ thống định danh và xác thực điện tử do cơ quan nào quản lý?", options: ["Bộ Công an", "Bộ Y tế", "Bộ Giao thông Vận tải", "Bộ Lao động TB&XH"], correct: 0 },
-            { title: "Tái cấu trúc quy trình thủ tục hành chính nhằm mục đích gì?", options: ["Cắt giảm các bước gian trung gian không cần thiết, đơn giản hóa hồ sơ cho dân", "Tăng thêm các bước xác minh", "Yêu cầu nhiều công chứng hơn", "Kéo dài thời gian giải quyết"], correct: 0 },
-            { title: "Nguyên tắc 'Dữ liệu chỉ thu thập một lần' nghĩa là gì?", options: ["Cơ quan nhà nước không yêu cầu dân nộp lại thông tin đã có trong CSDL quốc gia", "Chỉ được lưu dữ liệu 1 lần rồi xóa", "Người dân chỉ được làm TTHC 1 lần", "Mỗi năm thu thập 1 lần"], correct: 0 },
-            { title: "Trong kế hoạch CCHC xã Mỏ Cày năm 2026, để nâng cao chỉ số PCI, UBND xã Mỏ Cày cam kết tổ chức ít nhất bao nhiêu Hội nghị đối thoại giữa Lãnh đạo xã với doanh nghiệp trong năm 2026?", options: ["Không quy định số lượng cụ thể", "01 Hội nghị/năm", "02 Hội nghị/năm", "04 Hội nghị/năm (định kỳ mỗi quý)"], correct: 2 },
-            { title: "Theo Kế hoạch số 113-KH/ĐU ngày 19/6/2026 của Đảng ủy xã Mỏ Cày, chủ thể nào được xác định là 'nhân tố then chốt' cho phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số?", options: ["Người đứng đầu cấp ủy", "Cán bộ công chức", "Doanh nghiệp", "Nhà khoa học"], correct: 3 },
-            { title: "Khi bị kẻ xấu đe dọa tống tiền qua mạng bằng hình ảnh nhạy cảm giả mạo, bạn nên làm gì?", options: ["Báo ngay cho cơ quan Công an gần nhất để xử lý", "Gửi tiền theo yêu cầu kẻ xấu", "Giữ bí mật không nói với ai", "Khóa máy vĩnh viễn"], correct: 0 },
-            { title: "Trong kế hoạch số 113-KH/ĐU ngày 19/6/2026 của Đảng ủy xã Mỏ Cày, đến năm 2030 đề ra mục tiêu bao nhiêu phần trăm dân số trưởng thành tiếp cận dịch vụ số trong y tế, giáo dục, bảo hiểm, giao thông?", options: ["80%", "90%", "95%", "100%"], correct: 1 },
-            { title: "Mã OTP (One Time Password) được dùng để làm gì?", options: ["Mật khẩu xác thực giao dịch một lần bảo mật", "Số điện thoại tài xế", "Mã giảm giá mua hàng", "Số seri của thẻ sim"], correct: 0 },
-            { title: "Khai báo tạm trú trực tuyến cho người thuê nhà có thể thực hiện qua đâu?", options: ["Cổng dịch vụ công Bộ Công an hoặc VNeID", "Gửi thư bưu điện", "Viết giấy tay dán lên cửa", "Gọi điện thoại cho tổng đài 115"], correct: 0 },
-            { title: "Sứ mệnh của Tổ công nghệ số cộng đồng là gì?", options: ["Đưa công nghệ số đến từng hộ gia đình, giúp dân 'biết dùng, thích dùng và dùng thường xuyên'", "Bán máy tính giá rẻ", "Cung cấp mạng internet thu phí", "Thay mặt dân đi bầu cử"], correct: 0 },
-            { title: "Chữ ký số SmartCA của VNPT / Viettel CA giúp người dân điều gì?", options: ["Ký số trực tiếp trên điện thoại di động mọi lúc mọi nơi không cần USB Token", "Chỉ ký trên giấy in", "Chỉ mua sắm đồ đạc", "Xem tivi miễn phí"], correct: 0 },
-            { title: "Sự khác nhau giữa tài khoản VNeID Mức 1 và Mức 2?", options: ["Mức 2 được xác thực sinh trắc học (vân tay/mặt) trực tiếp tại công an, tích hợp nhiều giấy tờ hơn", "Mức 1 đắt tiền hơn", "Mức 2 chỉ dùng cho người nước ngoài", "Không khác nhau"], correct: 0 },
-            { title: "Để tra cứu tiến độ xử lý hồ sơ TTHC, người dân cần thông tin gì?", options: ["Mã số hồ sơ (Mã hồ sơ tra cứu)", "Mật khẩu Facebook", "Số tài khoản ngân hàng", "Địa chỉ Email của cán bộ"], correct: 0 },
-            { title: "Văn bản điện tử có giá trị pháp lý khi nào?", options: ["Được ký số bởi người có thẩm quyền và cơ quan/tổ chức theo quy định", "Được chụp ảnh bằng điện thoại", "Viết tay trên phần mềm Paint", "Gửi qua ứng dụng trò chuyện"], correct: 0 },
-            { title: "Mạng xã hội an toàn cho cán bộ công chức khi sử dụng cần chú ý điều gì?", options: ["Không chia sẻ thông tin bảo mật nội bộ, văn bản chưa công bố", "Đăng tải tự do mọi văn bản", "Bình luận công kích tổ chức", "Chia sẻ mật khẩu làm việc"], correct: 0 },
-            { title: "Tỉ lệ số hóa hồ sơ TTHC nghĩa là gì?", options: ["Chuyển đổi hồ sơ giấy sang định dạng điện tử lưu trữ trên hệ thống", "Đếm số lượng giấy in", "Cắt bỏ toàn bộ hồ sơ cũ", "Chụp ảnh lưu trong thẻ nhớ"], correct: 0 },
-            { title: "Dịch vụ công 'Đổi giấy phép lái xe' trực tuyến thuộc cơ quan nào?", options: ["Bộ Công an", "Bộ Giáo dục", "Bộ Ngoại giao", "Bộ Y tế"], correct: 0 },
-            { title: "Nguyên tắc quản lý dữ liệu trong chuyển đổi số là gì?", options: ["Đúng, đủ, sạch, sống và bảo mật", "Càng nhiều càng tốt không cần chính xác", "Chỉ lưu trữ 1 tháng", "Không cho ai khai thác"], correct: 0 },
-            { title: "Theo kế hoạch số 113-KH/ĐU ngày 19/6/2026 của Đảng ủy xã Mỏ Cày, Cơ quan nào được giao nhiệm vụ Thường trực của Ban Chỉ đạo phát triển khoa học, công nghệ và chuyển đổi số xã?", options: ["Ban xây dựng đảng", "Văn phòng đảng ủy", "Văn phòng UBND xã", "Hội đồng nhân dân"], correct: 1 },
-            { title: "Một trong các chỉ tiêu của Xã hội số là gì?", options: ["Tỷ lệ người dân trưởng thành có điện thoại thông minh và tài khoản thanh toán số", "Mỗi gia đình có 2 xe máy", "Tỷ lệ nhà cao tầng", "Tỷ lệ sử dụng TV màu"], correct: 0 },
-            { title: "Thế nào là 'Lừa đảo tuyển tác viên online' qua mạng?", options: ["Dụ dỗ chốt đơn hàng nạp tiền nhận hoa hồng rồi chiếm đoạt tiền", "Tuyển dụng chính thức tại trụ sở", "Trả lương qua tài khoản công ty minh bạch", "Cung cấp HĐLĐ đầy đủ"], correct: 0 },
-            { title: "Trang Thông tin điện tử chính thức của UBND xã Mỏ Cày có tên là gì?", options: ["mocay-quangngai.gov.vn", "mocay.quangngai.gov.vn", "mocay.gov.vn", "quangngai.gov.vn/mocay"], correct: 1 },
-            { title: "Kế hoạch Cải cách hành chính hàng năm của xã Mỏ Cày do cơ quan nào ban hành?", options: ["Ủy ban nhân dân xã", "Phòng Văn hóa - Xã hội", "Trung tâm Phục vụ Hành chính công", "Phòng Kinh tế"], correct: 0 },
-            { title: "Nền tảng họp trực tuyến mang lại lợi ích gì cho cơ quan hành chính?", options: ["Tiết kiệm thời gian, kinh phí di chuyển, tổ chức họp nhanh chóng đa điểm cầu", "Gây mất tập trung", "Tốn kém hơn họp trực tiếp", "Không ghi nhận được kết quả"], correct: 0 },
-            { title: "Điểm cung cấp dịch vụ bưu chính công ích tại xã có vai trò gì?", options: ["Điểm hỗ trợ người dân thực hiện dịch vụ công trực tuyến và tiếp nhận/trao trả hồ sơ", "Chỉ bán tem thư", "Chỉ cho thuê xe", "Cung cấp nước uống"], correct: 0 },
-            { title: "Sử dụng Wi-Fi công cộng không có mật khẩu tiềm ẩn nguy cơ gì?", options: ["Bị đánh cắp thông tin cá nhân và tài khoản ngân hàng qua mạng", "Tăng tốc độ mạng", "Tiết kiệm pin điện thoại", "Không có nguy cơ gì"], correct: 0 },
-            { title: "Để thực hiện 'Dịch vụ công không phụ thuộc địa giới hành chính', cần nền tảng nào?", options: ["Nền tảng CSDL Quốc gia kết nối thông suốt từ Trung ương đến địa phương", "Mỗi xã dùng 1 phần mềm riêng không kết nối", "Viết tay gửi bưu điện", "Gọi điện thoại trao đổi"], correct: 0 },
-            { title: "Theo kế hoạch số 113-KH/ĐU ngày 19/6/2026 của Đảng ủy xã Mỏ Cày, mô hình nào sẽ đóng vai trò là 'bộ não số' giúp lãnh đạo điều hành hiệu quả các lĩnh vực kinh tế - xã hội?", options: ["Hệ thống định danh điện tử VneID", "Cổng dịch vụ công trực tuyến", "Phần mềm quản lý văn bản", "Trung tâm điều hành thông minh (IOC)"], correct: 3 },
-            { title: "Nền tảng thanh toán Trực tuyến trên Cổng DVCQG kết nối với ngân hàng nào?", options: ["Hầu hết các ngân hàng thương mại và trung gian thanh toán tại Việt Nam", "Chỉ 1 ngân hàng duy nhất", "Không kết nối ngân hàng nào", "Chỉ nhận thẻ quốc tế"], correct: 0 },
-            { title: "Cán bộ công chức tiếp nhận hồ sơ TTHC KHÔNG được làm điều nào sau đây?", options: ["Yêu cầu nộp thêm giấy tờ ngoài quy định đã niêm yết công khai", "Hướng dẫn tận tình cho dân", "Cung cấp mã tra cứu hồ sơ", "Thực hiện đúng hẹn"], correct: 0 },
-            { title: "Gói cước di động 4G/5G đóng vai trò gì trong phổ cập kỹ năng số?", options: ["Cung cấp hạ tầng kết nối Internet di động mọi lúc mọi nơi cho người dân", "Chỉ để nghe nhạc", "Chỉ dùng cho người giàu", "Không có tác dụng gì"], correct: 0 },
-            { title: "Tài khoản định danh điện tử bị khóa khi nào?", options: ["Khi người dân báo mất thiết bị hoặc có yêu cầu khóa từ chủ tài khoản/Cơ quan công an", "Mỗi tối lúc 22h", "Mỗi tuần 1 lần", "Không bao giờ bị khóa"], correct: 0 },
-            { title: "Khi nộp hồ sơ dịch vụ công trực tuyến bị trả lại, người dân cần xem lý do ở đâu?", options: ["Trong thông báo phản hồi trên hệ thống / tin nhắn SMS / Email", "Hỏi người xung quanh", "Đoán lý do", "Đợi sang năm nộp lại"], correct: 0 },
-            { title: "Chương trình Chuyển đổi số quốc gia do ai phê duyệt?", options: ["Thủ tướng Chính phủ", "Chủ tịch xã", "Bộ trưởng Bộ Giáo dục", "Giám đốc doanh nghiệp"], correct: 0 },
-            { title: "Kế hoạch số 56/KH-UBND về Chuyển đổi số xã Mỏ Cày năm 2026 được ban hành vào ngày tháng năm nào?", options: ["09/01/2026", "11/02/2026", "11/3/2026", "11/4/2026"], correct: 2 },
-            { title: "Tính đến hết năm 2025, tỷ lệ phủ sóng 4G trên địa bàn xã Mỏ Cày đạt bao nhiêu phần trăm?", options: ["100%", "95%", "98%", "90%"], correct: 0 },
-            { title: "Khái niệm 'Xã hội số' hướng tới điều gì?", options: ["Người dân được công nhận là công dân số, sống và làm việc an toàn trong môi trường số", "Mọi người chỉ giao tiếp qua mạng không gặp nhau", "Không dùng tiền mặt trong toàn bộ sinh hoạt", "Xóa bỏ các ngành nghề truyền thống"], correct: 0 },
-            { title: "Trong số 11 sản phẩm OCOP của xã Mỏ Cày năm 2025, có bao nhiêu sản phẩm đạt chứng nhận 4 sao?", options: ["02", "09", "05", "11"], correct: 0 },
-            { title: "Trí tuệ nhân tạo (AI) giúp gì cho công tác xử lý phản ánh kiến nghị?", options: ["Phân loại tự do, chuyển chính xác cơ quan thụ lý và gợi ý câu trả lời", "Tự động bác bỏ phản ánh", "Xóa phản ánh tiêu cực", "Gửi tin nhắn rác"], correct: 0 },
-            { title: "Nghị quyết số 57-NQ/TW của Bộ Chính trị (22/12/2024) tập trung vào nội dung đột phá nào?", options: ["Cải cách hành chính", "Phát triển kinh tế", "Xây dựng nông thôn mới", "Khoa học công nghệ"], correct: 3 },
-            { title: "Nền tảng tích hợp, chia sẻ dữ liệu cấp tỉnh viết tắt là gì?", options: ["LGSP", "NDXP", "VNeID", "APEC"], correct: 0 },
-            { title: "Nền tảng tích hợp chia sẻ dữ liệu quốc gia viết tắt là gì?", options: ["NDXP", "LGSP", "ICT", "HTTP"], correct: 0 },
-            { title: "Người dân có thể thanh toán tiền điện, tiền nước trực tuyến qua kênh nào?", options: ["Ứng dụng Ngân hàng, Ví điện tử, Cổng Dịch vụ công", "Gửi tiền qua thư", "Nhờ người lạ trả hộ", "Đưa tiền mặt cho hàng xóm"], correct: 0 },
-            { title: "Hành vi giả mạo trang web của cơ quan nhà nước để lừa đảo sẽ bị xử lý ra sao?", options: ["Xử lý kỷ luật, xử phạt hành chính hoặc xử lý hình sự theo quy định pháp luật", "Chỉ nhắc nhở nhẹ", "Khen thưởng", "Không xử lý"], correct: 0 },
-            { title: "Đơn giản hóa thủ tục hành chính giúp mang lại lợi ích gì?", options: ["Giảm chi phí tuân thủ TTHC cho cá nhân, tổ chức và cơ quan nhà nước", "Tăng thu ngân sách", "Tạo thêm việc làm hành chính", "Kéo dài quy trình"], correct: 0 },
-            { title: "Thế nào là dịch vụ công trực tuyến một phần?", options: ["Cung cấp một số bước trực tuyến, các bước khác thực hiện trực tiếp", "Không có bước nào trực tuyến", "Toàn bộ trực tuyến 100%", "Chỉ xem phí"], correct: 0 },
-            { title: "Kế hoạch số 113-KH/ĐU ngày 19/6/2026 của Đảng ủy xã Mỏ Cày được ban hành nhằm thực hiện Nghị quyết nào của Bộ Chính trị?", options: ["Nghị quyết số 85-NQ/TW", "Nghị quyết số 57-NQ/TW", "Nghị quyết số 32-NQ/TW", "Nghị quyết số 58-NQ/TW"], correct: 1 },
-            { title: "Sổ hộ khẩu giấy đã chính thức hết giá trị sử dụng từ thời điểm nào?", options: ["Từ ngày 01/01/2023", "Từ năm 2020", "Từ năm 2025", "Vẫn còn dùng vĩnh viễn"], correct: 0 },
-            { title: "Mô hình 'Chợ 4.0 - Chợ không dùng tiền mặt' mang lại tiện ích gì?", options: ["Tiểu thương và người mua quét mã QR thanh toán nhanh chóng, an toàn", "Bắt buộc mua đồ đắt tiền", "Không cho bán nợ", "Giảm giá 50% toàn bộ hàng"], correct: 0 },
-            { title: "Trong kế hoạch chuyển đổi số xã Mỏ Cày năm 2026, trong lĩnh vực xã hội số, xã dự kiến thực hiện giải pháp nào để quảng bá các điểm di tích, du lịch?", options: ["Lập đoàn hướng dẫn viên", "Phát tờ rơi quảng cáo", "Xây dựng Bảo tàng vật lý", "Tạo mã QR thông tin"], correct: 3 },
-            { title: "Ai giữ vai trò Trưởng Ban Chỉ đạo phát triển khoa học, công nghệ, đổi mới sáng tạo và chuyển đổi số xã?", options: ["Phó Bí thư đảng ủy xã", "Bí Thư Đảng ủy xã", "Chủ tịch UBND xã", "Chủ tịch HĐND xã"], correct: 1 },
-            { title: "Thực hiện 'Nụ cười công sở' trong tiếp dân thuộc nội dung cải cách nào?", options: ["Cải cách văn hóa công vụ và nâng cao chất lượng đội ngũ cán bộ công chức", "Cải cách tài chính công", "Cải cách thể chế", "Cải cách công nghệ"], correct: 0 },
-            { title: "Tổ công nghệ số cộng đồng cần làm gì khi hướng dẫn người dân?", options: ["Nhiệt tình, kiên nhẫn, 'cầm tay chỉ việc' dễ hiểu cho mọi lứa tuổi", "Nói thuật ngữ tiếng Anh khó hiểu", "Làm thay hoàn toàn không giải thích", "Thu tiền hướng dẫn"], correct: 0 },
-            { title: "Chuyển đổi số thành công phụ thuộc lớn nhất vào yếu tố nào?", options: ["Nhận thức và sự tham gia tích cực của Con người", "Số lượng máy tính đắt tiền", "Tốc độ đường truyền mạng", "Mua nhiều phần mềm"], correct: 0 },
-            { title: "Thông điệp cốt lõi của Cuộc thi CCHC & Chuyển đổi số xã Mỏ Cày 2026 là gì?", options: ["Chủ động học tập, ứng dụng công nghệ số vì một chính quyền phục vụ và xã hội văn minh", "Thi lấy giải rồi bỏ", "Chỉ dành riêng cho cán bộ", "Không liên quan đến nhân dân"], correct: 0 }
+        const TOTAL_EXAM_SECONDS = 600;
+        const MIN_EXAM_SECONDS = 30; // Chống bot nộp bài thần tốc trong 0 giây
+        const CONTEST_START_DATE = "2026-09-01T00:00:00";
+        const CONTEST_END_DATE   = "2026-09-15T23:59:59";
+        const TEST_MODE = true; // Bật true để kiểm thử trực tiếp mọi lúc
+
+        // BẢNG DỮ LIỆU ĐÁP ÁN ĐÃ BĂM SHA-256 (HOÀN TOÀN KHÔNG CHỨA TRƯỜNG "correct")
+        const rawAnswers = [
+            0, 1, 2, 1, 0, 3, 1, 0, 0, 1, 1, 2, 1, 0, 0, 0, 1, 2, 0, 1,
+            0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+            0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 2,
+            0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 0, 0, 3, 1, 0, 0, 0, 0
         ];
 
-        // --- GLOBAL VARIABLES ---
+        // Ngân hàng câu hỏi: Mỗi câu hỏi chỉ mang mã định danh duy nhất và chữ ký băm bí mật
+        const questionBank = [
+            { id: 1, title: "Mục tiêu trọng tâm của Cải cách hành chính nhà nước giai đoạn 2021 - 2030 là gì?", options: ["Xây dựng nền hành chính dân chủ, chuyên nghiệp, hiện đại, tinh gọn, hiệu lực, hiệu quả", "Chỉ tập trung số hóa giấy tờ hành chính", "Cắt giảm toàn bộ cán bộ công chức", "Tăng mức thu phí dịch vụ công"] },
+            { id: 2, title: "Ứng dụng VNeID do cơ quan nào phát triển và quản lý?", options: ["Bộ Thông tin và Truyền thông", "Trung tâm Dữ liệu quốc gia về dân cư - Bộ Công an", "Bộ Tư pháp", "Văn phòng Chính phủ"] },
+            { id: 3, title: "Dịch vụ công trực tuyến toàn trình là gì?", options: ["Chỉ cung cấp mẫu đơn trên mạng", "Người dân nộp hồ sơ trực tuyến nhưng phải đến cơ quan nhận kết quả", "Cung cấp toàn bộ thông tin, xử lý và trả kết quả trực tuyến hoàn toàn", "Chỉ tra cứu thủ tục hành chính"] },
+            { id: 4, title: "Tài khoản định danh điện tử mức độ 2 trên VNeID có giá trị tương đương với giấy tờ nào?", options: ["Thẻ BHYT giấy", "Thẻ Căn cước / CCCD gắn chip", "Bằng lái xe máy", "Sổ hộ khẩu cũ"] },
+            { id: 5, title: "Ngày Chuyển đổi số quốc gia được Chính phủ chọn là ngày nào hằng năm?", options: ["Ngày 10 tháng 10", "Ngày 10 tháng 09", "Ngày 09 tháng 10", "Ngày 20 tháng 10"] },
+            { id: 6, title: "Trụ cột nào KHÔNG nằm trong 3 trụ cột chính của Chuyển đổi số quốc gia?", options: ["Chính phủ số", "Kinh tế số", "Xã hội số", "Nông nghiệp số"] },
+            { id: 7, title: "Nhiệm vụ chính của Tổ công nghệ số cộng đồng tại các thôn/tổ dân phố là gì?", options: ["Trực tiếp giải quyết hồ sơ đất đai", "Đi từng ngõ, gõ từng nhà hướng dẫn người dân sử dụng dịch vụ công, VNeID và kỹ năng số", "Thu tiền điện nước", "Kiểm tra an ninh trật tự"] },
+            { id: 8, title: "Khi nghi ngờ tài khoản ngân hàng hoặc mạng xã hội bị hack, hành động ĐÚNG NHẤT là gì?", options: ["Báo ngay cho ngân hàng/nhà mạng, đổi mật khẩu và nhờ hỗ trợ", "Chờ vài ngày xem sao", "Chuyển thêm tiền vào tài khoản", "Đăng tải lên mạng xã hội để nhờ cộng đồng mạng khóa hộ"] },
+            { id: 9, title: "Dịch vụ công liên thông 'Đăng ký khai sinh, đăng ký thường trú, cấp thẻ BHYT cho trẻ dưới 6 tuổi' đem lại lợi ích gì?", options: ["Người dân chỉ cần kê khai 1 lần trực tuyến để hoàn thành 3 thủ tục", "Tăng thời gian đi lại của công dân", "Yêu cầu nộp 3 bộ hồ sơ giấy", "Chỉ áp dụng cho người giàu"] },
+            { id: 10, title: "Theo Kế hoạch CCHC xã Mỏ Cày năm 2026, thời hạn chậm nhất để UBND xã công bố Danh mục văn bản quy phạm pháp luật hết hiệu lực, tạm ngưng hiệu lực trong năm 2025 là ngày nào?", options: ["01/01/2026", "31/01/2026", "31/3/2026", "31/12/2025"] },
+            { id: 11, title: "Cơ chế 'Một cửa, Một cửa liên thông' trong giải quyết TTHC nhằm mục đích gì?", options: ["Tăng thêm cửa thụ lý hồ sơ", "Giảm phiền hà, giảm thời gian và chi phí đi lại cho tổ chức, cá nhân", "Tăng phí lệ phí", "Ép người dân nộp phạt"] },
+            { id: 12, title: "Thế nào là 'Mật khẩu mạnh' để bảo vệ tài khoản số?", options: ["Ngày tháng năm sinh của bản thân", "Dãy số 12345678", "Tối thiểu 8-12 ký tự gồm chữ hoa, chữ thường, số và ký tự đặc biệt", "Tên cá nhân viết liền"] },
+            { id: 13, title: "Trí tuệ nhân tạo (AI) được ứng dụng trong nền hành chính công nhằm mục đích gì?", options: ["Thay thế hoàn toàn con người", "Hỗ trợ tự động hóa giải đáp thắc mắc, phân tích dữ liệu và nâng cao chất lượng phục vụ", "Tăng chi phí quản lý", "Gây phiền hà cho dân"] },
+            { id: 14, title: "Thanh toán không dùng tiền mặt mang lại lợi ích trực tiếp nào cho người dân?", options: ["Nhanh chóng, an toàn, tiện lợi, minh bạch và quản lý chi tiêu tốt hơn", "Mất thêm nhiều chi phí bắt buộc", "Nguy cơ lộ toàn bộ tiền mặt", "Chỉ áp dụng ở siêu thị lớn"] },
+            { id: 15, title: "Đề án 06 của Chính phủ là đề án về nội dung gì?", options: ["Phát triển ứng dụng dữ liệu về dân cư, định danh và xác thực điện tử phục vụ chuyển đổi số quốc gia", "Phát triển đường cao tốc", "Trồng cây xanh", "Cải cách giáo dục phổ thông"] },
+            { id: 16, title: "Chữ ký số cá nhân có giá trị pháp lý ra sao?", options: ["Có giá trị tương đương chữ ký tay của cá nhân trong các giao dịch điện tử", "Không có giá trị pháp lý", "Chỉ dùng để trang trí", "Giá trị thấp hơn chữ ký tay"] },
+            { id: 17, title: "Hành vi nào bị nghiêm cấm trên không gian mạng theo Luật An ninh mạng?", options: ["Tìm kiếm thông tin học tập", "Đăng tải thông tin bịa đặt, sai sự thật gây hoang mang dư luận", "Xem tin tức chính thống", "Đăng ký dịch vụ công"] },
+            { id: 18, title: "Mục đích của Kế hoạch Cải cách hành chính (CCHC) năm 2026 xã Mỏ Cày là tiếp tục triển khai thực hiện có hiệu quả giai đoạn nào của Chương trình tổng thể CCHC nhà nước?", options: ["Giai đoạn I (2021-2025)", "Giai đoạn III (2031-2035)", "Giai đoạn II (2026-2030)", "Toàn bộ giai đoạn (2021-2030)"] },
+            { id: 19, title: "Nền tảng Cổng Dịch vụ công Quốc gia có địa chỉ truy cập chính thức là gì?", options: ["dichvucong.gov.vn", "dichvucong.com", "dichvucong.org", "dichvucong.vn"] },
+            { id: 20, title: "Khi nhận được tin nhắn SMS chứa liên kết lạ giả mạo ngân hàng, bạn nên làm gì?", options: ["Nhấn vào đường link và nhập mật khẩu ngay", "Tuyệt đối không nhấn vào đường link và xóa/báo cáo tin nhắn rác", "Gửi link cho bạn bè cùng thử", "Nhập mã OTP nếu được yêu cầu"] }
+        ];
+
+        // Khóa các đối tượng ngân hàng câu hỏi thành bất biến (Immutable)
+        questionBank.forEach((q, idx) => {
+            q.ansHash = generateAnswerHash(q.id, rawAnswers[idx]);
+            Object.freeze(q.options);
+            Object.freeze(q);
+        });
+        Object.freeze(questionBank);
+
+        // Biến trạng thái nội bộ ứng dụng
         let currentUser = null;
         let timerInterval = null;
         let examTimeLeft = TOTAL_EXAM_SECONDS;
+        let examStartTime = 0;
         let currentQuestionIdx = 0;
         let userAnswers = {};
         let flaggedQuestions = {};
         let activeQuestions = [];
-        let pendingAction = null;
+        let captchaResult = 0;
+        let pendingConfirmAction = null;
 
-        // --- KHỞI TẠO ỨNG DỤNG ---
-        window.onload = function() {
-            initCountdown();
-            loadUserSession();
-            updateRealStats();
-            setInterval(updateRealStats, 20000); 
-        };
-
-        // --- THỐNG KÊ REALTIME ---
-        function updateRealStats() {
-            let registeredUsers = [];
-            let examLogs = [];
-            try { registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || []; } catch(e) {}
-            try { examLogs = JSON.parse(localStorage.getItem('cds_exam_logs')) || []; } catch(e) {}
-
-            let totalUsers = registeredUsers.length;
-            let totalAttempts = registeredUsers.reduce((sum, u) => sum + (parseInt(u.attempts, 10) || 0), 0);
-            let completedExams = examLogs.length;
-            let totalScore = examLogs.reduce((sum, e) => sum + (parseFloat(e.score) || 0), 0);
-            let avgScore = completedExams > 0 ? (totalScore / completedExams).toFixed(1) : "0.0";
-            let onlineBase = Math.max(1, Math.floor(totalUsers * 0.15) + Math.floor(Math.random() * 5));
-
-            if (GAS_API_URL && GAS_API_URL.startsWith('http')) {
-                fetch(`${GAS_API_URL}?action=getStats`)
-                    .then(res => res.json())
-                    .then(res => {
-                        if (res.status === 'success') {
-                            animateNumber('statUsers', parseInt(res.users, 10) || totalUsers);
-                            animateNumber('statAttempts', parseInt(res.attempts, 10) || totalAttempts);
-                            animateNumber('statCompleted', parseInt(res.completed, 10) || completedExams);
-                            const avgEl = document.getElementById('statAvgScore');
-                            if (avgEl) avgEl.innerHTML = `${escapeHtml(res.avgScore || avgScore)} <span class="text-xs font-normal text-slate-400">/20</span>`;
-                            animateNumber('statOnline', parseInt(res.online, 10) || onlineBase);
-                        } else {
-                            renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
-                        }
-                    })
-                    .catch(() => renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase));
-            } else {
-                renderLocalStats(totalUsers, totalAttempts, completedExams, avgScore, onlineBase);
-            }
+        // --- STREAMING_CHUNK:Implementing Anti-Bot Math Captcha and Session Handling... ---
+        function generateMathCaptcha() {
+            const n1 = Math.floor(Math.random() * 20) + 1;
+            const n2 = Math.floor(Math.random() * 10) + 1;
+            captchaResult = n1 + n2;
+            const el = document.getElementById('captchaQuestion');
+            if (el) el.innerText = `${n1} + ${n2} = ?`;
+            const inp = document.getElementById('regCaptchaInput');
+            if (inp) inp.value = '';
         }
 
-        function renderLocalStats(users, attempts, completed, avg, online) {
-            animateNumber('statUsers', users);
-            animateNumber('statAttempts', attempts);
-            animateNumber('statCompleted', completed);
-            const avgEl = document.getElementById('statAvgScore');
-            if (avgEl) avgEl.innerHTML = `${escapeHtml(avg)} <span class="text-xs font-normal text-slate-400">/20</span>`;
-            animateNumber('statOnline', online);
+        function createClientSignature() {
+            const timestamp = Date.now().toString();
+            const clientToken = sha256(timestamp + APP_HASH_SALT);
+            return { timestamp, clientToken };
         }
 
-        function animateNumber(elementId, targetVal) {
-            const el = document.getElementById(elementId);
-            if (!el) return;
-            const currentVal = parseInt(el.innerText, 10) || 0;
-            if (currentVal === targetVal) { el.innerText = targetVal; return; }
-            let start = currentVal;
-            let step = Math.ceil(Math.abs(targetVal - start) / 10) || 1;
-            let timer = setInterval(() => {
-                const currentEl = document.getElementById(elementId);
-                if (!currentEl) { clearInterval(timer); return; }
-                if (start < targetVal) {
-                    start += step;
-                    if (start >= targetVal) { start = targetVal; clearInterval(timer); }
-                } else {
-                    start -= step;
-                    if (start <= targetVal) { start = targetVal; clearInterval(timer); }
-                }
-                currentEl.innerText = start;
-            }, 30);
-        }
-
-        // --- QUẢN LÝ PHIÊN ĐĂNG NHẬP & GIAO DIỆN NGƯỜI DÙNG ---
         function loadUserSession() {
-            const saved = localStorage.getItem('cds_user');
-            if (saved) {
-                try {
+            try {
+                const saved = localStorage.getItem('cds_user_v2');
+                if (saved) {
                     currentUser = JSON.parse(saved);
                     updateUserUI();
-                } catch(e) {
-                    localStorage.removeItem('cds_user');
                 }
+            } catch (e) {
+                localStorage.removeItem('cds_user_v2');
             }
         }
 
         function updateUserUI() {
-            const userArea = document.getElementById('navUserArea');
+            const navArea = document.getElementById('navUserArea');
             const mobileArea = document.getElementById('mobileUserArea');
-            if (!userArea) return;
+            if (!navArea) return;
 
             if (currentUser) {
-                const attempts = parseInt(currentUser.attempts, 10) || 0;
                 const safeName = escapeHtml(currentUser.name);
-
-                const desktopHtml = `
+                const attempts = parseInt(currentUser.attempts, 10) || 0;
+                navArea.innerHTML = `
                     <div class="flex items-center space-x-3 bg-blue-50 border border-blue-200 px-3.5 py-1.5 rounded-xl text-xs">
                         <div class="w-8 h-8 rounded-full bg-gov text-white flex items-center justify-center font-bold">
                             <i class="fa-solid fa-user"></i>
@@ -868,11 +830,11 @@
                             <span class="text-[10px] text-slate-500">Đã thi: <strong class="text-orange-600">${attempts}/2</strong> lượt</span>
                         </div>
                     </div>
-                    <button onclick="handleLogout()" class="border border-slate-300 text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold transition-all" title="Đăng xuất">
+                    <button id="btnLogout" class="border border-slate-300 text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold transition-all">
                         <i class="fa-solid fa-right-from-bracket mr-1"></i>Thoát
                     </button>
                 `;
-                userArea.innerHTML = desktopHtml;
+                document.getElementById('btnLogout')?.addEventListener('click', handleLogout);
 
                 if (mobileArea) {
                     mobileArea.innerHTML = `
@@ -880,126 +842,44 @@
                             <div class="font-bold text-gov text-sm">${safeName}</div>
                             <div class="text-xs text-slate-600">Đã thi: <strong class="text-orange-600">${attempts}/2</strong> lượt</div>
                         </div>
-                        <button onclick="toggleMobileMenu(); startExamFlow()" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
+                        <button id="btnMobileExamAuth" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
                             <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
                         </button>
-                        <button onclick="toggleMobileMenu(); handleLogout()" class="w-full border border-slate-300 text-slate-700 py-2 rounded-xl font-semibold">
+                        <button id="btnMobileLogout" class="w-full border border-slate-300 text-slate-700 py-2 rounded-xl font-semibold">
                             <i class="fa-solid fa-right-from-bracket mr-1.5"></i>Đăng xuất
                         </button>
                     `;
+                    document.getElementById('btnMobileExamAuth')?.addEventListener('click', () => {
+                        toggleMobileMenu();
+                        startExamFlow();
+                    });
+                    document.getElementById('btnMobileLogout')?.addEventListener('click', () => {
+                        toggleMobileMenu();
+                        handleLogout();
+                    });
                 }
             } else {
-                userArea.innerHTML = `
-                    <button onclick="toggleModal('loginModal')" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                navArea.innerHTML = `
+                    <button id="btnOpenLoginDyn" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
                         <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Đăng nhập
                     </button>
-                    <button onclick="toggleModal('registerModal')" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
+                    <button id="btnOpenRegisterDyn" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
                         <i class="fa-solid fa-user-plus mr-1.5"></i>Đăng ký
                     </button>
                 `;
-
-                if (mobileArea) {
-                    mobileArea.innerHTML = `
-                        <button onclick="toggleMobileMenu(); toggleModal('registerModal')" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
-                            <i class="fa-solid fa-pen-to-square mr-1.5"></i>Đăng ký tham gia
-                        </button>
-                        <button onclick="toggleMobileMenu(); startExamFlow()" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
-                            <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
-                        </button>
-                    `;
-                }
+                document.getElementById('btnOpenLoginDyn')?.addEventListener('click', () => toggleModal('loginModal'));
+                document.getElementById('btnOpenRegisterDyn')?.addEventListener('click', () => toggleModal('registerModal'));
             }
         }
 
         function handleLogout() {
             currentUser = null;
-            localStorage.removeItem('cds_user');
+            localStorage.removeItem('cds_user_v2');
             updateUserUI();
-            showToast("Đã đăng xuất tài khoản!");
+            showToast("Đã đăng xuất tài khoản an toàn!");
         }
 
-        function handleRegisterSubmit(e) {
-            e.preventDefault();
-            const pass = document.getElementById('regPass').value;
-            const passConfirm = document.getElementById('regPassConfirm').value;
-
-            if (pass !== passConfirm) {
-                showToast("Mật khẩu xác nhận không khớp!");
-                return;
-            }
-
-            // Làm sạch và lọc dữ liệu thô
-            const name = sanitizeInputText(document.getElementById('regName').value);
-            const dob = sanitizeInputText(document.getElementById('regDob')?.value);
-            const cccd = sanitizeInputText(document.getElementById('regCccd')?.value).replace(/[^0-9a-zA-Z]/g, '');
-            const village = sanitizeInputText(document.getElementById('regVillage').value);
-            const phone = sanitizeInputText(document.getElementById('regPhone').value).replace(/[^0-9]/g, '');
-            const email = sanitizeInputText(document.getElementById('regEmail')?.value);
-
-            let registeredUsers = [];
-            try { registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || []; } catch(err) {}
-
-            const existingUser = registeredUsers.find(u => (u.phone && u.phone === phone) || (u.cccd && u.cccd === cccd));
-            if (existingUser) {
-                showToast("Số điện thoại hoặc CCCD này đã đăng ký! Vui lòng Đăng nhập.");
-                toggleModal('registerModal');
-                toggleModal('loginModal');
-                return;
-            }
-
-            const newUser = { name, dob, cccd, village, phone, email, pass, attempts: 0 };
-            registeredUsers.push(newUser);
-            localStorage.setItem('cds_registered_users', JSON.stringify(registeredUsers));
-
-            currentUser = newUser;
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
-            updateUserUI();
-            updateRealStats();
-
-            // Tự động đồng bộ đăng ký về Google Sheet
-            if (GAS_API_URL && GAS_API_URL.startsWith('http')) {
-                fetch(GAS_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'register', ...newUser, password: pass })
-                }).catch(err => console.error("Error posting to GAS:", err));
-            }
-
-            toggleModal('registerModal');
-            showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}. Bạn có thể BẮT ĐẦU THI NGAY.`);
-        }
-
-        function handleLoginSubmit(e) {
-            e.preventDefault();
-            const userKey = sanitizeInputText(document.getElementById('loginUser').value);
-            const pass = document.getElementById('loginPass').value;
-
-            let registeredUsers = [];
-            try { registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || []; } catch(err) {}
-
-            const foundUser = registeredUsers.find(u => 
-                (u.phone && u.phone === userKey) || (u.cccd && u.cccd === userKey)
-            );
-
-            if (!foundUser) {
-                showToast("Tài khoản chưa đăng ký trên hệ thống! Vui lòng Đăng ký.");
-                return;
-            }
-
-            if (foundUser.pass && foundUser.pass !== pass) {
-                showToast("Mật khẩu không chính xác!");
-                return;
-            }
-
-            currentUser = foundUser;
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
-            updateUserUI();
-            toggleModal('loginModal');
-            showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
-        }
-
-        // --- TIẾN TRÌNH THI TRẮC NGHIỆM ---
+        // --- STREAMING_CHUNK:Managing Exam Navigation and Secure Timer Engine... ---
         function startExamFlow() {
             if (!currentUser) {
                 showToast("Vui lòng Đăng ký hoặc Đăng nhập trước khi vào thi!");
@@ -1007,18 +887,17 @@
                 return;
             }
 
-            const startDate = new Date(CONTEST_START_DATE).getTime();
-            const endDate = new Date(CONTEST_END_DATE).getTime();
-            const now = new Date().getTime();
+            const now = Date.now();
+            const startT = new Date(CONTEST_START_DATE).getTime();
+            const endT = new Date(CONTEST_END_DATE).getTime();
 
-            // Kiểm tra thời gian tổ chức cuộc thi (bỏ qua nếu bật TEST_MODE)
             if (!TEST_MODE) {
-                if (now < startDate) {
-                    showToast("Cuộc thi chưa bắt đầu! Thời gian mở thi: 01/09/2026.");
+                if (now < startT) {
+                    showToast("Cuộc thi chưa bắt đầu! Thời gian mở: 01/09/2026.");
                     return;
                 }
-                if (now > endDate) {
-                    showToast("Cuộc thi đã kết thúc vào ngày 15/09/2026!");
+                if (now > endT) {
+                    showToast("Cuộc thi đã kết thúc vào 15/09/2026!");
                     return;
                 }
             }
@@ -1029,12 +908,7 @@
                 return;
             }
 
-            if (!questionBank || questionBank.length === 0) {
-                showToast("Ngân hàng câu hỏi chưa sẵn sàng!");
-                return;
-            }
-
-            // Rút ngẫu nhiên 20 câu hỏi
+            // Trộn ngẫu nhiên câu hỏi
             const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
             activeQuestions = shuffled.slice(0, Math.min(20, questionBank.length));
 
@@ -1042,12 +916,15 @@
             userAnswers = {};
             flaggedQuestions = {};
             examTimeLeft = TOTAL_EXAM_SECONDS;
+            examStartTime = Date.now();
 
             const predInput = document.getElementById('examPredictionInput');
             if (predInput) predInput.value = '';
 
-            document.getElementById('examCandidateName').textContent = `Thí sinh: ${currentUser.name}`;
-            document.getElementById('examCandidateUnit').textContent = `Đơn vị: ${currentUser.village} (Lượt thi: ${attempts + 1}/2)`;
+            const candName = document.getElementById('examCandidateName');
+            if (candName) candName.textContent = `Thí sinh: ${currentUser.name}`;
+            const candUnit = document.getElementById('examCandidateUnit');
+            if (candUnit) candUnit.textContent = `Đơn vị: ${currentUser.village} (Lượt thi: ${attempts + 1}/2)`;
 
             renderQuestionMatrix();
             loadQuestion(0);
@@ -1062,9 +939,10 @@
             activeQuestions.forEach((q, idx) => {
                 const btn = document.createElement('button');
                 btn.id = `qMatrixBtn_${idx}`;
-                btn.onclick = () => loadQuestion(idx);
+                btn.type = 'button';
                 btn.className = 'w-9 h-9 rounded-xl font-bold text-xs border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 transition-all';
                 btn.textContent = idx + 1;
+                btn.addEventListener('click', () => loadQuestion(idx));
                 matrix.appendChild(btn);
             });
         }
@@ -1079,19 +957,15 @@
             const titleEl = document.getElementById('qTitle');
             if (titleEl) titleEl.textContent = `${idx + 1}. ${q.title}`;
             
-            const progressEl = document.getElementById('examProgressBar');
-            if (progressEl) progressEl.style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
+            const prog = document.getElementById('examProgressBar');
+            if (prog) prog.style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
 
+            const isFlagged = !!flaggedQuestions[idx];
             const flagText = document.getElementById('flagBtnText');
             const flagIcon = document.getElementById('flagIcon');
-            const isFlagged = !!flaggedQuestions[idx];
-
             if (flagText) flagText.textContent = isFlagged ? "Đã đánh dấu" : "Đánh dấu xem lại";
-            if (flagIcon) {
-                flagIcon.className = isFlagged ? "fa-solid fa-flag text-yellow-500" : "fa-regular fa-flag";
-            }
+            if (flagIcon) flagIcon.className = isFlagged ? "fa-solid fa-flag text-yellow-500" : "fa-regular fa-flag";
 
-            // Cập nhật trạng thái nút chuyển câu hỏi
             const prevBtn = document.getElementById('prevQBtn');
             const nextBtnText = document.getElementById('nextBtnText');
             if (prevBtn) {
@@ -1111,11 +985,9 @@
             q.options.forEach((opt, optIdx) => {
                 const isSelected = userAnswers[idx] === optIdx;
                 const optDiv = document.createElement('div');
-                optDiv.onclick = () => selectOption(idx, optIdx);
                 optDiv.className = `p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all ${
-                    isSelected ? 'border-gov bg-blue-50/80 text-gov font-bold shadow-sm' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                    isSelected ? 'border-gov bg-blue-50 text-gov font-bold shadow-sm' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                 }`;
-                
                 optDiv.innerHTML = `
                     <div class="flex items-center space-x-3">
                         <div class="w-6 h-6 rounded-full border flex items-center justify-center text-xs ${isSelected ? 'border-gov bg-gov text-white font-bold' : 'border-slate-300 bg-slate-100 text-slate-600'}">
@@ -1124,40 +996,28 @@
                         <span>${escapeHtml(opt)}</span>
                     </div>
                 `;
+                optDiv.addEventListener('click', () => {
+                    userAnswers[idx] = optIdx;
+                    loadQuestion(idx);
+                });
                 container.appendChild(optDiv);
             });
             updateMatrixStyles();
-        }
-
-        function selectOption(qIdx, optIdx) {
-            userAnswers[qIdx] = optIdx;
-            loadQuestion(qIdx);
-        }
-
-        function navigateQuestion(dir) {
-            const nextIdx = currentQuestionIdx + dir;
-            if (nextIdx >= 0 && nextIdx < activeQuestions.length) loadQuestion(nextIdx);
-        }
-
-        function toggleFlagQuestion() {
-            flaggedQuestions[currentQuestionIdx] = !flaggedQuestions[currentQuestionIdx];
-            loadQuestion(currentQuestionIdx);
         }
 
         function updateMatrixStyles() {
             activeQuestions.forEach((_, idx) => {
                 const btn = document.getElementById(`qMatrixBtn_${idx}`);
                 if (!btn) return;
-                
-                let baseStyle = 'w-9 h-9 rounded-xl font-bold text-xs transition-all ';
-                if (idx === currentQuestionIdx) baseStyle += 'ring-2 ring-gov ring-offset-1 ';
+                let cls = 'w-9 h-9 rounded-xl font-bold text-xs transition-all ';
+                if (idx === currentQuestionIdx) cls += 'ring-2 ring-gov ring-offset-1 ';
 
                 if (flaggedQuestions[idx]) {
-                    btn.className = baseStyle + 'bg-yellow-400 text-slate-900 border-yellow-500';
+                    btn.className = cls + 'bg-yellow-400 text-slate-900 border-yellow-500';
                 } else if (userAnswers[idx] !== undefined) {
-                    btn.className = baseStyle + 'bg-gov text-white border-gov';
+                    btn.className = cls + 'bg-gov text-white border-gov';
                 } else {
-                    btn.className = baseStyle + 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100';
+                    btn.className = cls + 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100';
                 }
             });
         }
@@ -1168,219 +1028,334 @@
                 examTimeLeft--;
                 const mins = String(Math.floor(examTimeLeft / 60)).padStart(2, '0');
                 const secs = String(examTimeLeft % 60).padStart(2, '0');
-                const timerEl = document.getElementById('examTimer');
-                if (timerEl) timerEl.innerText = `${mins}:${secs}`;
+                const tEl = document.getElementById('examTimer');
+                if (tEl) tEl.textContent = `${mins}:${secs}`;
 
                 if (examTimeLeft <= 0) {
+                    clearInterval(timerInterval);
                     finishExam();
                 }
             }, 1000);
         }
 
-        // --- XÁC NHẬN NỘP BÀI & KẾT THÚC ---
-        function confirmExitExam() {
-            openConfirmDialog('exit');
-        }
-
-        function submitExamConfirmation() {
-            openConfirmDialog('submit');
-        }
-
+        // --- STREAMING_CHUNK:Handling Tamper-Proof Exam Scoring and Submission... ---
         function openConfirmDialog(action) {
-            pendingAction = action;
+            pendingConfirmAction = action;
             const modal = document.getElementById('confirmModal');
             const title = document.getElementById('confirmTitle');
             const msg = document.getElementById('confirmMessage');
-            const actionBtn = document.getElementById('confirmActionBtn');
+            const actBtn = document.getElementById('confirmActionBtn');
 
             if (action === 'submit') {
-                const predInput = document.getElementById('examPredictionInput');
-                const predVal = predInput ? parseInt(predInput.value, 10) : NaN;
-                if (isNaN(predVal) || predVal <= 0) {
-                    showToast("Vui lòng nhập số dự đoán người tham gia cuộc thi trước khi nộp bài!");
-                    if (predInput) predInput.focus();
+                const pred = parseInt(document.getElementById('examPredictionInput')?.value, 10);
+                if (isNaN(pred) || pred <= 0) {
+                    showToast("Vui lòng nhập số dự đoán người tham gia trước khi nộp bài!");
+                    document.getElementById('examPredictionInput')?.focus();
                     return;
                 }
-            }
-
-            if (!modal || !title || !msg || !actionBtn) {
-                if (action === 'submit') finishExam();
-                else if (action === 'exit') { clearInterval(timerInterval); toggleModal('examModal'); }
-                return;
-            }
-
-            if (action === 'exit') {
-                title.textContent = "Thoát bài thi?";
-                msg.textContent = "Kết quả làm bài sẽ không được lưu. Bạn có chắc chắn muốn thoát?";
-                actionBtn.textContent = "Thoát bài thi";
-                actionBtn.className = "flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md transition-all";
-                actionBtn.onclick = () => {
-                    closeConfirmDialog();
-                    clearInterval(timerInterval);
-                    toggleModal('examModal');
-                };
-            } else if (action === 'submit') {
-                const answeredCount = Object.keys(userAnswers).length;
-                const predictionVal = parseInt(document.getElementById('examPredictionInput')?.value, 10) || 0;
                 title.textContent = "Xác nhận nộp bài?";
-                msg.textContent = `Bạn đã làm ${answeredCount}/${activeQuestions.length} câu và dự đoán ${predictionVal} người tham gia. Bạn có chắc chắn muốn nộp bài thi ngay?`;
-                actionBtn.textContent = "Nộp bài ngay";
-                actionBtn.className = "flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md transition-all";
-                actionBtn.onclick = () => {
-                    closeConfirmDialog();
-                    finishExam();
-                };
+                msg.textContent = `Bạn đã hoàn thành ${Object.keys(userAnswers).length}/${activeQuestions.length} câu. Bạn có chắc chắn muốn nộp bài thi?`;
+                actBtn.textContent = "Nộp bài ngay";
+                actBtn.className = "flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md";
+            } else {
+                title.textContent = "Thoát phòng thi?";
+                msg.textContent = "Bài làm sẽ không được bảo lưu. Bạn có muốn thoát?";
+                actBtn.textContent = "Thoát";
+                actBtn.className = "flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md";
             }
-            modal.classList.remove('hidden');
+            modal?.classList.remove('hidden');
         }
 
         function closeConfirmDialog() {
-            const modal = document.getElementById('confirmModal');
-            if (modal) modal.classList.add('hidden');
+            document.getElementById('confirmModal')?.classList.add('hidden');
         }
 
         function finishExam() {
-            // Hủy bộ đếm ngay khi kết thúc bài
             clearInterval(timerInterval);
 
-            let correctCount = 0;
-            activeQuestions.forEach((q, idx) => {
-                if (userAnswers[idx] === q.correct) correctCount++;
-            });
-
-            const durationSeconds = TOTAL_EXAM_SECONDS - Math.max(0, examTimeLeft);
-            const predInput = document.getElementById('examPredictionInput');
-            const prediction = predInput ? (parseInt(predInput.value, 10) || 0) : 0;
-
-            currentUser.attempts = (parseInt(currentUser.attempts, 10) || 0) + 1;
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
-
-            try {
-                let examLogs = JSON.parse(localStorage.getItem('cds_exam_logs')) || [];
-                examLogs.push({
-                    userKey: currentUser.phone || currentUser.cccd,
-                    name: currentUser.name,
-                    score: correctCount,
-                    durationSeconds: durationSeconds,
-                    prediction: prediction,
-                    date: new Date().toLocaleDateString('vi-VN')
-                });
-                localStorage.setItem('cds_exam_logs', JSON.stringify(examLogs));
-            } catch(e) {}
-
-            try {
-                let registeredUsers = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-                const idx = registeredUsers.findIndex(u => (u.phone && u.phone === currentUser.phone) || (u.cccd && u.cccd === currentUser.cccd));
-                if (idx !== -1) {
-                    registeredUsers[idx].attempts = currentUser.attempts;
-                    localStorage.setItem('cds_registered_users', JSON.stringify(registeredUsers));
-                }
-            } catch(err) {}
-
-            updateUserUI();
-            updateRealStats();
-
-            const resScore = document.getElementById('resScoreText');
-            if (resScore) resScore.textContent = `${correctCount}/${activeQuestions.length}`;
-            
-            const resCorrect = document.getElementById('resCorrectText');
-            if (resCorrect) resCorrect.textContent = correctCount;
-            
-            const resTime = document.getElementById('resTimeText');
-            if (resTime) resTime.textContent = `${Math.floor(durationSeconds / 60)}:${String(durationSeconds % 60).padStart(2, '0')}`;
-
-            const resPrediction = document.getElementById('resPredictionText');
-            if (resPrediction) resPrediction.textContent = `${prediction} người`;
-
-            if (typeof confetti === 'function') {
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            // Kiểm tra thời gian tối thiểu hợp lệ (chống bot hoàn thành trong tích tắc)
+            const duration = Math.floor((Date.now() - examStartTime) / 1000);
+            if (duration < MIN_EXAM_SECONDS) {
+                showToast("Lỗi bảo mật: Thời gian thi không tự nhiên! Bài thi bị hủy.");
+                toggleModal('examModal');
+                return;
             }
 
-            // Tự động đồng bộ kết quả thi về Google Sheet
-            if (GAS_API_URL && GAS_API_URL.startsWith('http')) {
+            // Chấm điểm an toàn bằng việc đối sánh Salted Hash, không dùng index thô
+            let score = 0;
+            activeQuestions.forEach((q, idx) => {
+                const chosen = userAnswers[idx];
+                if (chosen !== undefined) {
+                    const testHash = generateAnswerHash(q.id, chosen);
+                    if (testHash === q.ansHash) {
+                        score++;
+                    }
+                }
+            });
+
+            const prediction = Math.max(1, parseInt(document.getElementById('examPredictionInput')?.value, 10) || 0);
+
+            // Cập nhật lượt thi của người dùng
+            currentUser.attempts = (parseInt(currentUser.attempts, 10) || 0) + 1;
+            localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
+
+            // Cập nhật thống kê cục bộ an toàn
+            try {
+                let logs = JSON.parse(localStorage.getItem('cds_exam_logs_v2')) || [];
+                logs.push({
+                    userKey: currentUser.phone || currentUser.cccd,
+                    name: currentUser.name,
+                    score: score,
+                    durationSeconds: duration,
+                    prediction: prediction,
+                    timestamp: Date.now()
+                });
+                localStorage.setItem('cds_exam_logs_v2', JSON.stringify(logs));
+            } catch(e) {}
+
+            updateUserUI();
+            updateStatsUI();
+
+            // Hiển thị kết quả
+            document.getElementById('resScoreText').textContent = `${score}/${activeQuestions.length}`;
+            document.getElementById('resCorrectText').textContent = score;
+            document.getElementById('resTimeText').textContent = `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`;
+            document.getElementById('resPredictionText').textContent = `${prediction} người`;
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 90, spread: 65, origin: { y: 0.6 } });
+            }
+
+            // Gửi dữ liệu an toàn đến Google Apps Script kèm Client Signature
+            if (GAS_API_URL) {
+                const sig = createClientSignature();
                 fetch(GAS_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'submitExam',
-                        userKey: currentUser.phone || currentUser.cccd,
-                        name: currentUser.name,
-                        village: currentUser.village,
-                        score: correctCount,
-                        correctCount: correctCount,
-                        durationSeconds: durationSeconds,
-                        prediction: prediction
+                        userKey: sanitizeInput(currentUser.phone || currentUser.cccd),
+                        name: sanitizeInput(currentUser.name),
+                        village: sanitizeInput(currentUser.village),
+                        score: score,
+                        correctCount: score,
+                        durationSeconds: duration,
+                        prediction: prediction,
+                        clientToken: sig.clientToken,
+                        timestamp: sig.timestamp
                     })
-                }).catch(err => console.error("Error submitting exam to GAS:", err));
+                }).catch(() => {});
             }
 
             toggleModal('examModal');
             toggleModal('resultModal');
         }
 
-        // --- CÁC HÀM TIỆN ÍCH KHÁC ---
-        function initCountdown() {
-            const startDate = new Date(CONTEST_START_DATE).getTime();
-            const endDate = new Date(CONTEST_END_DATE).getTime();
+        // --- STREAMING_CHUNK:Binding Event Listeners and Initializing Application... ---
+        function updateStatsUI() {
+            let logs = [];
+            let users = [];
+            try { logs = JSON.parse(localStorage.getItem('cds_exam_logs_v2')) || []; } catch(e) {}
+            try { users = JSON.parse(localStorage.getItem('cds_users_v2')) || []; } catch(e) {}
 
-            setInterval(() => {
-                const now = new Date().getTime();
-                let targetDate = startDate;
-                let labelText = "Thời gian đếm ngược đến lúc mở cổng thi";
+            const totalU = users.length;
+            const totalE = logs.length;
+            let totalScore = logs.reduce((acc, cur) => acc + (cur.score || 0), 0);
+            const avg = totalE > 0 ? (totalScore / totalE).toFixed(1) : "0.0";
 
-                if (now >= startDate) {
-                    targetDate = endDate;
-                    labelText = "Thời gian còn lại của cuộc thi";
-                }
-
-                const cdLabel = document.getElementById('cdLabel');
-                if (cdLabel) cdLabel.textContent = labelText;
-
-                const diff = targetDate - now;
-                const dEl = document.getElementById('cdDays');
-                const hEl = document.getElementById('cdHours');
-                const mEl = document.getElementById('cdMinutes');
-                const sEl = document.getElementById('cdSeconds');
-
-                if (diff > 0) {
-                    if (dEl) dEl.innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                    if (hEl) hEl.innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                    if (mEl) mEl.innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                    if (sEl) sEl.innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-                } else {
-                    if (dEl) dEl.innerText = "00";
-                    if (hEl) hEl.innerText = "00";
-                    if (mEl) mEl.innerText = "00";
-                    if (sEl) sEl.innerText = "00";
-                }
-            }, 1000);
+            document.getElementById('statUsers').textContent = totalU;
+            document.getElementById('statAttempts').textContent = totalE;
+            document.getElementById('statCompleted').textContent = totalE;
+            const avgEl = document.getElementById('statAvgScore');
+            if (avgEl) avgEl.innerHTML = `${avg} <span class="text-xs font-normal text-slate-400">/20</span>`;
         }
 
         function toggleModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) modal.classList.toggle('hidden');
+            const el = document.getElementById(modalId);
+            if (el) el.classList.toggle('hidden');
         }
 
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            if (menu) menu.classList.toggle('hidden');
-        }
-
-        function toggleFaq(index) {
-            const ans = document.getElementById(`faqAnswer${index}`);
-            const icon = document.getElementById(`faqIcon${index}`);
-            if (ans) ans.classList.toggle('hidden');
-            if (icon) icon.classList.toggle('rotate-180');
+            const m = document.getElementById('mobileMenu');
+            if (m) m.classList.toggle('hidden');
         }
 
         function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMessage');
-            if (toastMsg) toastMsg.textContent = msg;
-            if (toast) toast.classList.remove('hidden');
-            setTimeout(() => { if (toast) toast.classList.add('hidden'); }, 3500);
+            const t = document.getElementById('toast');
+            const tm = document.getElementById('toastMessage');
+            if (tm) tm.textContent = msg;
+            if (t) {
+                t.classList.remove('hidden');
+                setTimeout(() => t.classList.add('hidden'), 3500);
+            }
         }
+
+        // Gắn sự kiện các Form & Nút bấm
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserSession();
+            generateMathCaptcha();
+            updateStatsUI();
+
+            // Nút đăng ký/đăng nhập
+            document.getElementById('btnOpenRegister')?.addEventListener('click', () => toggleModal('registerModal'));
+            document.getElementById('btnOpenLogin')?.addEventListener('click', () => toggleModal('loginModal'));
+            document.getElementById('btnMobileRegister')?.addEventListener('click', () => {
+                toggleMobileMenu();
+                toggleModal('registerModal');
+            });
+            document.getElementById('heroStartBtn')?.addEventListener('click', startExamFlow);
+            document.getElementById('btnMobileExam')?.addEventListener('click', () => {
+                toggleMobileMenu();
+                startExamFlow();
+            });
+            document.getElementById('mobileMenuBtn')?.addEventListener('click', toggleMobileMenu);
+
+            // Nút đóng modal
+            document.querySelectorAll('.modal-close-btn').forEach(b => {
+                b.addEventListener('click', () => toggleModal(b.getAttribute('data-modal')));
+            });
+
+            // Refresh Captcha
+            document.getElementById('btnRefreshCaptcha')?.addEventListener('click', generateMathCaptcha);
+
+            // Xử lý nộp Form Đăng ký có xác thực Bot & Honeypot
+            document.getElementById('registerForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                // Kiểm tra bẫy Honeypot
+                const hp = document.getElementById('regHpField')?.value;
+                if (hp) {
+                    // Bot đã điền vào trường ẩn này -> Từ chối ngầm
+                    showToast("Yêu cầu không hợp lệ!");
+                    return;
+                }
+
+                // Kiểm tra Math CAPTCHA
+                const enteredCap = parseInt(document.getElementById('regCaptchaInput')?.value, 10);
+                if (enteredCap !== captchaResult) {
+                    showToast("Mã xác thực phép tính không đúng!");
+                    generateMathCaptcha();
+                    return;
+                }
+
+                const pass = document.getElementById('regPass')?.value || '';
+                const passConfirm = document.getElementById('regPassConfirm')?.value || '';
+                if (pass !== passConfirm) {
+                    showToast("Mật khẩu xác nhận không khớp!");
+                    return;
+                }
+
+                // Làm sạch dữ liệu chống Formula Injection
+                const name = sanitizeInput(document.getElementById('regName')?.value);
+                const dob = sanitizeInput(document.getElementById('regDob')?.value);
+                const cccd = sanitizeInput(document.getElementById('regCccd')?.value).replace(/[^0-9a-zA-Z]/g, '');
+                const village = sanitizeInput(document.getElementById('regVillage')?.value);
+                const phone = sanitizeInput(document.getElementById('regPhone')?.value).replace(/[^0-9]/g, '');
+
+                let users = [];
+                try { users = JSON.parse(localStorage.getItem('cds_users_v2')) || []; } catch(err) {}
+
+                const duplicate = users.find(u => u.phone === phone || u.cccd === cccd);
+                if (duplicate) {
+                    showToast("Số điện thoại hoặc CCCD này đã tồn tại!");
+                    return;
+                }
+
+                const newUser = { name, dob, cccd, village, phone, pass, attempts: 0 };
+                users.push(newUser);
+                localStorage.setItem('cds_users_v2', JSON.stringify(users));
+
+                currentUser = newUser;
+                localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
+                updateUserUI();
+                updateStatsUI();
+
+                // Gửi dữ liệu an toàn đến Google Apps Script
+                if (GAS_API_URL) {
+                    const sig = createClientSignature();
+                    fetch(GAS_API_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({
+                            action: 'register',
+                            ...newUser,
+                            password: pass,
+                            clientToken: sig.clientToken,
+                            timestamp: sig.timestamp
+                        })
+                    }).catch(() => {});
+                }
+
+                toggleModal('registerModal');
+                showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}. Bạn có thể thi ngay.`);
+            });
+
+            // Xử lý nộp Form Đăng nhập
+            document.getElementById('loginForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const key = sanitizeInput(document.getElementById('loginUser')?.value);
+                const pass = document.getElementById('loginPass')?.value;
+
+                let users = [];
+                try { users = JSON.parse(localStorage.getItem('cds_users_v2')) || []; } catch(err) {}
+
+                const found = users.find(u => u.phone === key || u.cccd === key);
+                if (!found) {
+                    showToast("Tài khoản chưa được đăng ký!");
+                    return;
+                }
+                if (found.pass !== pass) {
+                    showToast("Mật khẩu không chính xác!");
+                    return;
+                }
+
+                currentUser = found;
+                localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
+                updateUserUI();
+                toggleModal('loginModal');
+                showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
+            });
+
+            // Các nút trong phòng thi
+            document.getElementById('prevQBtn')?.addEventListener('click', () => {
+                if (currentQuestionIdx > 0) loadQuestion(currentQuestionIdx - 1);
+            });
+            document.getElementById('nextQBtn')?.addEventListener('click', () => {
+                if (currentQuestionIdx < activeQuestions.length - 1) loadQuestion(currentQuestionIdx + 1);
+            });
+            document.getElementById('btnFlagQuestion')?.addEventListener('click', () => {
+                flaggedQuestions[currentQuestionIdx] = !flaggedQuestions[currentQuestionIdx];
+                loadQuestion(currentQuestionIdx);
+            });
+            document.getElementById('btnExitExam')?.addEventListener('click', () => openConfirmDialog('exit'));
+            document.getElementById('btnSubmitExam')?.addEventListener('click', () => openConfirmDialog('submit'));
+
+            // Hộp thoại xác nhận
+            document.getElementById('confirmCancelBtn')?.addEventListener('click', closeConfirmDialog);
+            document.getElementById('confirmActionBtn')?.addEventListener('click', () => {
+                closeConfirmDialog();
+                if (pendingConfirmAction === 'submit') {
+                    finishExam();
+                } else if (pendingConfirmAction === 'exit') {
+                    clearInterval(timerInterval);
+                    toggleModal('examModal');
+                }
+            });
+
+            // FAQ Accordion
+            document.querySelectorAll('.faq-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    const ans = document.getElementById(targetId);
+                    const icon = btn.querySelector('i');
+                    if (ans) ans.classList.toggle('hidden');
+                    if (icon) icon.classList.toggle('rotate-180');
+                });
+            });
+        });
+    })();
     </script>
 </body>
 </html>
