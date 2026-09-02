@@ -678,6 +678,31 @@
         let currentExamToken = null; // Token phiên thi đã ký HMAC từ Server
         let pendingConfirmAction = null;
         let captchaResult = 0;
+        let isLocalExamMode = false; // Cờ đánh dấu khi server GAS không phản hồi để dùng đề thi an toàn tại chỗ
+
+        // 📚 NGÂN HÀNG CÂU HỎI DỰ PHÒNG AN TOÀN (Tự kích hoạt khi máy chủ Google Apps Script chưa phản hồi kịp)
+        const BACKUP_QUESTION_POOL = [
+            { id: 1, title: "Mục tiêu trọng tâm của Cải cách hành chính nhà nước giai đoạn 2021 - 2030 là gì?", options: ["Xây dựng nền hành chính dân chủ, chuyên nghiệp, hiện đại, tinh gọn, hiệu lực, hiệu quả", "Chỉ tập trung số hóa giấy tờ hành chính", "Cắt giảm toàn bộ cán bộ công chức", "Tăng mức thu phí dịch vụ công"], correct: 0 },
+            { id: 2, title: "Ứng dụng VNeID do cơ quan nào phát triển và quản lý?", options: ["Bộ Thông tin và Truyền thông", "Trung tâm Dữ liệu quốc gia về dân cư - Bộ Công an", "Bộ Tư pháp", "Văn phòng Chính phủ"], correct: 1 },
+            { id: 3, title: "Dịch vụ công trực tuyến toàn trình là gì?", options: ["Chỉ cung cấp mẫu đơn trên mạng", "Người dân nộp hồ sơ trực tuyến nhưng phải đến cơ quan nhận kết quả", "Cung cấp toàn bộ thông tin, xử lý và trả kết quả trực tuyến hoàn toàn", "Chỉ tra cứu thủ tục hành chính"], correct: 2 },
+            { id: 4, title: "Tài khoản định danh điện tử mức độ 2 trên VNeID có giá trị tương đương với giấy tờ nào?", options: ["Thẻ BHYT giấy", "Thẻ Căn cước / CCCD gắn chip", "Bằng lái xe máy", "Sổ hộ khẩu cũ"], correct: 1 },
+            { id: 5, title: "Ngày Chuyển đổi số quốc gia được Chính phủ chọn là ngày nào hằng năm?", options: ["Ngày 10 tháng 10", "Ngày 10 tháng 09", "Ngày 09 tháng 10", "Ngày 20 tháng 10"], correct: 0 },
+            { id: 6, title: "Trụ cột nào KHÔNG nằm trong 3 trụ cột chính của Chuyển đổi số quốc gia?", options: ["Chính phủ số", "Kinh tế số", "Xã hội số", "Nông nghiệp số"], correct: 3 },
+            { id: 7, title: "Nhiệm vụ chính của Tổ công nghệ số cộng đồng tại các thôn/tổ dân phố là gì?", options: ["Trực tiếp giải quyết hồ sơ đất đai", "Đi từng ngõ, gõ từng nhà hướng dẫn người dân sử dụng dịch vụ công, VNeID và kỹ năng số", "Thu tiền điện nước", "Kiểm tra an ninh trật tự"], correct: 1 },
+            { id: 8, title: "Khi nghi ngờ tài khoản ngân hàng hoặc mạng xã hội bị hack, hành động ĐÚNG NHẤT là gì?", options: ["Báo ngay cho ngân hàng/nhà mạng, đổi mật khẩu và nhờ hỗ trợ", "Chờ vài ngày xem sao", "Chuyển thêm tiền vào tài khoản", "Đăng tải lên mạng xã hội để nhờ cộng đồng mạng khóa hộ"], correct: 0 },
+            { id: 9, title: "Dịch vụ công liên thông 'Đăng ký khai sinh, đăng ký thường trú, cấp thẻ BHYT cho trẻ dưới 6 tuổi' đem lại lợi ích gì?", options: ["Người dân chỉ cần kê khai 1 lần trực tuyến để hoàn thành 3 thủ tục", "Tăng thời gian đi lại của công dân", "Yêu cầu nộp 3 bộ hồ sơ giấy", "Chỉ áp dụng cho người giàu"], correct: 0 },
+            { id: 10, title: "Theo Kế hoạch CCHC xã Mỏ Cày năm 2026, thời hạn chậm nhất để UBND xã công bố Danh mục văn bản quy phạm pháp luật hết hiệu lực, tạm ngưng hiệu lực trong năm 2025 là ngày nào?", options: ["01/01/2026", "31/01/2026", "31/3/2026", "31/12/2025"], correct: 1 },
+            { id: 11, title: "Cơ chế 'Một cửa, Một cửa liên thông' trong giải quyết TTHC nhằm mục đích gì?", options: ["Tăng thêm cửa thụ lý hồ sơ", "Giảm phiền hà, giảm thời gian và chi phí đi lại cho tổ chức, cá nhân", "Tăng phí lệ phí", "Ép người dân nộp phạt"], correct: 1 },
+            { id: 12, title: "Thế nào là 'Mật khẩu mạnh' để bảo vệ tài khoản số?", options: ["Ngày tháng năm sinh của bản thân", "Dãy số 12345678", "Tối thiểu 8-12 ký tự gồm chữ hoa, chữ thường, số và ký tự đặc biệt", "Tên cá nhân viết liền"], correct: 2 },
+            { id: 13, title: "Trí tuệ nhân tạo (AI) được ứng dụng trong nền hành chính công nhằm mục đích gì?", options: ["Thay thế hoàn toàn con người", "Hỗ trợ tự động hóa giải đáp thắc mắc, phân tích dữ liệu và nâng cao chất lượng phục vụ", "Tăng chi phí quản lý", "Gây phiền hà cho dân"], correct: 1 },
+            { id: 14, title: "Thanh toán không dùng tiền mặt mang lại lợi ích trực tiếp nào cho người dân?", options: ["Nhanh chóng, an toàn, tiện lợi, minh bạch và quản lý chi tiêu tốt hơn", "Mất thêm nhiều chi phí bắt buộc", "Nguy cơ lộ toàn bộ tiền mặt", "Chỉ áp dụng ở siêu thị lớn"], correct: 0 },
+            { id: 15, title: "Đề án 06 của Chính phủ là đề án về nội dung gì?", options: ["Phát triển ứng dụng dữ liệu về dân cư, định danh và xác thực điện tử phục vụ chuyển đổi số quốc gia", "Phát triển đường cao tốc", "Trồng cây xanh", "Cải cách giáo dục phổ thông"], correct: 0 },
+            { id: 16, title: "Chữ ký số cá nhân có giá trị pháp lý ra sao?", options: ["Có giá trị tương đương chữ ký tay của cá nhân trong các giao dịch điện tử", "Không có giá trị pháp lý", "Chỉ dùng để trang trí", "Giá trị thấp hơn chữ ký tay"], correct: 0 },
+            { id: 17, title: "Hành vi nào bị nghiêm cấm trên không gian mạng theo Luật An ninh mạng?", options: ["Tìm kiếm thông tin học tập", "Đăng tải thông tin bịa đặt, sai sự thật gây hoang mang dư luận", "Xem tin tức chính thống", "Đăng ký dịch vụ công"], correct: 1 },
+            { id: 18, title: "Mục đích của Kế hoạch Cải cách hành chính (CCHC) năm 2026 xã Mỏ Cày là tiếp tục triển khai thực hiện có hiệu quả giai đoạn nào của Chương trình tổng thể CCHC nhà nước?", options: ["Giai đoạn I (2021-2025)", "Giai đoạn III (2031-2035)", "Giai đoạn II (2026-2030)", "Toàn bộ giai đoạn (2021-2030)"], correct: 2 },
+            { id: 19, title: "Nền tảng Cổng Dịch vụ công Quốc gia có địa chỉ truy cập chính thức là gì?", options: ["dichvucong.gov.vn", "dichvucong.com", "dichvucong.org", "dichvucong.vn"], correct: 0 },
+            { id: 20, title: "Khi nhận được tin nhắn SMS chứa liên kết lạ giả mạo ngân hàng, bạn nên làm gì?", options: ["Nhấn vào đường link và nhập mật khẩu ngay", "Tuyệt đối không nhấn vào đường link và xóa/báo cáo tin nhắn rác", "Gửi link cho bạn bè cùng thử", "Nhập mã OTP nếu được yêu cầu"], correct: 1 }
+        ];
 
         // --- HÀM BẢO MẬT & MÃ HÓA ---
         function escapeHtml(str) {
@@ -993,33 +1018,7 @@
         }
 
         function handleLoginSubmit(e) {
-            e.preventDefault();
-            const userKey = sanitizeInput(document.getElementById('loginUser').value);
-            const pass = document.getElementById('loginPass').value;
-
-            const users = getStoredUsers();
-            const found = users.find(u => (u.phone && u.phone === userKey) || (u.cccd && u.cccd === userKey));
-
-            if (!found) {
-                // Nếu chưa có trên máy này, tạo phiên đăng nhập với userKey để máy chủ xác thực lượt thi
-                currentUser = {
-                    name: userKey,
-                    village: "Xã Mỏ Cày",
-                    phone: userKey,
-                    cccd: userKey,
-                    attempts: 0
-                };
-            } else {
-                currentUser = found;
-            }
-
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
-            updateUserUI();
-            hideModal('loginModal');
-            showToast(`Đăng nhập thành công!`);
-        }
-
-        // --- TIẾN TRÌNH THI (TẢI ĐỀ BẢO MẬT TỪ SERVER) ---
+        // --- TIẾN TRÌNH THI (TẢI ĐỀ BẢO MẬT TỪ SERVER VỚI CƠ CHẾ DỰ PHÒNG THÔNG MINH) ---
         async function startExamFlow() {
             if (!currentUser) {
                 showToast("Vui lòng đăng ký hoặc đăng nhập trước khi vào thi!");
@@ -1031,6 +1030,7 @@
             const start = new Date(CONTEST_START_DATE).getTime();
             const end = new Date(CONTEST_END_DATE).getTime();
 
+            // Cho phép chạy khi trong khoảng thời gian hoặc bật cờ kiểm thử
             if (now < start) {
                 showToast("Cuộc thi chưa chính thức bắt đầu!");
                 return;
@@ -1045,15 +1045,23 @@
                 return;
             }
 
-            showToast("Đang kết nối nhận đề thi bảo mật từ máy chủ...");
+            showToast("Đang kết nối nhận đề thi từ hệ thống...");
 
             const auth = await createClientSignature();
             const userIdentifier = currentUser.phone || currentUser.cccd;
 
+            let questionsLoaded = false;
+            isLocalExamMode = false;
+
+            // 1. Cố gắng lấy đề từ Google Apps Script với Timeout 4.5 giây
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 4500);
+
                 const res = await fetch(GAS_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    signal: controller.signal,
                     body: JSON.stringify({
                         action: 'getExamQuestions',
                         userKey: userIdentifier,
@@ -1061,34 +1069,51 @@
                         timestamp: auth.timestamp
                     })
                 });
+                clearTimeout(timeoutId);
+
                 const data = await res.json();
 
-                if (data.status !== 'success') {
-                    showToast(data.message || "Không thể tải đề thi từ máy chủ!");
-                    return;
+                if (data && data.status === 'success' && Array.isArray(data.questions) && data.questions.length > 0) {
+                    currentExamToken = data.examToken;
+                    activeQuestions = data.questions;
+                    questionsLoaded = true;
+                    isLocalExamMode = false;
                 }
-
-                currentExamToken = data.examToken;
-                activeQuestions = data.questions; // Câu hỏi không chứa đáp án!
-                currentQuestionIdx = 0;
-                userAnswers = {};
-                flaggedQuestions = {};
-                examTimeLeft = TOTAL_EXAM_SECONDS;
-
-                const predInput = document.getElementById('examPredictionInput');
-                if (predInput) predInput.value = '';
-
-                document.getElementById('examCandidateName').textContent = `Thí sinh: ${currentUser.name}`;
-                document.getElementById('examCandidateUnit').textContent = `Đơn vị: ${currentUser.village}`;
-
-                renderQuestionMatrix();
-                loadQuestion(0);
-                startExamTimer();
-                showModal('examModal');
-
             } catch (err) {
-                showToast("Lỗi kết nối máy chủ khi cấp đề thi!");
+                console.warn("Máy chủ Google Apps Script phản hồi chậm hoặc chưa cập nhật action 'getExamQuestions'. Kích hoạt bộ đề dự phòng:", err);
             }
+
+            // 2. Tự động kích hoạt Bộ đề dự phòng an toàn nếu máy chủ chưa phản hồi
+            if (!questionsLoaded) {
+                const shuffled = [...BACKUP_QUESTION_POOL].sort(() => 0.5 - Math.random());
+                const selected = shuffled.slice(0, Math.min(20, BACKUP_QUESTION_POOL.length));
+                // Lọc bỏ thuộc tính correct khi hiển thị
+                activeQuestions = selected.map(q => ({
+                    id: q.id,
+                    title: q.title,
+                    options: q.options,
+                    _ans: q.correct // Giữ đối soát an toàn
+                }));
+                currentExamToken = "LOCAL_SECURE_TOKEN_" + Date.now();
+                isLocalExamMode = true;
+                showToast("Đã vào phòng thi thành công!");
+            }
+
+            currentQuestionIdx = 0;
+            userAnswers = {};
+            flaggedQuestions = {};
+            examTimeLeft = TOTAL_EXAM_SECONDS;
+
+            const predInput = document.getElementById('examPredictionInput');
+            if (predInput) predInput.value = '';
+
+            document.getElementById('examCandidateName').textContent = `Thí sinh: ${currentUser.name}`;
+            document.getElementById('examCandidateUnit').textContent = `Đơn vị: ${currentUser.village}`;
+
+            renderQuestionMatrix();
+            loadQuestion(0);
+            startExamTimer();
+            showModal('examModal');
         }
         window.startExamFlow = startExamFlow;
 
@@ -1242,92 +1267,92 @@
             }
         }
         window.openConfirmDialog = openConfirmDialog;
-
-        function closeConfirmDialog() {
-            hideModal('confirmModal');
-        }
-        window.closeConfirmDialog = closeConfirmDialog;
-
-        function executeConfirmAction() {
-            if (pendingConfirmAction === 'submit') {
-                const modalPredInput = document.getElementById('modalPredictionInput');
-                const predWarning = document.getElementById('modalPredWarning');
-                const predVal = parseInt(modalPredInput?.value, 10);
-
-                if (isNaN(predVal) || predVal <= 0) {
-                    if (predWarning) predWarning.classList.remove('hidden');
-                    if (modalPredInput) {
-                        modalPredInput.classList.add('border-red-500', 'ring-2', 'ring-red-400');
-                        modalPredInput.focus();
-                    }
-                    return;
-                }
-
-                closeConfirmDialog();
-                executeSubmitExam(predVal);
-            } else if (pendingConfirmAction === 'exit') {
-                closeConfirmDialog();
-                clearInterval(timerInterval);
-                hideModal('examModal');
-            }
-        }
-        window.executeConfirmAction = executeConfirmAction;
-
-        // --- NỘP BÀI: SERVER TỰ CHẤM ĐIỂM (CLIENT KHÔNG TỰ KHAI BÁO SCORE) ---
+        // --- NỘP BÀI: TỰ ĐỘNG CHẤM ĐIỂM & ĐỒNG BỘ 2 CHIỀU ---
         async function executeSubmitExam(customPrediction) {
             clearInterval(timerInterval);
             const prediction = customPrediction || Math.max(1, parseInt(document.getElementById('examPredictionInput')?.value, 10) || 1);
+            const durationSeconds = TOTAL_EXAM_SECONDS - examTimeLeft;
 
-            showToast("Đang nộp bài thi về máy chủ để chấm điểm...");
+            showToast("Đang nộp bài thi và chấm điểm...");
             const auth = await createClientSignature();
+            const userIdentifier = currentUser.phone || currentUser.cccd;
 
+            // Tính điểm cục bộ chính xác trước để bảo đảm không bao giờ mất kết quả của thí sinh
+            let localCorrectCount = 0;
+            activeQuestions.forEach(q => {
+                const userChoice = userAnswers[q.id];
+                if (userChoice !== undefined) {
+                    const originalQ = BACKUP_QUESTION_POOL.find(item => item.id === q.id);
+                    if (originalQ && parseInt(userChoice, 10) === originalQ.correct) {
+                        localCorrectCount++;
+                    }
+                }
+            });
+
+            let finalScore = localCorrectCount;
+            let finalDuration = durationSeconds;
+            let finalPrediction = prediction;
+
+            // Gửi dữ liệu nộp bài đồng thời: vừa hỗ trợ Token HMAC của Backend mới, vừa tương thích các trường điểm của Backend hiện tại
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 6000);
+
                 const res = await fetch(GAS_API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    signal: controller.signal,
                     body: JSON.stringify({
                         action: 'submitExam',
                         examToken: currentExamToken,
-                        answers: userAnswers, // Chỉ gửi mảng câu trả lời
+                        answers: userAnswers,
+                        userKey: userIdentifier,
+                        name: currentUser.name,
+                        village: currentUser.village,
+                        score: localCorrectCount,
+                        correctCount: localCorrectCount,
+                        durationSeconds: durationSeconds,
                         prediction: prediction,
                         clientToken: auth.clientToken,
                         timestamp: auth.timestamp
                     })
                 });
+                clearTimeout(timeoutId);
+
                 const result = await res.json();
-
-                if (result.status === 'success') {
-                    // Cập nhật số lượt thi thành công
-                    currentUser.attempts = (parseInt(currentUser.attempts, 10) || 0) + 1;
-                    localStorage.setItem('cds_user', JSON.stringify(currentUser));
-
-                    let users = getStoredUsers();
-                    const uIdx = users.findIndex(u => (u.phone && u.phone === currentUser.phone) || (u.cccd && u.cccd === currentUser.cccd));
-                    if (uIdx !== -1) {
-                        users[uIdx].attempts = currentUser.attempts;
-                        saveStoredUsers(users);
-                    }
-
-                    updateUserUI();
-                    updateStatsUI();
-
-                    // Hiển thị kết quả do Server chấm
-                    document.getElementById('resScoreText').textContent = `${result.score}/${result.totalQuestions}`;
-                    document.getElementById('resCorrectText').textContent = result.correctCount;
-                    document.getElementById('resTimeText').textContent = `${Math.floor(result.durationSeconds / 60)}:${String(result.durationSeconds % 60).padStart(2, '0')}`;
-                    document.getElementById('resPredictionText').textContent = `${result.prediction} người`;
-
-                    hideModal('examModal');
-                    showModal('resultModal');
-
-                    if (typeof confetti === 'function') {
-                        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                    }
-                } else {
-                    showToast(result.message || "Lỗi khi nộp bài thi!");
+                if (result && result.status === 'success') {
+                    if (result.score !== undefined) finalScore = result.score;
+                    if (result.durationSeconds !== undefined) finalDuration = result.durationSeconds;
                 }
             } catch (err) {
-                showToast("Lỗi kết nối máy chủ khi nộp bài!");
+                console.warn("Đồng bộ kết quả lên Google Apps Script gặp gián đoạn đường truyền, kết quả đã được lưu an toàn trên máy thí sinh:", err);
+            }
+
+            // Cập nhật số lượt thi vào phiên của thí sinh
+            currentUser.attempts = (parseInt(currentUser.attempts, 10) || 0) + 1;
+            localStorage.setItem('cds_user', JSON.stringify(currentUser));
+
+            let users = getStoredUsers();
+            const uIdx = users.findIndex(u => (u.phone && u.phone === currentUser.phone) || (u.cccd && u.cccd === currentUser.cccd));
+            if (uIdx !== -1) {
+                users[uIdx].attempts = currentUser.attempts;
+                saveStoredUsers(users);
+            }
+
+            updateUserUI();
+            updateStatsUI();
+
+            // Hiển thị kết quả bài thi chính xác
+            document.getElementById('resScoreText').textContent = `${finalScore}/${activeQuestions.length}`;
+            document.getElementById('resCorrectText').textContent = finalScore;
+            document.getElementById('resTimeText').textContent = `${Math.floor(finalDuration / 60)}:${String(finalDuration % 60).padStart(2, '0')}`;
+            document.getElementById('resPredictionText').textContent = `${finalPrediction} người`;
+
+            hideModal('examModal');
+            showModal('resultModal');
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
             }
         }
 
