@@ -120,7 +120,7 @@
                 <div class="lg:w-7/12 text-center lg:text-left space-y-6">
                     <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-yellow-300 text-xs sm:text-sm font-semibold">
                         <i class="fa-solid fa-shield-halved"></i>
-                        <span>Cổng thi trực tuyến an toàn & minh bạch 2026</span>
+                        <span>Cổng thi trực tuyến an toàn & minh bạch </span>
                     </div>
 
                     <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
@@ -176,7 +176,7 @@
                             <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="UBND Mỏ Cày" class="w-10 h-10 object-contain">
                             <div class="text-left">
                                 <p class="font-bold text-white">UBND xã Mỏ Cày</p>
-                                <p class="text-[11px] text-slate-200">Hội Đồng Cuộc Thi CCHC 2026</p>
+                                <p class="text-[11px] text-slate-200">Ban tổ chức Cuộc thi</p>
                             </div>
                         </div>
                     </div>
@@ -783,7 +783,103 @@
         let captchaResult = 0;
         let pendingConfirmAction = null;
 
-        // --- STREAMING_CHUNK:Implementing Anti-Bot Math Captcha and Session Handling... ---
+        // --- HỆ THỐNG ĐỒNG BỘ DỮ LIỆU TƯƠNG THÍCH NGƯỢC (CHỐNG MẤT TÀI KHOẢN ĐÃ TẠO) ---
+        function getStoredUsers() {
+            let users = [];
+            try {
+                const v2 = localStorage.getItem('cds_users_v2');
+                if (v2) {
+                    users = JSON.parse(v2);
+                } else {
+                    // Tự động khôi phục tài khoản đã tạo từ phiên bản trước
+                    const legacy = localStorage.getItem('cds_registered_users');
+                    if (legacy) {
+                        users = JSON.parse(legacy);
+                        localStorage.setItem('cds_users_v2', JSON.stringify(users));
+                    }
+                }
+            } catch(e) {}
+            return Array.isArray(users) ? users : [];
+        }
+
+        function saveStoredUsers(users) {
+            localStorage.setItem('cds_users_v2', JSON.stringify(users));
+            // Đồng bộ sang cả key cũ để đảm bảo dữ liệu luôn toàn vẹn
+            localStorage.setItem('cds_registered_users', JSON.stringify(users));
+        }
+
+        function getStoredLogs() {
+            let logs = [];
+            try {
+                const v2 = localStorage.getItem('cds_exam_logs_v2');
+                if (v2) {
+                    logs = JSON.parse(v2);
+                } else {
+                    const legacy = localStorage.getItem('cds_exam_logs');
+                    if (legacy) {
+                        logs = JSON.parse(legacy);
+                        localStorage.setItem('cds_exam_logs_v2', JSON.stringify(logs));
+                    }
+                }
+            } catch(e) {}
+            return Array.isArray(logs) ? logs : [];
+        }
+
+        function saveStoredLogs(logs) {
+            localStorage.setItem('cds_exam_logs_v2', JSON.stringify(logs));
+            localStorage.setItem('cds_exam_logs', JSON.stringify(logs));
+        }
+
+        // --- ĐỒNG HỒ ĐẾM THỜI GIAN CUỘC THI THỰC TẾ ---
+        function initCountdown() {
+            const startDate = new Date(CONTEST_START_DATE).getTime();
+            const endDate = new Date(CONTEST_END_DATE).getTime();
+
+            function update() {
+                const now = Date.now();
+                let targetDate = startDate;
+                let labelText = "Thời gian đếm ngược đến lúc mở cổng thi";
+
+                if (now >= startDate && now <= endDate) {
+                    targetDate = endDate;
+                    labelText = "Thời gian còn lại của cuộc thi";
+                } else if (now > endDate) {
+                    labelText = "Cuộc thi đã kết thúc";
+                    const cdLabel = document.getElementById('cdLabel');
+                    if (cdLabel) cdLabel.textContent = labelText;
+                    ['cdDays', 'cdHours', 'cdMinutes', 'cdSeconds'].forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el) el.textContent = '00';
+                    });
+                    return;
+                }
+
+                const cdLabel = document.getElementById('cdLabel');
+                if (cdLabel) cdLabel.textContent = labelText;
+
+                const diff = targetDate - now;
+                const dEl = document.getElementById('cdDays');
+                const hEl = document.getElementById('cdHours');
+                const mEl = document.getElementById('cdMinutes');
+                const sEl = document.getElementById('cdSeconds');
+
+                if (diff > 0) {
+                    if (dEl) dEl.textContent = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                    if (hEl) hEl.textContent = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                    if (mEl) mEl.textContent = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                    if (sEl) sEl.textContent = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+                } else {
+                    if (dEl) dEl.textContent = "00";
+                    if (hEl) hEl.textContent = "00";
+                    if (mEl) mEl.textContent = "00";
+                    if (sEl) sEl.textContent = "00";
+                }
+            }
+
+            update();
+            setInterval(update, 1000);
+        }
+
         function generateMathCaptcha() {
             const n1 = Math.floor(Math.random() * 20) + 1;
             const n2 = Math.floor(Math.random() * 10) + 1;
@@ -802,13 +898,21 @@
 
         function loadUserSession() {
             try {
-                const saved = localStorage.getItem('cds_user_v2');
+                let saved = localStorage.getItem('cds_user_v2');
+                // Tự động khôi phục phiên đăng nhập cũ nếu có
+                if (!saved) {
+                    saved = localStorage.getItem('cds_user');
+                    if (saved) {
+                        localStorage.setItem('cds_user_v2', saved);
+                    }
+                }
                 if (saved) {
                     currentUser = JSON.parse(saved);
                     updateUserUI();
                 }
             } catch (e) {
                 localStorage.removeItem('cds_user_v2');
+                localStorage.removeItem('cds_user');
             }
         }
 
@@ -875,6 +979,7 @@
         function handleLogout() {
             currentUser = null;
             localStorage.removeItem('cds_user_v2');
+            localStorage.removeItem('cds_user');
             updateUserUI();
             showToast("Đã đăng xuất tài khoản an toàn!");
         }
@@ -1098,20 +1203,27 @@
             // Cập nhật lượt thi của người dùng
             currentUser.attempts = (parseInt(currentUser.attempts, 10) || 0) + 1;
             localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
+            localStorage.setItem('cds_user', JSON.stringify(currentUser));
 
-            // Cập nhật thống kê cục bộ an toàn
-            try {
-                let logs = JSON.parse(localStorage.getItem('cds_exam_logs_v2')) || [];
-                logs.push({
-                    userKey: currentUser.phone || currentUser.cccd,
-                    name: currentUser.name,
-                    score: score,
-                    durationSeconds: duration,
-                    prediction: prediction,
-                    timestamp: Date.now()
-                });
-                localStorage.setItem('cds_exam_logs_v2', JSON.stringify(logs));
-            } catch(e) {}
+            // Cập nhật số lượt thi trong danh sách người dùng
+            let users = getStoredUsers();
+            const uIdx = users.findIndex(u => (u.phone && u.phone === (currentUser.phone || currentUser.cccd)) || (u.cccd && u.cccd === (currentUser.phone || currentUser.cccd)));
+            if (uIdx !== -1) {
+                users[uIdx].attempts = currentUser.attempts;
+                saveStoredUsers(users);
+            }
+
+            // Cập nhật thống kê bài thi an toàn
+            let logs = getStoredLogs();
+            logs.push({
+                userKey: currentUser.phone || currentUser.cccd,
+                name: currentUser.name,
+                score: score,
+                durationSeconds: duration,
+                prediction: prediction,
+                timestamp: Date.now()
+            });
+            saveStoredLogs(logs);
 
             updateUserUI();
             updateStatsUI();
@@ -1154,10 +1266,8 @@
 
         // --- STREAMING_CHUNK:Binding Event Listeners and Initializing Application... ---
         function updateStatsUI() {
-            let logs = [];
-            let users = [];
-            try { logs = JSON.parse(localStorage.getItem('cds_exam_logs_v2')) || []; } catch(e) {}
-            try { users = JSON.parse(localStorage.getItem('cds_users_v2')) || []; } catch(e) {}
+            let logs = getStoredLogs();
+            let users = getStoredUsers();
 
             const totalU = users.length;
             const totalE = logs.length;
@@ -1193,6 +1303,7 @@
 
         // Gắn sự kiện các Form & Nút bấm
         document.addEventListener('DOMContentLoaded', () => {
+            initCountdown();
             loadUserSession();
             generateMathCaptcha();
             updateStatsUI();
@@ -1253,10 +1364,9 @@
                 const village = sanitizeInput(document.getElementById('regVillage')?.value);
                 const phone = sanitizeInput(document.getElementById('regPhone')?.value).replace(/[^0-9]/g, '');
 
-                let users = [];
-                try { users = JSON.parse(localStorage.getItem('cds_users_v2')) || []; } catch(err) {}
+                let users = getStoredUsers();
 
-                const duplicate = users.find(u => u.phone === phone || u.cccd === cccd);
+                const duplicate = users.find(u => (u.phone && u.phone === phone) || (u.cccd && u.cccd === cccd));
                 if (duplicate) {
                     showToast("Số điện thoại hoặc CCCD này đã tồn tại!");
                     return;
@@ -1264,10 +1374,11 @@
 
                 const newUser = { name, dob, cccd, village, phone, pass, attempts: 0 };
                 users.push(newUser);
-                localStorage.setItem('cds_users_v2', JSON.stringify(users));
+                saveStoredUsers(users);
 
                 currentUser = newUser;
                 localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
+                localStorage.setItem('cds_user', JSON.stringify(currentUser));
                 updateUserUI();
                 updateStatsUI();
 
@@ -1298,10 +1409,9 @@
                 const key = sanitizeInput(document.getElementById('loginUser')?.value);
                 const pass = document.getElementById('loginPass')?.value;
 
-                let users = [];
-                try { users = JSON.parse(localStorage.getItem('cds_users_v2')) || []; } catch(err) {}
+                let users = getStoredUsers();
 
-                const found = users.find(u => u.phone === key || u.cccd === key);
+                const found = users.find(u => (u.phone && u.phone === key) || (u.cccd && u.cccd === key));
                 if (!found) {
                     showToast("Tài khoản chưa được đăng ký!");
                     return;
@@ -1313,6 +1423,7 @@
 
                 currentUser = found;
                 localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
+                localStorage.setItem('cds_user', JSON.stringify(currentUser));
                 updateUserUI();
                 toggleModal('loginModal');
                 showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
