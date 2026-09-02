@@ -345,53 +345,7 @@
         </div>
     </section>
 
-    <!-- Leaderboard Section (Top 20 Realtime từ Server) -->
-    <section id="leaderboard" class="py-16 md:py-24 bg-slate-50 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Vinh Danh Thành Tích</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Bảng Xếp Hạng Top 20 Thí Sinh</h2>
-                <p class="text-slate-600 text-sm mt-2">Dữ liệu được sắp xếp tự động theo Điểm số cao nhất và Thời gian hoàn thành nhanh nhất</p>
-                <div class="w-20 h-1.5 bg-gov mx-auto mt-4 rounded-full"></div>
-            </div>
-
-            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
-                <div class="p-4 sm:p-6 bg-gov text-white flex justify-between items-center">
-                    <div class="flex items-center space-x-3">
-                        <i class="fa-solid fa-medal text-2xl text-yellow-300"></i>
-                        <span class="font-bold text-sm sm:text-base">Danh Sách Dẫn Đầu Cuộc Thi</span>
-                    </div>
-                    <button type="button" onclick="window.loadLeaderboard()" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1.5 rounded-xl transition-all flex items-center space-x-1.5">
-                        <i class="fa-solid fa-arrows-rotate"></i>
-                        <span>Làm mới</span>
-                    </button>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-sm">
-                        <thead>
-                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
-                                <th class="py-3.5 px-4 text-center">Hạng</th>
-                                <th class="py-3.5 px-4">Họ và Tên</th>
-                                <th class="py-3.5 px-4">Đơn vị / Thôn</th>
-                                <th class="py-3.5 px-4 text-center">Điểm số</th>
-                                <th class="py-3.5 px-4 text-center">Thời gian</th>
-                                <th class="py-3.5 px-4 text-center">Dự đoán</th>
-                                <th class="py-3.5 px-4 text-center">Ngày thi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboardBody" class="divide-y divide-slate-100 text-slate-700">
-                            <tr>
-                                <td colspan="7" class="py-8 text-center text-slate-400">
-                                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang tải dữ liệu bảng xếp hạng...
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
+ 
 
     <!-- FAQ Section -->
     <section id="faq" class="py-16 bg-white border-t border-slate-200">
