@@ -1035,22 +1035,6 @@
             showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
         }
 
-        // --- TIẾN TRÌNH THI (TẢI ĐỀ BẢO MẬT TỪ SERVER VỚI CƠ CHẾ DỰ PHÒNG THÔNG MINH) ---
-        async function startExamFlow() {
-            if (!currentUser) {
-                showToast("Vui lòng đăng ký hoặc đăng nhập trước khi vào thi!");
-                showModal('loginModal');
-                return;
-            }
-
-            if ((parseInt(currentUser.attempts, 10) || 0) >= 2) {
-                showToast("Bạn đã hoàn thành tối đa 02/02 lượt thi theo quy định!");
-                return;
-            }
-
-            showToast("Đang kết nối nhận đề thi từ hệ thống...");
-
-            const auth = await createClientSignature();
         // --- TIẾN TRÌNH THI (TẢI ĐỀ BẢO MẬT 100% TỪ MÁY CHỦ GOOGLE APPS SCRIPT) ---
         async function startExamFlow() {
             if (!currentUser) {
@@ -1090,7 +1074,7 @@
 
                 if (data && data.status === 'success' && Array.isArray(data.questions) && data.questions.length > 0) {
                     currentExamToken = data.examToken;
-                    activeQuestions = data.questions; // Câu hỏi không chứa trường correct
+                    activeQuestions = data.questions; // Câu hỏi bảo mật, không chứa trường correct
                 } else {
                     showToast(data.message || "Không thể tải đề thi từ máy chủ!");
                     return;
@@ -1299,16 +1283,6 @@
             }
         }
         window.executeConfirmAction = executeConfirmAction;
-
-        // --- NỘP BÀI: TỰ ĐỘNG CHẤM ĐIỂM & ĐỒNG BỘ 2 CHIỀU ---
-        async function executeSubmitExam(customPrediction) {
-            clearInterval(timerInterval);
-            const prediction = customPrediction || Math.max(1, parseInt(document.getElementById('examPredictionInput')?.value, 10) || 1);
-            const durationSeconds = TOTAL_EXAM_SECONDS - examTimeLeft;
-
-            showToast("Đang nộp bài thi và chấm điểm...");
-            const auth = await createClientSignature();
-            const userIdentifier = currentUser.phone || currentUser.cccd;
 
         // --- NỘP BÀI: SERVER TỰ ĐỘNG CHẤM ĐIỂM DỰA TRÊN ĐÁP ÁN GỐC (ZERO CLIENT TRUST) ---
         async function executeSubmitExam(customPrediction) {
