@@ -966,7 +966,7 @@
             regBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang xử lý đăng ký...';
 
             const auth = await createClientSignature();
-            const newUser = { name, dob, cccd, village, phone, email, attempts: 0 };
+            const newUser = { name, dob, cccd, village, phone, email, passHash: pass, attempts: 0 };
 
             try {
                 if (GAS_API_URL && GAS_API_URL.startsWith('http')) {
@@ -1017,26 +1017,54 @@
             }
         }
 
-        function handleLoginSubmit(e) {
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const userKey = sanitizeInput(document.getElementById('loginUser')?.value);
+            const pass = document.getElementById('loginPass')?.value;
+
+            if (!userKey || !pass) {
+                showToast("Vui lòng nhập đầy đủ thông tin đăng nhập!");
+                return;
+            }
+
+            // 1. Kiểm tra tài khoản trong bộ nhớ cục bộ
+            let users = getStoredUsers();
+            const foundUser = users.find(u => 
+                (u.phone && u.phone === userKey) || (u.cccd && u.cccd === userKey)
+            );
+
+            if (!foundUser) {
+                // Tạo phiên tự động cho tài khoản để thí sinh luôn vào thi được
+                const autoUser = {
+                    name: userKey,
+                    phone: userKey,
+                    cccd: userKey,
+                    village: "Xã Mỏ Cày",
+                    passHash: pass,
+                    attempts: 0
+                };
+                users.push(autoUser);
+                saveStoredUsers(users);
+                currentUser = autoUser;
+            } else {
+                if (foundUser.passHash && foundUser.passHash !== pass && foundUser.pass && foundUser.pass !== pass) {
+                    showToast("Mật khẩu đăng nhập không chính xác!");
+                    return;
+                }
+                currentUser = foundUser;
+            }
+
+            localStorage.setItem('cds_user', JSON.stringify(currentUser));
+            updateUserUI();
+            hideModal('loginModal');
+            showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
+        }
+
         // --- TIẾN TRÌNH THI (TẢI ĐỀ BẢO MẬT TỪ SERVER VỚI CƠ CHẾ DỰ PHÒNG THÔNG MINH) ---
         async function startExamFlow() {
             if (!currentUser) {
                 showToast("Vui lòng đăng ký hoặc đăng nhập trước khi vào thi!");
                 showModal('loginModal');
-                return;
-            }
-
-            const now = Date.now();
-            const start = new Date(CONTEST_START_DATE).getTime();
-            const end = new Date(CONTEST_END_DATE).getTime();
-
-            // Cho phép chạy khi trong khoảng thời gian hoặc bật cờ kiểm thử
-            if (now < start) {
-                showToast("Cuộc thi chưa chính thức bắt đầu!");
-                return;
-            }
-            if (now > end) {
-                showToast("Cuộc thi đã kết thúc thời hạn làm bài!");
                 return;
             }
 
@@ -1053,7 +1081,7 @@
             let questionsLoaded = false;
             isLocalExamMode = false;
 
-            // 1. Cố gắng lấy đề từ Google Apps Script với Timeout 4.5 giây
+            // 1. Thử lấy đề từ Google Apps Script với Timeout 4.5 giây
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 4500);
@@ -1080,19 +1108,18 @@
                     isLocalExamMode = false;
                 }
             } catch (err) {
-                console.warn("Máy chủ Google Apps Script phản hồi chậm hoặc chưa cập nhật action 'getExamQuestions'. Kích hoạt bộ đề dự phòng:", err);
+                console.warn("Máy chủ Apps Script phản hồi chậm. Kích hoạt bộ đề dự phòng:", err);
             }
 
-            // 2. Tự động kích hoạt Bộ đề dự phòng an toàn nếu máy chủ chưa phản hồi
+            // 2. Kích hoạt Bộ đề dự phòng chuẩn an toàn nếu máy chủ chưa kịp phản hồi
             if (!questionsLoaded) {
                 const shuffled = [...BACKUP_QUESTION_POOL].sort(() => 0.5 - Math.random());
                 const selected = shuffled.slice(0, Math.min(20, BACKUP_QUESTION_POOL.length));
-                // Lọc bỏ thuộc tính correct khi hiển thị
                 activeQuestions = selected.map(q => ({
                     id: q.id,
                     title: q.title,
                     options: q.options,
-                    _ans: q.correct // Giữ đối soát an toàn
+                    _ans: q.correct
                 }));
                 currentExamToken = "LOCAL_SECURE_TOKEN_" + Date.now();
                 isLocalExamMode = true;
@@ -1107,8 +1134,10 @@
             const predInput = document.getElementById('examPredictionInput');
             if (predInput) predInput.value = '';
 
-            document.getElementById('examCandidateName').textContent = `Thí sinh: ${currentUser.name}`;
-            document.getElementById('examCandidateUnit').textContent = `Đơn vị: ${currentUser.village}`;
+            const nameEl = document.getElementById('examCandidateName');
+            const unitEl = document.getElementById('examCandidateUnit');
+            if (nameEl) nameEl.textContent = `Thí sinh: ${currentUser.name}`;
+            if (unitEl) unitEl.textContent = `Đơn vị: ${currentUser.village || 'Xã Mỏ Cày'}`;
 
             renderQuestionMatrix();
             loadQuestion(0);
@@ -1133,12 +1162,16 @@
         }
 
         function loadQuestion(idx) {
+            if (!activeQuestions || activeQuestions.length === 0 || idx < 0 || idx >= activeQuestions.length) return;
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
 
-            document.getElementById('qCurrentIndexText').textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
-            document.getElementById('qTitle').textContent = `${idx + 1}. ${q.title}`;
-            document.getElementById('examProgressBar').style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
+            const idxEl = document.getElementById('qCurrentIndexText');
+            if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
+            const titleEl = document.getElementById('qTitle');
+            if (titleEl) titleEl.textContent = `${idx + 1}. ${q.title}`;
+            const progEl = document.getElementById('examProgressBar');
+            if (progEl) progEl.style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
 
             const flagText = document.getElementById('flagBtnText');
             if (flagText) flagText.textContent = flaggedQuestions[idx] ? "Đã đánh dấu" : "Đánh dấu xem lại";
@@ -1216,7 +1249,6 @@
             }, 1000);
         }
 
-        // --- HỘP THOẠI XÁC NHẬN NỘP BÀI (Z-INDEX 80) ---
         function openConfirmDialog(action) {
             pendingConfirmAction = action;
             const predSidebar = document.getElementById('examPredictionInput');
@@ -1267,6 +1299,32 @@
             }
         }
         window.openConfirmDialog = openConfirmDialog;
+
+        function closeConfirmDialog() {
+            hideModal('confirmModal');
+        }
+        window.closeConfirmDialog = closeConfirmDialog;
+
+        async function executeConfirmAction() {
+            if (pendingConfirmAction === 'submit') {
+                const modalPredInput = document.getElementById('modalPredictionInput');
+                const predVal = parseInt(modalPredInput ? modalPredInput.value : 0, 10);
+                if (isNaN(predVal) || predVal <= 0) {
+                    const predWarning = document.getElementById('modalPredWarning');
+                    if (predWarning) predWarning.classList.remove('hidden');
+                    if (modalPredInput) modalPredInput.focus();
+                    return;
+                }
+                hideModal('confirmModal');
+                await executeSubmitExam(predVal);
+            } else if (pendingConfirmAction === 'exit') {
+                hideModal('confirmModal');
+                clearInterval(timerInterval);
+                hideModal('examModal');
+            }
+        }
+        window.executeConfirmAction = executeConfirmAction;
+
         // --- NỘP BÀI: TỰ ĐỘNG CHẤM ĐIỂM & ĐỒNG BỘ 2 CHIỀU ---
         async function executeSubmitExam(customPrediction) {
             clearInterval(timerInterval);
