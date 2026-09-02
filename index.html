@@ -661,7 +661,7 @@
         'use strict';
 
         // ⚠️ ĐƯỜNG DẪN MÁY CHỦ GOOGLE APPS SCRIPT ĐÃ TRIỂN KHAI BACKEND
-        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxyAwKwBi2kbgjHf52TyLmK1mVW4aJ04CrgqTzjvpVbEYUlVRXP2DLdGEgpsxXC_kfy/exec';
+        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbynDNYlt7HKaRejWnQ-oejrTPYjRUxI9kOrD9nlZD0E4p1yVPoAvCe3xFqKVh5_fNhY/exec';
         const CLIENT_SALT = "APP_HASH_CDS_2026_XMC";
         const TOTAL_EXAM_SECONDS = 600;
         const CONTEST_START_DATE = "2026-09-01T00:00:00";
@@ -1064,6 +1064,10 @@
                     body: JSON.stringify({
                         action: 'getExamQuestions',
                         userKey: userIdentifier,
+                        name: currentUser.name || userIdentifier,
+                        village: currentUser.village || "Xã Mỏ Cày",
+                        phone: currentUser.phone || userIdentifier,
+                        cccd: currentUser.cccd || userIdentifier,
                         clientToken: auth.clientToken,
                         timestamp: auth.timestamp
                     })
