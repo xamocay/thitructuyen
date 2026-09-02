@@ -395,6 +395,67 @@
 
     <!-- FAQ Section -->
     <section id="faq" class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Giải đáp thắc mắc</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 mt-3">Câu Hỏi Thường Gặp (FAQ)</h2>
+                <div class="w-20 h-1.5 bg-gov mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button type="button" class="faq-toggle-btn w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none" data-target="faqAnswer1" data-icon="faqIcon1">
+                        <span>1. Ai được phép đăng ký tham gia cuộc thi?</span>
+                        <i id="faqIcon1" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
+                    </button>
+                    <div id="faqAnswer1" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-200 pt-3 bg-white">
+                        Tất cả cán bộ, công chức, viên chức, người lao động, đoàn viên thanh niên và nhân dân đang sinh sống, làm việc, học tập trên địa bàn xã Mỏ Cày đều được đăng ký tham gia cuộc thi.
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button type="button" class="faq-toggle-btn w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none" data-target="faqAnswer2" data-icon="faqIcon2">
+                        <span>2. Mỗi thí sinh được làm bài thi bao nhiêu lần?</span>
+                        <i id="faqIcon2" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
+                    </button>
+                    <div id="faqAnswer2" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-200 pt-3 bg-white">
+                        Mỗi thí sinh được tham gia tối đa 02 lượt thi. Hệ thống tự động ghi nhận kết quả ở lượt thi có điểm số cao nhất và thời gian hoàn thành nhanh nhất để xét giải.
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden">
+                    <button type="button" class="faq-toggle-btn w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none" data-target="faqAnswer3" data-icon="faqIcon3">
+                        <span>3. Tiêu chí phụ khi xét giải thưởng được tính như thế nào?</span>
+                        <i id="faqIcon3" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
+                    </button>
+                    <div id="faqAnswer3" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-200 pt-3 bg-white">
+                        Trong trường hợp các thí sinh có cùng số điểm (ví dụ 20/20) và cùng thời gian làm bài, Ban Tổ chức sẽ căn cứ vào câu hỏi dự đoán số lượt người tham gia gần đúng nhất để xếp hạng chung cuộc.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gov-dark text-white py-10 border-t border-blue-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-blue-200 space-y-2">
+            <p class="font-bold text-white text-sm">ỦY BAN NHÂN DÂN XÃ MỎ CÀY - TỈNH QUẢNG NGÃI</p>
+            <p>Ban Tổ chức Cuộc thi tìm hiểu Cải cách hành chính & Chuyển đổi số năm 2026</p>
+            <p class="text-[11px] text-blue-300 opacity-80">Bản quyền © 2026. Cổng thi trực tuyến xác thực tập trung bảo mật.</p>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: Registration Modal -->
+    <div id="registerModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8">
+            <div class="bg-gov px-6 py-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-base flex items-center">
+                    <i class="fa-solid fa-user-plus mr-2"></i> Đăng Ký Tài Khoản Dự Thi
+                </h3>
+                <button type="button" onclick="window.toggleModal('registerModal', false)" class="text-white/80 hover:text-white text-xl focus:outline-none">&times;</button>
+            </div>
+
+            <form id="registerForm" class="p-6 space-y-4 max-h-[82vh] overflow-y-auto custom-scrollbar">
                 <!-- Honeypot Bot Trap -->
                 <input type="text" name="website_trap" id="regTrap" class="hp-field" tabindex="-1" autocomplete="off">
 
@@ -956,7 +1017,7 @@
 
             // 2. Kiểm tra Math CAPTCHA
             const capAns = parseInt(document.getElementById('captchaAnswer')?.value, 10);
-            if (capAns !== captchaResult) {
+            if (isNaN(capAns) || capAns !== captchaResult) {
                 showToast("Kết quả CAPTCHA chưa chính xác!");
                 refreshCaptcha();
                 return;
@@ -976,45 +1037,69 @@
             const phone = sanitizeInput(document.getElementById('regPhone').value).replace(/[^0-9]/g, '');
             const email = sanitizeInput(document.getElementById('regEmail')?.value);
 
+            if (!name || !cccd || !phone || !village || !pass) {
+                showToast("Vui lòng điền đầy đủ các thông tin bắt buộc!");
+                return;
+            }
+
+            // Kiểm tra trùng lặp cục bộ
+            let users = getStoredUsers();
+            const isDuplicate = users.some(u => (u.phone && u.phone === phone) || (u.cccd && u.cccd === cccd));
+            if (isDuplicate) {
+                showToast("Số CCCD hoặc Số điện thoại này đã được đăng ký!");
+                return;
+            }
+
             const regBtn = document.getElementById('regSubmitBtn');
             regBtn.disabled = true;
-            regBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang xác thực...';
+            regBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang xử lý đăng ký...';
 
             const auth = await createClientSignature();
+            const newUser = { name, dob, cccd, village, phone, email, attempts: 0 };
 
             try {
-                const response = await fetch(GAS_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({
-                        action: 'register',
-                        name, dob, cccd, village, phone, email,
-                        passHash: pass, // Backend sẽ lưu trữ an toàn
-                        clientToken: auth.clientToken,
-                        timestamp: auth.timestamp
-                    })
-                });
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    // Lưu session cục bộ
-                    const newUser = { name, dob, cccd, village, phone, email, attempts: 0 };
-                    currentUser = newUser;
-                    localStorage.setItem('cds_user', JSON.stringify(currentUser));
-
-                    let users = getStoredUsers();
-                    users.push(newUser);
-                    saveStoredUsers(users);
-
-                    updateUserUI();
-                    updateStatsUI();
-                    hideModal('registerModal');
-                    showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}.`);
-                } else {
-                    showToast(result.message || "Đăng ký không thành công!");
+                if (GAS_API_URL && GAS_API_URL.startsWith('http')) {
+                    try {
+                        const response = await fetch(GAS_API_URL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify({
+                                action: 'register',
+                                name, dob, cccd, village, phone, email,
+                                passHash: pass,
+                                clientToken: auth.clientToken,
+                                timestamp: auth.timestamp
+                            })
+                        });
+                        const result = await response.json();
+                        if (result.status !== 'success') {
+                            showToast(result.message || "Đăng ký không thành công!");
+                            regBtn.disabled = false;
+                            regBtn.innerHTML = '<i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản';
+                            return;
+                        }
+                    } catch (cloudErr) {
+                        console.warn("Đồng bộ đám mây gặp sự cố, lưu phiên trên thiết bị:", cloudErr);
+                    }
                 }
+
+                // Lưu session và danh sách người dùng
+                currentUser = newUser;
+                localStorage.setItem('cds_user', JSON.stringify(currentUser));
+                users.push(newUser);
+                saveStoredUsers(users);
+
+                updateUserUI();
+                updateStatsUI();
+                hideModal('registerModal');
+                showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}.`);
+
+                const form = document.getElementById('registerForm');
+                if (form) form.reset();
+                refreshCaptcha();
+
             } catch(err) {
-                showToast("Lỗi kết nối máy chủ! Vui lòng thử lại.");
+                showToast("Có lỗi xảy ra trong quá trình đăng ký!");
             } finally {
                 regBtn.disabled = false;
                 regBtn.innerHTML = '<i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản';
