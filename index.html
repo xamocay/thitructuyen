@@ -661,7 +661,7 @@
         'use strict';
 
         // ⚠️ ĐƯỜNG DẪN MÁY CHỦ GOOGLE APPS SCRIPT ĐÃ TRIỂN KHAI BACKEND
-        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxekUKfT-6UrTKlOmBec9lkMKWl7J5pM2vT0W6ZNQGWQx9gxhV0KOX4rEugZK394j0d/exec';
+        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxyAwKwBi2kbgjHf52TyLmK1mVW4aJ04CrgqTzjvpVbEYUlVRXP2DLdGEgpsxXC_kfy/exec';
         const CLIENT_SALT = "APP_HASH_CDS_2026_XMC";
         const TOTAL_EXAM_SECONDS = 600;
         const CONTEST_START_DATE = "2026-09-01T00:00:00";
@@ -674,35 +674,10 @@
         let currentQuestionIdx = 0;
         let userAnswers = {}; // Lưu lựa chọn: { [questionId]: selectedOptionIndex }
         let flaggedQuestions = {};
-        let activeQuestions = []; // Chỉ lưu tiêu đề và phương án nhận từ Server (KHÔNG CÓ ĐÁP ÁN)
+        let activeQuestions = []; // Chỉ lưu tiêu đề và phương án nhận từ Server (TUYỆT ĐỐI KHÔNG CÓ ĐÁP ÁN)
         let currentExamToken = null; // Token phiên thi đã ký HMAC từ Server
         let pendingConfirmAction = null;
         let captchaResult = 0;
-        let isLocalExamMode = false; // Cờ đánh dấu khi server GAS không phản hồi để dùng đề thi an toàn tại chỗ
-
-        // 📚 NGÂN HÀNG CÂU HỎI DỰ PHÒNG AN TOÀN (Tự kích hoạt khi máy chủ Google Apps Script chưa phản hồi kịp)
-        const BACKUP_QUESTION_POOL = [
-            { id: 1, title: "Mục tiêu trọng tâm của Cải cách hành chính nhà nước giai đoạn 2021 - 2030 là gì?", options: ["Xây dựng nền hành chính dân chủ, chuyên nghiệp, hiện đại, tinh gọn, hiệu lực, hiệu quả", "Chỉ tập trung số hóa giấy tờ hành chính", "Cắt giảm toàn bộ cán bộ công chức", "Tăng mức thu phí dịch vụ công"], correct: 0 },
-            { id: 2, title: "Ứng dụng VNeID do cơ quan nào phát triển và quản lý?", options: ["Bộ Thông tin và Truyền thông", "Trung tâm Dữ liệu quốc gia về dân cư - Bộ Công an", "Bộ Tư pháp", "Văn phòng Chính phủ"], correct: 1 },
-            { id: 3, title: "Dịch vụ công trực tuyến toàn trình là gì?", options: ["Chỉ cung cấp mẫu đơn trên mạng", "Người dân nộp hồ sơ trực tuyến nhưng phải đến cơ quan nhận kết quả", "Cung cấp toàn bộ thông tin, xử lý và trả kết quả trực tuyến hoàn toàn", "Chỉ tra cứu thủ tục hành chính"], correct: 2 },
-            { id: 4, title: "Tài khoản định danh điện tử mức độ 2 trên VNeID có giá trị tương đương với giấy tờ nào?", options: ["Thẻ BHYT giấy", "Thẻ Căn cước / CCCD gắn chip", "Bằng lái xe máy", "Sổ hộ khẩu cũ"], correct: 1 },
-            { id: 5, title: "Ngày Chuyển đổi số quốc gia được Chính phủ chọn là ngày nào hằng năm?", options: ["Ngày 10 tháng 10", "Ngày 10 tháng 09", "Ngày 09 tháng 10", "Ngày 20 tháng 10"], correct: 0 },
-            { id: 6, title: "Trụ cột nào KHÔNG nằm trong 3 trụ cột chính của Chuyển đổi số quốc gia?", options: ["Chính phủ số", "Kinh tế số", "Xã hội số", "Nông nghiệp số"], correct: 3 },
-            { id: 7, title: "Nhiệm vụ chính của Tổ công nghệ số cộng đồng tại các thôn/tổ dân phố là gì?", options: ["Trực tiếp giải quyết hồ sơ đất đai", "Đi từng ngõ, gõ từng nhà hướng dẫn người dân sử dụng dịch vụ công, VNeID và kỹ năng số", "Thu tiền điện nước", "Kiểm tra an ninh trật tự"], correct: 1 },
-            { id: 8, title: "Khi nghi ngờ tài khoản ngân hàng hoặc mạng xã hội bị hack, hành động ĐÚNG NHẤT là gì?", options: ["Báo ngay cho ngân hàng/nhà mạng, đổi mật khẩu và nhờ hỗ trợ", "Chờ vài ngày xem sao", "Chuyển thêm tiền vào tài khoản", "Đăng tải lên mạng xã hội để nhờ cộng đồng mạng khóa hộ"], correct: 0 },
-            { id: 9, title: "Dịch vụ công liên thông 'Đăng ký khai sinh, đăng ký thường trú, cấp thẻ BHYT cho trẻ dưới 6 tuổi' đem lại lợi ích gì?", options: ["Người dân chỉ cần kê khai 1 lần trực tuyến để hoàn thành 3 thủ tục", "Tăng thời gian đi lại của công dân", "Yêu cầu nộp 3 bộ hồ sơ giấy", "Chỉ áp dụng cho người giàu"], correct: 0 },
-            { id: 10, title: "Theo Kế hoạch CCHC xã Mỏ Cày năm 2026, thời hạn chậm nhất để UBND xã công bố Danh mục văn bản quy phạm pháp luật hết hiệu lực, tạm ngưng hiệu lực trong năm 2025 là ngày nào?", options: ["01/01/2026", "31/01/2026", "31/3/2026", "31/12/2025"], correct: 1 },
-            { id: 11, title: "Cơ chế 'Một cửa, Một cửa liên thông' trong giải quyết TTHC nhằm mục đích gì?", options: ["Tăng thêm cửa thụ lý hồ sơ", "Giảm phiền hà, giảm thời gian và chi phí đi lại cho tổ chức, cá nhân", "Tăng phí lệ phí", "Ép người dân nộp phạt"], correct: 1 },
-            { id: 12, title: "Thế nào là 'Mật khẩu mạnh' để bảo vệ tài khoản số?", options: ["Ngày tháng năm sinh của bản thân", "Dãy số 12345678", "Tối thiểu 8-12 ký tự gồm chữ hoa, chữ thường, số và ký tự đặc biệt", "Tên cá nhân viết liền"], correct: 2 },
-            { id: 13, title: "Trí tuệ nhân tạo (AI) được ứng dụng trong nền hành chính công nhằm mục đích gì?", options: ["Thay thế hoàn toàn con người", "Hỗ trợ tự động hóa giải đáp thắc mắc, phân tích dữ liệu và nâng cao chất lượng phục vụ", "Tăng chi phí quản lý", "Gây phiền hà cho dân"], correct: 1 },
-            { id: 14, title: "Thanh toán không dùng tiền mặt mang lại lợi ích trực tiếp nào cho người dân?", options: ["Nhanh chóng, an toàn, tiện lợi, minh bạch và quản lý chi tiêu tốt hơn", "Mất thêm nhiều chi phí bắt buộc", "Nguy cơ lộ toàn bộ tiền mặt", "Chỉ áp dụng ở siêu thị lớn"], correct: 0 },
-            { id: 15, title: "Đề án 06 của Chính phủ là đề án về nội dung gì?", options: ["Phát triển ứng dụng dữ liệu về dân cư, định danh và xác thực điện tử phục vụ chuyển đổi số quốc gia", "Phát triển đường cao tốc", "Trồng cây xanh", "Cải cách giáo dục phổ thông"], correct: 0 },
-            { id: 16, title: "Chữ ký số cá nhân có giá trị pháp lý ra sao?", options: ["Có giá trị tương đương chữ ký tay của cá nhân trong các giao dịch điện tử", "Không có giá trị pháp lý", "Chỉ dùng để trang trí", "Giá trị thấp hơn chữ ký tay"], correct: 0 },
-            { id: 17, title: "Hành vi nào bị nghiêm cấm trên không gian mạng theo Luật An ninh mạng?", options: ["Tìm kiếm thông tin học tập", "Đăng tải thông tin bịa đặt, sai sự thật gây hoang mang dư luận", "Xem tin tức chính thống", "Đăng ký dịch vụ công"], correct: 1 },
-            { id: 18, title: "Mục đích của Kế hoạch Cải cách hành chính (CCHC) năm 2026 xã Mỏ Cày là tiếp tục triển khai thực hiện có hiệu quả giai đoạn nào của Chương trình tổng thể CCHC nhà nước?", options: ["Giai đoạn I (2021-2025)", "Giai đoạn III (2031-2035)", "Giai đoạn II (2026-2030)", "Toàn bộ giai đoạn (2021-2030)"], correct: 2 },
-            { id: 19, title: "Nền tảng Cổng Dịch vụ công Quốc gia có địa chỉ truy cập chính thức là gì?", options: ["dichvucong.gov.vn", "dichvucong.com", "dichvucong.org", "dichvucong.vn"], correct: 0 },
-            { id: 20, title: "Khi nhận được tin nhắn SMS chứa liên kết lạ giả mạo ngân hàng, bạn nên làm gì?", options: ["Nhấn vào đường link và nhập mật khẩu ngay", "Tuyệt đối không nhấn vào đường link và xóa/báo cáo tin nhắn rác", "Gửi link cho bạn bè cùng thử", "Nhập mã OTP nếu được yêu cầu"], correct: 1 }
-        ];
 
         // --- HÀM BẢO MẬT & MÃ HÓA ---
         function escapeHtml(str) {
@@ -1076,15 +1051,27 @@
             showToast("Đang kết nối nhận đề thi từ hệ thống...");
 
             const auth = await createClientSignature();
+        // --- TIẾN TRÌNH THI (TẢI ĐỀ BẢO MẬT 100% TỪ MÁY CHỦ GOOGLE APPS SCRIPT) ---
+        async function startExamFlow() {
+            if (!currentUser) {
+                showToast("Vui lòng đăng ký hoặc đăng nhập trước khi vào thi!");
+                showModal('loginModal');
+                return;
+            }
+
+            if ((parseInt(currentUser.attempts, 10) || 0) >= 2) {
+                showToast("Bạn đã hoàn thành tối đa 02/02 lượt thi theo quy định!");
+                return;
+            }
+
+            showToast("Đang kết nối nhận đề thi từ máy chủ...");
+
+            const auth = await createClientSignature();
             const userIdentifier = currentUser.phone || currentUser.cccd;
 
-            let questionsLoaded = false;
-            isLocalExamMode = false;
-
-            // 1. Thử lấy đề từ Google Apps Script với Timeout 4.5 giây
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 4500);
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
 
                 const res = await fetch(GAS_API_URL, {
                     method: 'POST',
@@ -1103,27 +1090,15 @@
 
                 if (data && data.status === 'success' && Array.isArray(data.questions) && data.questions.length > 0) {
                     currentExamToken = data.examToken;
-                    activeQuestions = data.questions;
-                    questionsLoaded = true;
-                    isLocalExamMode = false;
+                    activeQuestions = data.questions; // Câu hỏi không chứa trường correct
+                } else {
+                    showToast(data.message || "Không thể tải đề thi từ máy chủ!");
+                    return;
                 }
             } catch (err) {
-                console.warn("Máy chủ Apps Script phản hồi chậm. Kích hoạt bộ đề dự phòng:", err);
-            }
-
-            // 2. Kích hoạt Bộ đề dự phòng chuẩn an toàn nếu máy chủ chưa kịp phản hồi
-            if (!questionsLoaded) {
-                const shuffled = [...BACKUP_QUESTION_POOL].sort(() => 0.5 - Math.random());
-                const selected = shuffled.slice(0, Math.min(20, BACKUP_QUESTION_POOL.length));
-                activeQuestions = selected.map(q => ({
-                    id: q.id,
-                    title: q.title,
-                    options: q.options,
-                    _ans: q.correct
-                }));
-                currentExamToken = "LOCAL_SECURE_TOKEN_" + Date.now();
-                isLocalExamMode = true;
-                showToast("Đã vào phòng thi thành công!");
+                console.error("Lỗi kết nối máy chủ khi lấy đề thi:", err);
+                showToast("Không thể kết nối đến máy chủ. Vui lòng kiểm tra đường truyền!");
+                return;
             }
 
             currentQuestionIdx = 0;
@@ -1335,26 +1310,23 @@
             const auth = await createClientSignature();
             const userIdentifier = currentUser.phone || currentUser.cccd;
 
-            // Tính điểm cục bộ chính xác trước để bảo đảm không bao giờ mất kết quả của thí sinh
-            let localCorrectCount = 0;
-            activeQuestions.forEach(q => {
-                const userChoice = userAnswers[q.id];
-                if (userChoice !== undefined) {
-                    const originalQ = BACKUP_QUESTION_POOL.find(item => item.id === q.id);
-                    if (originalQ && parseInt(userChoice, 10) === originalQ.correct) {
-                        localCorrectCount++;
-                    }
-                }
-            });
+        // --- NỘP BÀI: SERVER TỰ ĐỘNG CHẤM ĐIỂM DỰA TRÊN ĐÁP ÁN GỐC (ZERO CLIENT TRUST) ---
+        async function executeSubmitExam(customPrediction) {
+            clearInterval(timerInterval);
+            const prediction = customPrediction || Math.max(1, parseInt(document.getElementById('examPredictionInput')?.value, 10) || 1);
+            const durationSeconds = TOTAL_EXAM_SECONDS - examTimeLeft;
 
-            let finalScore = localCorrectCount;
+            showToast("Đang nộp bài thi lên máy chủ để chấm điểm...");
+            const auth = await createClientSignature();
+            const userIdentifier = currentUser.phone || currentUser.cccd;
+
+            let finalScore = 0;
             let finalDuration = durationSeconds;
             let finalPrediction = prediction;
 
-            // Gửi dữ liệu nộp bài đồng thời: vừa hỗ trợ Token HMAC của Backend mới, vừa tương thích các trường điểm của Backend hiện tại
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 6000);
+                const timeoutId = setTimeout(() => controller.abort(), 12000);
 
                 const res = await fetch(GAS_API_URL, {
                     method: 'POST',
@@ -1367,9 +1339,6 @@
                         userKey: userIdentifier,
                         name: currentUser.name,
                         village: currentUser.village,
-                        score: localCorrectCount,
-                        correctCount: localCorrectCount,
-                        durationSeconds: durationSeconds,
                         prediction: prediction,
                         clientToken: auth.clientToken,
                         timestamp: auth.timestamp
@@ -1379,11 +1348,17 @@
 
                 const result = await res.json();
                 if (result && result.status === 'success') {
-                    if (result.score !== undefined) finalScore = result.score;
-                    if (result.durationSeconds !== undefined) finalDuration = result.durationSeconds;
+                    finalScore = result.score !== undefined ? result.score : 0;
+                    finalDuration = result.durationSeconds !== undefined ? result.durationSeconds : durationSeconds;
+                    finalPrediction = result.prediction !== undefined ? result.prediction : prediction;
+                } else {
+                    showToast(result.message || "Lỗi khi chấm điểm tại máy chủ!");
+                    return;
                 }
             } catch (err) {
-                console.warn("Đồng bộ kết quả lên Google Apps Script gặp gián đoạn đường truyền, kết quả đã được lưu an toàn trên máy thí sinh:", err);
+                console.error("Lỗi đồng bộ kết quả thi lên Google Apps Script:", err);
+                showToast("Lỗi đường truyền khi nộp bài! Vui lòng kiểm tra lại.");
+                return;
             }
 
             // Cập nhật số lượt thi vào phiên của thí sinh
@@ -1400,7 +1375,7 @@
             updateUserUI();
             updateStatsUI();
 
-            // Hiển thị kết quả bài thi chính xác
+            // Hiển thị kết quả bài thi chính thức từ máy chủ
             document.getElementById('resScoreText').textContent = `${finalScore}/${activeQuestions.length}`;
             document.getElementById('resCorrectText').textContent = finalScore;
             document.getElementById('resTimeText').textContent = `${Math.floor(finalDuration / 60)}:${String(finalDuration % 60).padStart(2, '0')}`;
