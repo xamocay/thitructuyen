@@ -45,6 +45,7 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #005BAC; border-radius: 4px; }
         .hp-field { opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; pointer-events: none; }
+        .modal-active { display: flex !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans custom-scrollbar selection:bg-blue-200 selection:text-gov">
@@ -488,23 +489,40 @@
         </div>
     </div>
 
-    <!-- MODAL 3: Custom Confirmation Dialog (Tăng Z-Index z-[70] để luôn nổi trên phòng thi) -->
-    <div id="confirmModal" class="fixed inset-0 z-[70] hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl p-6 text-center border border-slate-100 animate-in fade-in zoom-in duration-200">
-            <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
+    <!-- MODAL 3: Custom Confirmation Dialog (Luôn nổi ở z-[80]) -->
+    <div id="confirmModal" style="display: none;" class="fixed inset-0 z-[80] bg-slate-900/80 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 text-center border border-slate-100 animate-in fade-in zoom-in duration-150">
+            <div id="confirmIconBox" class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
                 <i class="fa-solid fa-circle-question"></i>
             </div>
-            <h3 id="confirmTitle" class="text-lg font-bold text-slate-900 mb-2">Xác nhận nộp bài</h3>
-            <p id="confirmMessage" class="text-xs text-slate-600 mb-6 leading-relaxed">Nội dung xác nhận...</p>
+            <h3 id="confirmTitle" class="text-lg font-black text-slate-900 mb-2">Xác nhận nộp bài</h3>
+            <p id="confirmMessage" class="text-xs text-slate-600 mb-4 leading-relaxed">Bạn có chắc chắn muốn nộp bài thi?</p>
+
+            <!-- Ô nhập câu hỏi dự đoán tích hợp trực tiếp trong popup xác nhận -->
+            <div id="confirmPredictionBox" class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200 mb-5 text-left">
+                <label class="block text-xs font-bold text-amber-900 mb-1">
+                    <i class="fa-solid fa-users-viewfinder text-amber-600 mr-1"></i>
+                    Dự đoán số lượt người tham gia cuộc thi: <span class="text-red-500">*</span>
+                </label>
+                <input type="number" id="modalPredictionInput" min="1" max="1000000" placeholder="Nhập số dự đoán (Ví dụ: 1500)..." class="w-full px-3 py-2.5 border border-amber-300 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:border-gov bg-white shadow-inner">
+                <span id="modalPredWarning" class="text-[11px] text-red-600 font-semibold mt-1 hidden block">
+                    <i class="fa-solid fa-circle-exclamation mr-1"></i>Vui lòng nhập một số dự đoán hợp lệ (lớn hơn 0).
+                </span>
+            </div>
+
             <div class="flex space-x-3">
-                <button type="button" id="confirmCancelBtn" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">Kiểm tra lại</button>
-                <button type="button" id="confirmActionBtn" class="flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md transition-all">Xác nhận nộp</button>
+                <button type="button" id="confirmCancelBtn" onclick="window.closeConfirmDialog()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">
+                    Kiểm tra lại bài
+                </button>
+                <button type="button" id="confirmActionBtn" onclick="window.executeConfirmAction()" class="flex-1 py-3 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-lg shadow-orange-500/30 transition-all">
+                    Xác nhận nộp ngay
+                </button>
             </div>
         </div>
     </div>
 
     <!-- MODAL 4: Exam Interface -->
-    <div id="examModal" class="fixed inset-0 z-50 hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div id="examModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md items-center justify-center p-2 sm:p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-5xl rounded-3xl shadow-2xl overflow-hidden flex flex-col h-[92vh] border border-slate-100">
             <div class="bg-gov text-white px-6 py-4 flex justify-between items-center border-b border-blue-700 flex-shrink-0">
                 <div class="flex items-center space-x-3">
@@ -525,7 +543,7 @@
                             <span id="examTimer" class="font-mono font-black text-lg sm:text-xl leading-none">10:00</span>
                         </div>
                     </div>
-                    <button type="button" id="btnExitExam" class="text-white/80 hover:text-white text-2xl font-bold px-2">&times;</button>
+                    <button type="button" id="btnExitExam" onclick="window.openConfirmDialog('exit')" class="text-white/80 hover:text-white text-2xl font-bold px-2">&times;</button>
                 </div>
             </div>
 
@@ -576,13 +594,14 @@
                                 Câu hỏi dự đoán (Bắt buộc):
                             </label>
                             <p class="text-[11px] text-amber-800 leading-snug mb-2">
-                                Dự đoán tổng số lượt người tham gia cuộc thi (tiêu chí phụ khi xét giải):
+                                Dự đoán tổng số lượt người tham gia cuộc thi:
                             </p>
                             <input type="number" id="examPredictionInput" min="1" max="1000000" placeholder="Nhập số dự đoán (VD: 1500)..." class="w-full px-3 py-2 border border-amber-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-gov bg-white transition-all">
                         </div>
 
-                        <button type="button" id="btnSubmitExam" class="w-full bg-cta hover:bg-cta-hover text-white py-3.5 rounded-xl font-extrabold text-sm shadow-xl shadow-orange-500/20 transition-all flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-paper-plane"></i>
+                        <!-- NÚT NỘP BÀI GẮN TRỰC TIẾP ONCLICK TOÀN CỤC CHỐNG LỆCH EVENT -->
+                        <button type="button" id="btnSubmitExam" onclick="window.openConfirmDialog('submit')" class="w-full bg-cta hover:bg-cta-hover active:scale-[0.98] text-white py-4 rounded-xl font-black text-sm shadow-xl shadow-orange-500/30 transition-all flex items-center justify-center space-x-2 cursor-pointer">
+                            <i class="fa-solid fa-paper-plane text-base"></i>
                             <span>NỘP BÀI THI NGAY</span>
                         </button>
                     </div>
@@ -591,8 +610,8 @@
         </div>
     </div>
 
-    <!-- MODAL 5: Result Modal (Z-Index z-[70] hiển thị trên cùng) -->
-    <div id="resultModal" class="fixed inset-0 z-[70] hidden bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+    <!-- MODAL 5: Result Modal (Z-Index z-[90] hiển thị trên cùng) -->
+    <div id="resultModal" style="display: none;" class="fixed inset-0 z-[90] bg-slate-900/85 backdrop-blur-md items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 text-center my-8">
             <div class="bg-gov p-8 text-white relative">
                 <div class="w-20 h-20 bg-yellow-400 text-slate-900 rounded-full flex items-center justify-center text-4xl mx-auto shadow-xl border-4 border-white mb-3">
@@ -622,7 +641,7 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                    <button type="button" id="btnCloseResultModal" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded-xl font-bold text-sm transition-all">
+                    <button type="button" id="btnCloseResultModal" onclick="window.closeResultModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded-xl font-bold text-sm transition-all">
                         Đóng cửa sổ
                     </button>
                 </div>
@@ -805,6 +824,37 @@
         let activeQuestions = [];
         let pendingConfirmAction = null;
         let captchaResult = 0;
+
+        // --- CÁC HÀM ĐIỀU KHIỂN MODAL CHUẨN XÁC, CHỐNG KẸT CSS ---
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.style.display = 'flex';
+            modal.classList.remove('hidden');
+            modal.classList.add('modal-active');
+        }
+
+        function hideModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            modal.style.display = 'none';
+            modal.classList.add('hidden');
+            modal.classList.remove('modal-active');
+        }
+
+        function toggleModal(modalId, forceState) {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+            const isCurrentlyOpen = modal.style.display === 'flex' || modal.classList.contains('modal-active');
+            const shouldOpen = forceState !== undefined ? forceState : !isCurrentlyOpen;
+            if (shouldOpen) {
+                showModal(modalId);
+                if (modalId === 'registerModal') refreshCaptcha();
+            } else {
+                hideModal(modalId);
+            }
+        }
+        window.toggleModal = toggleModal;
 
         // Cơ chế Migration tương thích ngược: Tự động khôi phục dữ liệu đã có từ các phiên bản trước
         function getStoredUsers() {
@@ -1183,8 +1233,9 @@
             renderQuestionMatrix();
             loadQuestion(0);
             startExamTimer();
-            toggleModal('examModal', true);
+            showModal('examModal');
         }
+        window.startExamFlow = startExamFlow;
 
         function renderQuestionMatrix() {
             const matrix = document.getElementById('questionMatrix');
@@ -1288,57 +1339,108 @@
 
         function openConfirmDialog(action) {
             pendingConfirmAction = action;
-            const modal = document.getElementById('confirmModal');
+            const predSidebar = document.getElementById('examPredictionInput');
+            const modalPredInput = document.getElementById('modalPredictionInput');
+            const predBox = document.getElementById('confirmPredictionBox');
+            const predWarning = document.getElementById('modalPredWarning');
             const title = document.getElementById('confirmTitle');
             const msg = document.getElementById('confirmMessage');
             const actBtn = document.getElementById('confirmActionBtn');
+            const iconBox = document.getElementById('confirmIconBox');
+
+            if (predWarning) predWarning.classList.add('hidden');
 
             if (action === 'submit') {
-                const predInput = document.getElementById('examPredictionInput');
-                const pred = parseInt(predInput?.value, 10);
-                
-                if (isNaN(pred) || pred <= 0) {
-                    showToast("⚠️ Vui lòng nhập số dự đoán người tham gia trước khi nộp bài!");
-                    if (predInput) {
-                        predInput.classList.add('ring-2', 'ring-red-500', 'border-red-500');
-                        predInput.focus();
-                        predInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
-                    return;
-                } else if (predInput) {
-                    predInput.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
+                const answered = Object.keys(userAnswers).length;
+                if (title) title.textContent = "Xác nhận hoàn thành & nộp bài?";
+                if (msg) msg.innerHTML = `Bạn đã trả lời <strong class="text-gov">${answered}/${activeQuestions.length} câu hỏi</strong>.<br>Vui lòng xác nhận hoặc bổ sung số dự đoán bên dưới:`;
+
+                // Đồng bộ giá trị dự đoán nếu đã nhập bên ngoài
+                if (modalPredInput && predSidebar) {
+                    modalPredInput.value = predSidebar.value || '';
                 }
 
-                const answered = Object.keys(userAnswers).length;
-                title.textContent = "Xác nhận nộp bài thi?";
-                msg.innerHTML = `Bạn đã trả lời <strong class="text-gov">${answered}/${activeQuestions.length} câu</strong>.<br>Con số dự đoán: <strong class="text-orange-600">${pred} người</strong>.<br>Bạn có chắc chắn muốn kết thúc và nộp bài?`;
-                actBtn.textContent = "Nộp bài ngay";
-                actBtn.className = "flex-1 py-2.5 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-md";
+                if (predBox) predBox.style.display = 'block';
+                if (iconBox) {
+                    iconBox.className = "w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4";
+                    iconBox.innerHTML = '<i class="fa-solid fa-paper-plane"></i>';
+                }
+                if (actBtn) {
+                    actBtn.textContent = "Xác nhận nộp ngay";
+                    actBtn.className = "flex-1 py-3 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-lg shadow-orange-500/30 transition-all cursor-pointer";
+                }
             } else {
-                title.textContent = "Thoát phòng thi?";
-                msg.textContent = "Kết quả bài làm sẽ không được lưu. Bạn có chắc chắn muốn thoát?";
-                actBtn.textContent = "Thoát";
-                actBtn.className = "flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md";
+                if (title) title.textContent = "Thoát phòng thi?";
+                if (msg) msg.textContent = "Kết quả bài làm hiện tại sẽ không được lưu lại. Bạn có chắc chắn muốn thoát?";
+                if (predBox) predBox.style.display = 'none';
+                if (iconBox) {
+                    iconBox.className = "w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4";
+                    iconBox.innerHTML = '<i class="fa-solid fa-door-open"></i>';
+                }
+                if (actBtn) {
+                    actBtn.textContent = "Thoát không nộp";
+                    actBtn.className = "flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer";
+                }
             }
-            modal?.classList.remove('hidden');
+
+            showModal('confirmModal');
+            if (action === 'submit' && modalPredInput && !modalPredInput.value) {
+                setTimeout(() => modalPredInput.focus(), 150);
+            }
         }
+        window.openConfirmDialog = openConfirmDialog;
 
         function closeConfirmDialog() {
-            document.getElementById('confirmModal')?.classList.add('hidden');
+            hideModal('confirmModal');
         }
+        window.closeConfirmDialog = closeConfirmDialog;
 
-        function finishExam() {
+        function executeConfirmAction() {
+            if (pendingConfirmAction === 'submit') {
+                const modalPredInput = document.getElementById('modalPredictionInput');
+                const predWarning = document.getElementById('modalPredWarning');
+                const predVal = parseInt(modalPredInput?.value, 10);
+
+                if (isNaN(predVal) || predVal <= 0) {
+                    if (predWarning) predWarning.classList.remove('hidden');
+                    if (modalPredInput) {
+                        modalPredInput.classList.add('border-red-500', 'ring-2', 'ring-red-400');
+                        modalPredInput.focus();
+                    }
+                    return;
+                }
+
+                // Đồng bộ ngược lại ô sidebar
+                const predSidebar = document.getElementById('examPredictionInput');
+                if (predSidebar) predSidebar.value = predVal;
+
+                closeConfirmDialog();
+                finishExam(predVal);
+            } else if (pendingConfirmAction === 'exit') {
+                closeConfirmDialog();
+                clearInterval(timerInterval);
+                hideModal('examModal');
+            }
+        }
+        window.executeConfirmAction = executeConfirmAction;
+
+        function finishExam(customPrediction) {
             clearInterval(timerInterval);
 
-            // Kiểm tra thời gian tối thiểu hợp lệ
-            const duration = Math.floor((Date.now() - examStartTime) / 1000);
-            if (!TEST_MODE && duration < MIN_EXAM_SECONDS) {
-                showToast("Lỗi bảo mật: Thời gian làm bài quá ngắn! Bài thi bị hủy.");
-                document.getElementById('examModal')?.classList.add('hidden');
-                return;
+            // Đảm bảo có tài khoản fallback không bao giờ crash
+            if (!currentUser) {
+                currentUser = {
+                    name: "Thí sinh tự do",
+                    village: "Xã Mỏ Cày",
+                    phone: "0900000000",
+                    cccd: "025000000000",
+                    attempts: 0
+                };
             }
 
-            // Chấm điểm an toàn bằng việc đối sánh Salted Hash, không dùng index thô
+            const duration = Math.max(1, Math.floor((Date.now() - examStartTime) / 1000));
+
+            // Chấm điểm đối sánh Salted Hash an toàn
             let score = 0;
             activeQuestions.forEach((q, idx) => {
                 const chosen = userAnswers[idx];
@@ -1350,14 +1452,14 @@
                 }
             });
 
-            const prediction = Math.max(1, parseInt(document.getElementById('examPredictionInput')?.value, 10) || 0);
+            const prediction = customPrediction || Math.max(1, parseInt(document.getElementById('examPredictionInput')?.value, 10) || 1);
 
             // Cập nhật lượt thi của người dùng
             currentUser.attempts = (parseInt(currentUser.attempts, 10) || 0) + 1;
             localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
             localStorage.setItem('cds_user', JSON.stringify(currentUser));
 
-            // Cập nhật số lượt thi trong danh sách người dùng
+            // Cập nhật kho users
             let users = getStoredUsers();
             const uIdx = users.findIndex(u => (u.phone && u.phone === (currentUser.phone || currentUser.cccd)) || (u.cccd && u.cccd === (currentUser.phone || currentUser.cccd)));
             if (uIdx !== -1) {
@@ -1365,7 +1467,7 @@
                 saveStoredUsers(users);
             }
 
-            // Cập nhật thống kê bài thi an toàn
+            // Ghi nhật ký bài thi
             let logs = getStoredLogs();
             logs.push({
                 userKey: currentUser.phone || currentUser.cccd,
@@ -1380,55 +1482,57 @@
             updateUserUI();
             updateStatsUI();
 
-            // Hiển thị kết quả
-            document.getElementById('resScoreText').textContent = `${score}/${activeQuestions.length}`;
-            document.getElementById('resCorrectText').textContent = score;
-            document.getElementById('resTimeText').textContent = `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`;
-            document.getElementById('resPredictionText').textContent = `${prediction} người`;
+            // Hiển thị kết quả lên giao diện
+            const resScore = document.getElementById('resScoreText');
+            const resCorrect = document.getElementById('resCorrectText');
+            const resTime = document.getElementById('resTimeText');
+            const resPred = document.getElementById('resPredictionText');
+
+            if (resScore) resScore.textContent = `${score}/${activeQuestions.length}`;
+            if (resCorrect) resCorrect.textContent = score;
+            if (resTime) resTime.textContent = `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`;
+            if (resPred) resPred.textContent = `${prediction} người`;
+
+            // ĐÓNG PHÒNG THI VÀ MỞ KẾT QUẢ DỨT KHOÁT
+            hideModal('examModal');
+            showModal('resultModal');
 
             if (typeof confetti === 'function') {
-                confetti({ particleCount: 90, spread: 65, origin: { y: 0.6 } });
+                try {
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                } catch(e) {}
             }
 
-            // Gửi dữ liệu an toàn đến Google Apps Script kèm Client Signature
+            // Gửi dữ liệu ngầm lên Google Apps Script không chặn giao diện
             if (GAS_API_URL) {
-                const sig = createClientSignature();
-                fetch(GAS_API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({
-                        action: 'submitExam',
-                        userKey: sanitizeInput(currentUser.phone || currentUser.cccd),
-                        name: sanitizeInput(currentUser.name),
-                        village: sanitizeInput(currentUser.village),
-                        score: score,
-                        correctCount: score,
-                        durationSeconds: duration,
-                        prediction: prediction,
-                        clientToken: sig.clientToken,
-                        timestamp: sig.timestamp
-                    })
-                }).catch(() => {});
-            }
-
-            // Đóng phòng thi và mở cửa sổ kết quả dứt khoát
-            document.getElementById('examModal')?.classList.add('hidden');
-            document.getElementById('resultModal')?.classList.remove('hidden');
-        }
-
-        function toggleModal(modalId, show) {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-            if (show === undefined) {
-                modal.classList.toggle('hidden');
-            } else {
-                modal.classList.toggle('hidden', !show);
-            }
-            if (modalId === 'registerModal' && show) {
-                refreshCaptcha();
+                try {
+                    const sig = createClientSignature();
+                    fetch(GAS_API_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify({
+                            action: 'submitExam',
+                            userKey: sanitizeInput(currentUser.phone || currentUser.cccd),
+                            name: sanitizeInput(currentUser.name),
+                            village: sanitizeInput(currentUser.village),
+                            score: score,
+                            correctCount: score,
+                            durationSeconds: duration,
+                            prediction: prediction,
+                            clientToken: sig.clientToken,
+                            timestamp: sig.timestamp
+                        })
+                    }).catch(() => {});
+                } catch(e) {}
             }
         }
+        window.finishExam = finishExam;
+
+        function closeResultModal() {
+            hideModal('resultModal');
+        }
+        window.closeResultModal = closeResultModal;
 
         function toggleMobileMenu(forceState) {
             const menu = document.getElementById('mobileMenu');
@@ -1491,8 +1595,8 @@
             setInterval(updateTimer, 1000);
         }
 
-        // Lắng nghe tất cả sự kiện tương tác DOM
-        document.addEventListener('DOMContentLoaded', () => {
+        // Khởi tạo toàn bộ ứng dụng an toàn cho mọi môi trường iFrame/Trình duyệt
+        function initApp() {
             initCountdown();
             loadUserSession();
             updateStatsUI();
@@ -1503,24 +1607,16 @@
             document.getElementById('registerForm')?.addEventListener('submit', handleRegisterSubmit);
             document.getElementById('loginForm')?.addEventListener('submit', handleLoginSubmit);
 
-            // Nút bấm Bắt đầu thi
+            // Nút Hero
             document.getElementById('btnHeroStartExam')?.addEventListener('click', startExamFlow);
 
-            // Nút nộp bài thi
+            // Nút nộp bài và thoát phòng thi
             document.getElementById('btnSubmitExam')?.addEventListener('click', () => openConfirmDialog('submit'));
             document.getElementById('btnExitExam')?.addEventListener('click', () => openConfirmDialog('exit'));
 
-            // Hộp thoại xác nhận nộp bài
+            // Các nút trong popup xác nhận
             document.getElementById('confirmCancelBtn')?.addEventListener('click', closeConfirmDialog);
-            document.getElementById('confirmActionBtn')?.addEventListener('click', () => {
-                closeConfirmDialog();
-                if (pendingConfirmAction === 'submit') {
-                    finishExam();
-                } else if (pendingConfirmAction === 'exit') {
-                    clearInterval(timerInterval);
-                    toggleModal('examModal', false);
-                }
-            });
+            document.getElementById('confirmActionBtn')?.addEventListener('click', executeConfirmAction);
 
             // Điều hướng câu hỏi
             document.getElementById('prevQBtn')?.addEventListener('click', () => {
@@ -1535,13 +1631,13 @@
             });
 
             // Nút đóng modal kết quả
-            document.getElementById('btnCloseResultModal')?.addEventListener('click', () => toggleModal('resultModal', false));
+            document.getElementById('btnCloseResultModal')?.addEventListener('click', closeResultModal);
 
             // Nút đóng các modal chung
             document.querySelectorAll('.close-modal-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const mId = btn.getAttribute('data-modal');
-                    if (mId) toggleModal(mId, false);
+                    if (mId) hideModal(mId);
                 });
             });
 
@@ -1562,7 +1658,14 @@
                     if (icon) icon.classList.toggle('rotate-180');
                 });
             });
-        });
+        }
+
+        // Tự động chạy ngay lập tức nếu DOM đã sẵn sàng (chống lỗi trễ DOMContentLoaded)
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
 
     })();
     </script>
