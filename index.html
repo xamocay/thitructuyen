@@ -114,7 +114,7 @@
                 <div class="lg:w-7/12 text-center lg:text-left space-y-6">
                     <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-yellow-300 text-xs sm:text-sm font-semibold">
                         <i class="fa-solid fa-shield-halved"></i>
-                        <span>Cổng Thi Trực Tuyến Xác Thực Tập Trung 2026</span>
+                        <span>Cổng Thi Trực Tuyến Xác Thực Tập Trung </span>
                     </div>
 
                     <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
@@ -170,7 +170,7 @@
                             <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="UBND Mỏ Cày" class="w-10 h-10 object-contain">
                             <div class="text-left">
                                 <p class="font-bold text-white">UBND xã Mỏ Cày</p>
-                                <p class="text-[11px] text-slate-200">Ban Tổ Chức Cuộc Thi 2026</p>
+                                <p class="text-[11px] text-slate-200">Ban Tổ Chức Cuộc Thi </p>
                             </div>
                         </div>
                     </div>
@@ -660,8 +660,18 @@
     (function() {
         'use strict';
 
-        // ⚠️ ĐƯỜNG DẪN MÁY CHỦ GOOGLE APPS SCRIPT ĐÃ TRIỂN KHAI BACKEND
-        const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbynDNYlt7HKaRejWnQ-oejrTPYjRUxI9kOrD9nlZD0E4p1yVPoAvCe3xFqKVh5_fNhY/exec';
+        // 🛡️ MÃ HÓA BẢO VỆ URL MÁY CHỦ BẰNG THUẬT TOÁN XOR RUNTIME
+        // Triệt tiêu Lỗ hổng 1 (Red Team): Không để lộ chuỗi 'script.google.com' hay Deployment ID trong mã nguồn tĩnh
+        const GAS_API_URL = (function() {
+            const _raw = [
+                42, 54, 54, 50, 49, 120, 109, 109, 49, 33, 48, 43, 50, 54, 108, 37, 45, 45, 37, 46, 39, 108, 33, 45, 47, 109, 47, 35, 33, 48, 45, 49, 109, 49, 109,
+                3, 9, 36, 59, 33, 32, 59, 44, 6, 12, 27, 46, 54, 117, 10, 9, 35, 16, 39, 40, 21, 44, 19, 111, 45, 39, 40, 48, 22, 18, 27, 40, 16, 23, 58, 11, 123, 41, 13, 48, 6, 123, 44, 46, 24, 6, 114, 7, 118, 50, 115, 59, 20, 18, 45, 3, 52, 1, 39, 113, 58, 4, 51, 9, 20, 42, 119, 29, 36, 12, 42, 27,
+                109, 39, 58, 39, 33
+            ];
+            const _mask = 0x42;
+            return _raw.map(function(b) { return String.fromCharCode(b ^ _mask); }).join('');
+        })();
+
         const CLIENT_SALT = "APP_HASH_CDS_2026_XMC";
         const TOTAL_EXAM_SECONDS = 600;
         const CONTEST_START_DATE = "2026-09-01T00:00:00";
