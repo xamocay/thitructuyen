@@ -37,7 +37,7 @@
         }
     </script>
     <style>
-        .glass { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .glass { background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.4); }
         .hero-gradient { background: linear-gradient(135deg, #003B73 0%, #005BAC 50%, #0073DC 100%); }
         .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .card-hover:hover { transform: translateY(-5px); box-shadow: 0 12px 25px -5px rgba(0, 91, 172, 0.15); }
@@ -45,12 +45,11 @@
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #005BAC; border-radius: 4px; }
         .hp-field { opacity: 0; position: absolute; top: 0; left: 0; height: 0; width: 0; z-index: -1; pointer-events: none; }
-        .modal-active { display: flex !important; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans custom-scrollbar selection:bg-blue-200 selection:text-gov">
 
-    <!-- Top Bar Notice -->
+    <!-- Top Announcement Bar -->
     <div class="bg-yellow-500 text-slate-900 text-xs font-semibold py-2 px-4 text-center flex items-center justify-center space-x-2 shadow-inner">
         <span class="bg-red-600 text-white text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full animate-pulse">Thông báo</span>
         <span>Cuộc thi tìm hiểu CCHC & Chuyển đổi số xã Mỏ Cày năm 2026 diễn ra từ ngày 01/9/2026 - 15/9/2026. Hãy tham gia ngay!</span>
@@ -60,7 +59,6 @@
     <nav class="sticky top-0 z-40 glass shadow-md transition-all duration-300" id="mainNav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <!-- Logo & Brand -->
                 <a href="#home" class="flex items-center space-x-3 group">
                     <img src="https://datafiles.chinhphu.vn/cpp/files/dlt/2010/09/quochuy.gif" alt="Quốc huy Việt Nam" class="w-12 h-12 object-contain group-hover:scale-105 transition-transform drop-shadow">
                     <div>
@@ -69,44 +67,46 @@
                     </div>
                 </a>
 
-                <!-- Desktop Menu -->
                 <div class="hidden xl:flex items-center space-x-5 text-sm font-medium text-slate-700">
                     <a href="#home" class="hover:text-gov transition-colors py-2">Trang chủ</a>
                     <a href="#about" class="hover:text-gov transition-colors py-2">Giới thiệu</a>
                     <a href="#rules" class="hover:text-gov transition-colors py-2">Thể lệ</a>
+                    <a href="#leaderboard" class="hover:text-gov transition-colors py-2 text-gov font-bold flex items-center">
+                        <i class="fa-solid fa-trophy mr-1 text-yellow-500"></i> Bảng xếp hạng
+                    </a>
                     <a href="#faq" class="hover:text-gov transition-colors py-2">Hỏi đáp</a>
                 </div>
 
-                <!-- CTA Action Buttons -->
                 <div class="hidden sm:flex items-center space-x-3" id="navUserArea">
-                    <button type="button" id="btnNavLogin" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                    <button type="button" onclick="window.toggleModal('loginModal', true)" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
                         <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Đăng nhập
                     </button>
-                    <button type="button" id="btnNavRegister" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
+                    <button type="button" onclick="window.toggleModal('registerModal', true)" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
                         <i class="fa-solid fa-user-plus mr-1.5"></i>Đăng ký
                     </button>
                 </div>
 
-                <!-- Mobile Menu Button -->
                 <div class="xl:hidden flex items-center">
-                    <button type="button" id="mobileMenuBtn" class="text-slate-700 hover:text-gov p-2 focus:outline-none">
+                    <button type="button" onclick="window.toggleMobileMenu()" class="text-slate-700 hover:text-gov p-2 focus:outline-none">
                         <i class="fa-solid fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Mobile Drawer Menu -->
         <div id="mobileMenu" class="hidden xl:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3">
-            <a href="#home" class="block py-2 text-slate-700 font-medium border-b border-slate-100 mobile-nav-link">Trang chủ</a>
-            <a href="#about" class="block py-2 text-slate-700 font-medium border-b border-slate-100 mobile-nav-link">Giới thiệu</a>
-            <a href="#rules" class="block py-2 text-slate-700 font-medium border-b border-slate-100 mobile-nav-link">Thể lệ & Giải thưởng</a>
-            <a href="#faq" class="block py-2 text-slate-700 font-medium border-b border-slate-100 mobile-nav-link">Hỏi đáp</a>
+            <a href="#home" onclick="window.toggleMobileMenu(false)" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Trang chủ</a>
+            <a href="#about" onclick="window.toggleMobileMenu(false)" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Giới thiệu</a>
+            <a href="#rules" onclick="window.toggleMobileMenu(false)" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Thể lệ & Giải thưởng</a>
+            <a href="#leaderboard" onclick="window.toggleMobileMenu(false)" class="block py-2 text-gov font-bold border-b border-slate-100">
+                <i class="fa-solid fa-trophy mr-1 text-yellow-500"></i> Bảng xếp hạng Top 20
+            </a>
+            <a href="#faq" onclick="window.toggleMobileMenu(false)" class="block py-2 text-slate-700 font-medium border-b border-slate-100">Hỏi đáp</a>
             <div class="pt-2 flex flex-col space-y-2" id="mobileAuthArea">
-                <button type="button" id="btnMobileRegister" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
+                <button type="button" onclick="window.toggleModal('registerModal', true); window.toggleMobileMenu(false);" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
                     <i class="fa-solid fa-pen-to-square mr-1.5"></i>Đăng ký tham gia
                 </button>
-                <button type="button" id="btnMobileExam" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
+                <button type="button" onclick="window.startExamFlow(); window.toggleMobileMenu(false);" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
                     <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
                 </button>
             </div>
@@ -120,7 +120,7 @@
                 <div class="lg:w-7/12 text-center lg:text-left space-y-6">
                     <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-yellow-300 text-xs sm:text-sm font-semibold">
                         <i class="fa-solid fa-shield-halved"></i>
-                        <span>Chào mừng Ngày Chuyển đổi số Quốc gia 2026</span>
+                        <span>Cổng Thi Trực Tuyến Xác Thực Tập Trung 2026</span>
                     </div>
 
                     <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
@@ -130,11 +130,11 @@
                     </h1>
 
                     <p class="text-base sm:text-lg text-slate-100 font-light leading-relaxed">
-                        Nâng cao kiến thức kỹ năng số, dịch vụ công trực tuyến, ứng dụng VNeID và an toàn thông tin cho cán bộ, công chức, viên chức, đoàn viên, hội viên và nhân dân xã Mỏ Cày.
+                        Nâng cao kiến thức kỹ năng số, dịch vụ công trực tuyến, ứng dụng VNeID và an toàn thông tin mạng cho toàn thể cán bộ, công chức, đoàn viên, thanh niên và nhân dân xã Mỏ Cày.
                     </p>
 
                     <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
-                        <button type="button" id="btnHeroStartExam" class="bg-cta hover:bg-cta-hover text-white px-8 py-4 rounded-2xl font-extrabold text-base sm:text-lg shadow-xl shadow-orange-500/40 hover:scale-105 transition-all flex items-center justify-center space-x-3">
+                        <button type="button" onclick="window.startExamFlow()" class="bg-cta hover:bg-cta-hover text-white px-8 py-4 rounded-2xl font-extrabold text-base sm:text-lg shadow-xl shadow-orange-500/40 hover:scale-105 transition-all flex items-center justify-center space-x-3">
                             <i class="fa-solid fa-circle-play text-xl"></i>
                             <span>BẮT ĐẦU THI NGAY</span>
                         </button>
@@ -185,7 +185,7 @@
         </div>
     </header>
 
-    <!-- Live Statistics Cards -->
+    <!-- Statistics Cards -->
     <section class="relative -mt-12 z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
             <div class="bg-white p-5 rounded-2xl shadow-xl border border-slate-100 text-center card-hover">
@@ -287,7 +287,7 @@
                         </h3>
                         <ul class="text-slate-600 text-sm leading-relaxed space-y-2 list-disc list-inside">
                             <li><strong>Hình thức:</strong> Thi trắc nghiệm trực tuyến 100% trên thiết bị di động hoặc máy tính.</li>
-                            <li><strong>Cấu trúc đề:</strong> 20 câu hỏi trắc nghiệm rút ngẫu nhiên từ ngân hàng câu hỏi + 01 câu dự đoán lượt tham gia.</li>
+                            <li><strong>Cấu trúc đề:</strong> 20 câu hỏi trắc nghiệm rút ngẫu nhiên từ ngân hàng máy chủ + 01 câu dự đoán số lượt tham gia.</li>
                             <li><strong>Thời gian làm bài:</strong> Tối đa 10 phút (600 giây).</li>
                             <li><strong>Số lượt thi:</strong> Tối đa 02 lượt/thí sinh. Hệ thống tự động ghi nhận kết quả ở lượt thi cao nhất.</li>
                         </ul>
@@ -345,57 +345,57 @@
         </div>
     </section>
 
-    <!-- FAQ Section -->
-    <section id="faq" class="py-16 bg-slate-50 border-t border-slate-200">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Leaderboard Section (Top 20 Realtime từ Server) -->
+    <section id="leaderboard" class="py-16 md:py-24 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Giải đáp thắc mắc</span>
-                <h2 class="text-3xl font-extrabold text-slate-900 mt-3">Câu Hỏi Thường Gặp (FAQ)</h2>
+                <span class="text-gov font-bold text-sm tracking-widest uppercase bg-blue-100 px-3 py-1 rounded-full">Vinh Danh Thành Tích</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-3">Bảng Xếp Hạng Top 20 Thí Sinh</h2>
+                <p class="text-slate-600 text-sm mt-2">Dữ liệu được sắp xếp tự động theo Điểm số cao nhất và Thời gian hoàn thành nhanh nhất</p>
+                <div class="w-20 h-1.5 bg-gov mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <div class="space-y-4">
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                    <button type="button" class="faq-toggle-btn w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none" data-target="faqAnswer1" data-icon="faqIcon1">
-                        <span>1. Ai được phép đăng ký tham gia cuộc thi?</span>
-                        <i id="faqIcon1" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
-                    </button>
-                    <div id="faqAnswer1" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        Tất cả công dân Việt Nam đang sinh sống, làm việc, học tập trên địa bàn xã Mỏ Cày đều được phép đăng ký tham gia.
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden">
+                <div class="p-4 sm:p-6 bg-gov text-white flex justify-between items-center">
+                    <div class="flex items-center space-x-3">
+                        <i class="fa-solid fa-medal text-2xl text-yellow-300"></i>
+                        <span class="font-bold text-sm sm:text-base">Danh Sách Dẫn Đầu Cuộc Thi</span>
                     </div>
+                    <button type="button" onclick="window.loadLeaderboard()" class="text-xs bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1.5 rounded-xl transition-all flex items-center space-x-1.5">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span>Làm mới</span>
+                    </button>
                 </div>
 
-                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                    <button type="button" class="faq-toggle-btn w-full p-5 text-left font-bold text-slate-800 flex justify-between items-center focus:outline-none" data-target="faqAnswer2" data-icon="faqIcon2">
-                        <span>2. Mỗi thí sinh được làm bài thi bao nhiêu lần?</span>
-                        <i id="faqIcon2" class="fa-solid fa-chevron-down text-gov transition-transform"></i>
-                    </button>
-                    <div id="faqAnswer2" class="hidden px-5 pb-5 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        Mỗi tài khoản được dự thi tối đa 02 lần. Hệ thống tự động ghi nhận kết quả ở lượt thi đạt điểm cao nhất.
-                    </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
+                                <th class="py-3.5 px-4 text-center">Hạng</th>
+                                <th class="py-3.5 px-4">Họ và Tên</th>
+                                <th class="py-3.5 px-4">Đơn vị / Thôn</th>
+                                <th class="py-3.5 px-4 text-center">Điểm số</th>
+                                <th class="py-3.5 px-4 text-center">Thời gian</th>
+                                <th class="py-3.5 px-4 text-center">Dự đoán</th>
+                                <th class="py-3.5 px-4 text-center">Ngày thi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody" class="divide-y divide-slate-100 text-slate-700">
+                            <tr>
+                                <td colspan="7" class="py-8 text-center text-slate-400">
+                                    <i class="fa-solid fa-spinner fa-spin mr-2"></i> Đang tải dữ liệu bảng xếp hạng...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gov-dark text-white py-12 border-t border-blue-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-blue-200">
-            <p>Bản quyền © 2026 - Ủy ban nhân dân xã Mỏ Cày, tỉnh Quảng Ngãi.</p>
-        </div>
-    </footer>
-
-    <!-- MODAL 1: Registration Modal -->
-    <div id="registerModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 my-8">
-            <div class="bg-gov px-6 py-4 text-white flex justify-between items-center">
-                <h3 class="font-bold text-base flex items-center">
-                    <i class="fa-solid fa-user-plus mr-2"></i> Đăng Ký Tài Khoản Dự Thi
-                </h3>
-                <button type="button" class="close-modal-btn text-white/80 hover:text-white text-xl focus:outline-none" data-modal="registerModal">&times;</button>
-            </div>
-
-            <form id="registerForm" class="p-6 space-y-4 max-h-[80vh] overflow-y-auto custom-scrollbar">
-                <!-- Honeypot Field for Bot Trap -->
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-white border-t border-slate-200">
+                <!-- Honeypot Bot Trap -->
                 <input type="text" name="website_trap" id="regTrap" class="hp-field" tabindex="-1" autocomplete="off">
 
                 <div>
@@ -450,11 +450,6 @@
                     </div>
                 </div>
 
-                <div class="flex items-center space-x-2 pt-1">
-                    <input type="checkbox" id="regAgree" required class="w-4 h-4 text-gov rounded border-slate-300 focus:ring-gov">
-                    <label for="regAgree" class="text-xs text-slate-600">Tôi đồng ý với <a href="#rules" class="text-gov font-bold underline">Thể lệ cuộc thi</a>.</label>
-                </div>
-
                 <button type="submit" id="regSubmitBtn" class="w-full bg-cta hover:bg-cta-hover text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all mt-2">
                     <i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản
                 </button>
@@ -463,13 +458,13 @@
     </div>
 
     <!-- MODAL 2: Login Modal -->
-    <div id="loginModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="loginModal" style="display: none;" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4">
         <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100">
             <div class="bg-gov px-6 py-4 text-white flex justify-between items-center">
                 <h3 class="font-bold text-base flex items-center">
                     <i class="fa-solid fa-right-to-bracket mr-2"></i> Đăng Nhập Hệ Thống Thi
                 </h3>
-                <button type="button" class="close-modal-btn text-white/80 hover:text-white text-xl focus:outline-none" data-modal="loginModal">&times;</button>
+                <button type="button" onclick="window.toggleModal('loginModal', false)" class="text-white/80 hover:text-white text-xl focus:outline-none">&times;</button>
             </div>
 
             <form id="loginForm" class="p-6 space-y-4">
@@ -489,16 +484,15 @@
         </div>
     </div>
 
-    <!-- MODAL 3: Custom Confirmation Dialog (Luôn nổi ở z-[80]) -->
+    <!-- MODAL 3: Custom Confirmation Dialog (z-[80] Nổi trên cùng) -->
     <div id="confirmModal" style="display: none;" class="fixed inset-0 z-[80] bg-slate-900/80 backdrop-blur-sm items-center justify-center p-4">
-        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 text-center border border-slate-100 animate-in fade-in zoom-in duration-150">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 text-center border border-slate-100">
             <div id="confirmIconBox" class="w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
-                <i class="fa-solid fa-circle-question"></i>
+                <i class="fa-solid fa-paper-plane"></i>
             </div>
-            <h3 id="confirmTitle" class="text-lg font-black text-slate-900 mb-2">Xác nhận nộp bài</h3>
-            <p id="confirmMessage" class="text-xs text-slate-600 mb-4 leading-relaxed">Bạn có chắc chắn muốn nộp bài thi?</p>
+            <h3 id="confirmTitle" class="text-lg font-black text-slate-900 mb-2">Xác nhận hoàn thành bài thi?</h3>
+            <p id="confirmMessage" class="text-xs text-slate-600 mb-4 leading-relaxed">Vui lòng kiểm tra kỹ hoặc bổ sung câu hỏi dự đoán bên dưới trước khi nộp:</p>
 
-            <!-- Ô nhập câu hỏi dự đoán tích hợp trực tiếp trong popup xác nhận -->
             <div id="confirmPredictionBox" class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200 mb-5 text-left">
                 <label class="block text-xs font-bold text-amber-900 mb-1">
                     <i class="fa-solid fa-users-viewfinder text-amber-600 mr-1"></i>
@@ -511,7 +505,7 @@
             </div>
 
             <div class="flex space-x-3">
-                <button type="button" id="confirmCancelBtn" onclick="window.closeConfirmDialog()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">
+                <button type="button" onclick="window.closeConfirmDialog()" class="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl transition-all">
                     Kiểm tra lại bài
                 </button>
                 <button type="button" id="confirmActionBtn" onclick="window.executeConfirmAction()" class="flex-1 py-3 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-lg shadow-orange-500/30 transition-all">
@@ -543,7 +537,7 @@
                             <span id="examTimer" class="font-mono font-black text-lg sm:text-xl leading-none">10:00</span>
                         </div>
                     </div>
-                    <button type="button" id="btnExitExam" onclick="window.openConfirmDialog('exit')" class="text-white/80 hover:text-white text-2xl font-bold px-2">&times;</button>
+                    <button type="button" onclick="window.openConfirmDialog('exit')" class="text-white/80 hover:text-white text-2xl font-bold px-2">&times;</button>
                 </div>
             </div>
 
@@ -563,7 +557,7 @@
                         </div>
 
                         <h4 id="qTitle" class="text-base sm:text-lg font-extrabold text-slate-900 leading-relaxed mb-6">
-                            Đang tải câu hỏi...
+                            Đang tải câu hỏi từ máy chủ...
                         </h4>
 
                         <div id="qOptions" class="space-y-3">
@@ -599,8 +593,7 @@
                             <input type="number" id="examPredictionInput" min="1" max="1000000" placeholder="Nhập số dự đoán (VD: 1500)..." class="w-full px-3 py-2 border border-amber-300 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-gov bg-white transition-all">
                         </div>
 
-                        <!-- NÚT NỘP BÀI GẮN TRỰC TIẾP ONCLICK TOÀN CỤC CHỐNG LỆCH EVENT -->
-                        <button type="button" id="btnSubmitExam" onclick="window.openConfirmDialog('submit')" class="w-full bg-cta hover:bg-cta-hover active:scale-[0.98] text-white py-4 rounded-xl font-black text-sm shadow-xl shadow-orange-500/30 transition-all flex items-center justify-center space-x-2 cursor-pointer">
+                        <button type="button" id="btnSubmitExam" onclick="window.openConfirmDialog('submit')" class="w-full bg-cta hover:bg-cta-hover text-white py-4 rounded-xl font-black text-sm shadow-xl shadow-orange-500/30 transition-all flex items-center justify-center space-x-2 cursor-pointer">
                             <i class="fa-solid fa-paper-plane text-base"></i>
                             <span>NỘP BÀI THI NGAY</span>
                         </button>
@@ -610,14 +603,15 @@
         </div>
     </div>
 
-    <!-- MODAL 5: Result Modal (Z-Index z-[90] hiển thị trên cùng) -->
+    <!-- MODAL 5: Result Modal (z-[90]) -->
     <div id="resultModal" style="display: none;" class="fixed inset-0 z-[90] bg-slate-900/85 backdrop-blur-md items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden relative border border-slate-100 text-center my-8">
             <div class="bg-gov p-8 text-white relative">
                 <div class="w-20 h-20 bg-yellow-400 text-slate-900 rounded-full flex items-center justify-center text-4xl mx-auto shadow-xl border-4 border-white mb-3">
                     <i class="fa-solid fa-trophy"></i>
                 </div>
-                <h3 class="text-2xl font-black">HOÀN THÀNH BÀI THI!</h3>
+                <h3 class="text-2xl font-black">KẾT QUẢ BÀI THI</h3>
+                <p class="text-xs text-blue-200 mt-1">Đã được xác thực và lưu trữ trên hệ thống máy chủ</p>
             </div>
 
             <div class="p-8 space-y-6">
@@ -641,7 +635,7 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row gap-3 pt-2">
-                    <button type="button" id="btnCloseResultModal" onclick="window.closeResultModal()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded-xl font-bold text-sm transition-all">
+                    <button type="button" onclick="window.toggleModal('resultModal', false)" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 rounded-xl font-bold text-sm transition-all">
                         Đóng cửa sổ
                     </button>
                 </div>
@@ -649,7 +643,7 @@
         </div>
     </div>
 
-    <!-- Toast Notification (Z-Index z-[100] luôn nổi trên mọi modal) -->
+    <!-- Toast Notification (z-[100]) -->
     <div id="toast" class="fixed bottom-6 right-6 z-[100] hidden bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 flex items-center space-x-3 transition-all duration-300 text-xs font-semibold">
         <i id="toastIcon" class="fa-solid fa-circle-info text-yellow-400 text-base"></i>
         <span id="toastMessage">Thông báo</span>
@@ -659,102 +653,26 @@
     (function() {
         'use strict';
 
-        // --- HẰNG SỐ & BẢO MẬT HỆ THỐNG ---
+        // ⚠️ ĐƯỜNG DẪN MÁY CHỦ GOOGLE APPS SCRIPT ĐÃ TRIỂN KHAI BACKEND
         const GAS_API_URL = 'https://script.google.com/macros/s/AKfycbxekUKfT-6UrTKlOmBec9lkMKWl7J5pM2vT0W6ZNQGWQx9gxhV0KOX4rEugZK394j0d/exec';
-        const HASH_SALT = "M0_C4Y_2026_CDS_SECURE_SALT";
+        const CLIENT_SALT = "APP_HASH_CDS_2026_XMC";
         const TOTAL_EXAM_SECONDS = 600;
-        const MIN_EXAM_SECONDS = 5; // Giảm xuống 5 giây để kiểm thử thuận tiện, chống bot nộp 0s
         const CONTEST_START_DATE = "2026-09-01T00:00:00";
         const CONTEST_END_DATE   = "2026-09-15T23:59:59";
-        const TEST_MODE = true; // Bật true để kiểm thử trực tiếp mọi lúc
 
-        // Hàm băm mật mã học SHA-256 thuần (chạy đồng bộ, hỗ trợ so khớp đáp án an toàn)
-        function sha256Sync(ascii) {
-            function rightRotate(value, amount) { return (value >>> amount) | (value << (32 - amount)); }
-            let mathPow = Math.pow;
-            let maxWord = mathPow(2, 32);
-            let lengthProperty = 'length';
-            let i, j;
-            let result = '';
-            let words = [];
-            let asciiBitLength = ascii[lengthProperty] * 8;
-            let hash = [], k = [];
-            let primeCounter = 0;
+        // Biến trạng thái phiên làm việc
+        let currentUser = null;
+        let timerInterval = null;
+        let examTimeLeft = TOTAL_EXAM_SECONDS;
+        let currentQuestionIdx = 0;
+        let userAnswers = {}; // Lưu lựa chọn: { [questionId]: selectedOptionIndex }
+        let flaggedQuestions = {};
+        let activeQuestions = []; // Chỉ lưu tiêu đề và phương án nhận từ Server (KHÔNG CÓ ĐÁP ÁN)
+        let currentExamToken = null; // Token phiên thi đã ký HMAC từ Server
+        let pendingConfirmAction = null;
+        let captchaResult = 0;
 
-            function isPrime(candidate) {
-                for (let factor = 2; factor * factor <= candidate; factor++) {
-                    if (candidate % factor === 0) return false;
-                }
-                return true;
-            }
-
-            for (let candidate = 2; primeCounter < 64; candidate++) {
-                if (isPrime(candidate)) {
-                    if (primeCounter < 8) {
-                        hash[primeCounter] = (mathPow(candidate, 1 / 2) * maxWord) | 0;
-                    }
-                    k[primeCounter] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
-                    primeCounter++;
-                }
-            }
-
-            ascii += '\x80';
-            while (ascii[lengthProperty] % 64 - 56) ascii += '\x00';
-            for (i = 0; i < ascii[lengthProperty]; i++) {
-                j = ascii.charCodeAt(i);
-                words[i >> 2] |= j << ((3 - i % 4) * 8);
-            }
-            words[words[lengthProperty]] = ((asciiBitLength / maxWord) | 0);
-            words[words[lengthProperty]] = (asciiBitLength | 0);
-
-            for (j = 0; j < words[lengthProperty];) {
-                let w = words.slice(j, j += 16);
-                let oldHash = hash;
-                hash = hash.slice(0, 8);
-
-                for (i = 0; i < 64; i++) {
-                    let w15 = w[i - 15], w2 = w[i - 2];
-                    let s0 = rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3);
-                    let s1 = rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10);
-                    let ch = (hash[4] & hash[5]) ^ (~hash[4] & hash[6]);
-                    let temp1 = hash[7] + (rightRotate(hash[4], 6) ^ rightRotate(hash[4], 11) ^ rightRotate(hash[4], 25)) + ch + k[i] + (w[i] = (i < 16) ? w[i] : (w[i - 16] + s0 + w[i - 7] + s1) | 0);
-                    let maj = (hash[0] & hash[1]) ^ (hash[0] & hash[2]) ^ (hash[1] & hash[2]);
-                    let temp2 = (rightRotate(hash[0], 2) ^ rightRotate(hash[0], 13) ^ rightRotate(hash[0], 22)) + maj;
-
-                    hash = [(temp1 + temp2) | 0].concat(hash);
-                    hash[4] = (hash[4] + temp1) | 0;
-                }
-
-                for (i = 0; i < 8; i++) {
-                    hash[i] = (hash[i] + oldHash[i]) | 0;
-                }
-            }
-
-            for (i = 0; i < 8; i++) {
-                for (let b = 3; b >= 0; b--) {
-                    let byteVal = (hash[i] >> (b * 8)) & 255;
-                    result += ((byteVal < 16 ? '0' : '') + byteVal.toString(16));
-                }
-            }
-            return result;
-        }
-
-        // Tạo Salted Hash cho đáp án đúng
-        function generateAnswerHash(qId, correctIndex) {
-            return sha256Sync(`${qId}_${correctIndex}_${HASH_SALT}`);
-        }
-
-        // Chống XSS & Formula Injection
-        function sanitizeInput(val) {
-            if (val === null || val === undefined) return '';
-            let str = String(val).trim();
-            // Nếu bắt đầu bằng ký tự nguy hiểm cho Formula Google Sheets, thêm dấu '
-            if (/^[=+@\-\t\r]/.test(str)) {
-                str = "'" + str;
-            }
-            return str.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        }
-
+        // --- HÀM BẢO MẬT & MÃ HÓA ---
         function escapeHtml(str) {
             if (str === null || str === undefined) return '';
             return String(str)
@@ -765,88 +683,39 @@
                 .replace(/'/g, '&#39;');
         }
 
-        // Tạo Client Token chống script curl tự động
-        function createClientSignature() {
+        function sanitizeInput(val) {
+            if (val === null || val === undefined) return '';
+            return String(val).trim().replace(/^[=+@\-\t\r]/, '');
+        }
+
+        // Tạo chữ ký xác thực Client bằng Web Crypto API SHA-256
+        async function createClientSignature() {
             const timestamp = Date.now().toString();
-            const clientToken = sha256Sync(timestamp + HASH_SALT);
+            const msgBuffer = new TextEncoder().encode(timestamp + CLIENT_SALT);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const clientToken = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
             return { timestamp, clientToken };
         }
 
-        // Dữ liệu câu hỏi gốc (chỉ nằm trong Closure Scope, không thể đọc từ Console)
-        const RAW_QUESTIONS = [
-            { id: 1, title: "Mục tiêu trọng tâm của Cải cách hành chính nhà nước giai đoạn 2021 - 2030 là gì?", options: ["Xây dựng nền hành chính dân chủ, chuyên nghiệp, hiện đại, tinh gọn, hiệu lực, hiệu quả", "Chỉ tập trung số hóa giấy tờ hành chính", "Cắt giảm toàn bộ cán bộ công chức", "Tăng mức thu phí dịch vụ công"], correct: 0 },
-            { id: 2, title: "Ứng dụng VNeID do cơ quan nào phát triển và quản lý?", options: ["Bộ Thông tin và Truyền thông", "Trung tâm Dữ liệu quốc gia về dân cư - Bộ Công an", "Bộ Tư pháp", "Văn phòng Chính phủ"], correct: 1 },
-            { id: 3, title: "Dịch vụ công trực tuyến toàn trình là gì?", options: ["Chỉ cung cấp mẫu đơn trên mạng", "Người dân nộp hồ sơ trực tuyến nhưng phải đến cơ quan nhận kết quả", "Cung cấp toàn bộ thông tin, xử lý và trả kết quả trực tuyến hoàn toàn", "Chỉ tra cứu thủ tục hành chính"], correct: 2 },
-            { id: 4, title: "Tài khoản định danh điện tử mức độ 2 trên VNeID có giá trị tương đương với giấy tờ nào?", options: ["Thẻ BHYT giấy", "Thẻ Căn cước / CCCD gắn chip", "Bằng lái xe máy", "Sổ hộ khẩu cũ"], correct: 1 },
-            { id: 5, title: "Ngày Chuyển đổi số quốc gia được Chính phủ chọn là ngày nào hằng năm?", options: ["Ngày 10 tháng 10", "Ngày 10 tháng 09", "Ngày 09 tháng 10", "Ngày 20 tháng 10"], correct: 0 },
-            { id: 6, title: "Trụ cột nào KHÔNG nằm trong 3 trụ cột chính của Chuyển đổi số quốc gia?", options: ["Chính phủ số", "Kinh tế số", "Xã hội số", "Nông nghiệp số"], correct: 3 },
-            { id: 7, title: "Nhiệm vụ chính của Tổ công nghệ số cộng đồng tại các thôn/tổ dân phố là gì?", options: ["Trực tiếp giải quyết hồ sơ đất đai", "Đi từng ngõ, gõ từng nhà hướng dẫn người dân sử dụng dịch vụ công, VNeID và kỹ năng số", "Thu tiền điện nước", "Kiểm tra an ninh trật tự"], correct: 1 },
-            { id: 8, title: "Khi nghi ngờ tài khoản ngân hàng hoặc mạng xã hội bị hack, hành động ĐÚNG NHẤT là gì?", options: ["Báo ngay cho ngân hàng/nhà mạng, đổi mật khẩu và nhờ hỗ trợ", "Chờ vài ngày xem sao", "Chuyển thêm tiền vào tài khoản", "Đăng tải lên mạng xã hội để nhờ cộng đồng mạng khóa hộ"], correct: 0 },
-            { id: 9, title: "Dịch vụ công liên thông 'Đăng ký khai sinh, đăng ký thường trú, cấp thẻ BHYT cho trẻ dưới 6 tuổi' đem lại lợi ích gì?", options: ["Người dân chỉ cần kê khai 1 lần trực tuyến để hoàn thành 3 thủ tục", "Tăng thời gian đi lại của công dân", "Yêu cầu nộp 3 bộ hồ sơ giấy", "Chỉ áp dụng cho người giàu"], correct: 0 },
-            { id: 10, title: "Theo Kế hoạch CCHC xã Mỏ Cày năm 2026, thời hạn chậm nhất để UBND xã công bố Danh mục văn bản quy phạm pháp luật hết hiệu lực, tạm ngưng hiệu lực trong năm 2025 là ngày nào?", options: ["01/01/2026", "31/01/2026", "31/3/2026", "31/12/2025"], correct: 1 },
-            { id: 11, title: "Cơ chế 'Một cửa, Một cửa liên thông' trong giải quyết TTHC nhằm mục đích gì?", options: ["Tăng thêm cửa thụ lý hồ sơ", "Giảm phiền hà, giảm thời gian và chi phí đi lại cho tổ chức, cá nhân", "Tăng phí lệ phí", "Ép người dân nộp phạt"], correct: 1 },
-            { id: 12, title: "Thế nào là 'Mật khẩu mạnh' để bảo vệ tài khoản số?", options: ["Ngày tháng năm sinh của bản thân", "Dãy số 12345678", "Tối thiểu 8-12 ký tự gồm chữ hoa, chữ thường, số và ký tự đặc biệt", "Tên cá nhân viết liền"], correct: 2 },
-            { id: 13, title: "Trí tuệ nhân tạo (AI) được ứng dụng trong nền hành chính công nhằm mục đích gì?", options: ["Thay thế hoàn toàn con người", "Hỗ trợ tự động hóa giải đáp thắc mắc, phân tích dữ liệu và nâng cao chất lượng phục vụ", "Tăng chi phí quản lý", "Gây phiền hà cho dân"], correct: 1 },
-            { id: 14, title: "Thanh toán không dùng tiền mặt mang lại lợi ích trực tiếp nào cho người dân?", options: ["Nhanh chóng, an toàn, tiện lợi, minh bạch và quản lý chi tiêu tốt hơn", "Mất thêm nhiều chi phí bắt buộc", "Nguy cơ lộ toàn bộ tiền mặt", "Chỉ áp dụng ở siêu thị lớn"], correct: 0 },
-            { id: 15, title: "Đề án 06 của Chính phủ là đề án về nội dung gì?", options: ["Phát triển ứng dụng dữ liệu về dân cư, định danh và xác thực điện tử phục vụ chuyển đổi số quốc gia", "Phát triển đường cao tốc", "Trồng cây xanh", "Cải cách giáo dục phổ thông"], correct: 0 },
-            { id: 16, title: "Chữ ký số cá nhân có giá trị pháp lý ra sao?", options: ["Có giá trị tương đương chữ ký tay của cá nhân trong các giao dịch điện tử", "Không có giá trị pháp lý", "Chỉ dùng để trang trí", "Giá trị thấp hơn chữ ký tay"], correct: 0 },
-            { id: 17, title: "Hành vi nào bị nghiêm cấm trên không gian mạng theo Luật An ninh mạng?", options: ["Tìm kiếm thông tin học tập", "Đăng tải thông tin bịa đặt, sai sự thật gây hoang mang dư luận", "Xem tin tức chính thống", "Đăng ký dịch vụ công"], correct: 1 },
-            { id: 18, title: "Mục đích của Kế hoạch Cải cách hành chính (CCHC) năm 2026 xã Mỏ Cày là tiếp tục triển khai thực hiện có hiệu quả giai đoạn nào của Chương trình tổng thể CCHC nhà nước?", options: ["Giai đoạn I (2021-2025)", "Giai đoạn III (2031-2035)", "Giai đoạn II (2026-2030)", "Toàn bộ giai đoạn (2021-2030)"], correct: 2 },
-            { id: 19, title: "Nền tảng Cổng Dịch vụ công Quốc gia có địa chỉ truy cập chính thức là gì?", options: ["dichvucong.gov.vn", "dichvucong.com", "dichvucong.org", "dichvucong.vn"], correct: 0 },
-            { id: 20, title: "Khi nhận được tin nhắn SMS chứa liên kết lạ giả mạo ngân hàng, bạn nên làm gì?", options: ["Nhấn vào đường link và nhập mật khẩu ngay", "Tuyệt đối không nhấn vào đường link và xóa/báo cáo tin nhắn rác", "Gửi link cho bạn bè cùng thử", "Nhập mã OTP nếu được yêu cầu"], correct: 1 },
-            { id: 21, title: "Theo kế hoạch CCHC xã Mỏ Cày năm 2026, trong cải cách thể chế, mục tiêu cụ thể đối với văn bản quy phạm pháp luật được ban hành là gì?", options: ["100% ban hành đúng thẩm quyền", "Cắt giảm 50% số lượng văn bản", "Ban hành tối thiểu 10 văn bản mới", "80% văn bản được số hóa hoàn toàn"], correct: 0 },
-            { id: 22, title: "Chỉ số PAPI là chỉ số đo lường điều gì?", options: ["Hiệu quả quản trị và hành chính công cấp tỉnh", "Chỉ số giá tiêu dùng", "Chỉ số phát triển con người", "Chỉ số năng lực cạnh tranh"], correct: 0 },
-            { id: 23, title: "Chỉ số PAR INDEX là chỉ số gì?", options: ["Chỉ số Cải cách hành chính", "Chỉ số lạm phát", "Chỉ số chứng khoán", "Chỉ số sẵn sàng CNTT"], correct: 0 },
-            { id: 24, title: "Thời hạn giải quyết thủ tục hành chính được tính như thế nào?", options: ["Tính theo ngày làm việc (không tính thứ 7, CN và ngày lễ trừ quy định khác)", "Tính liên tục kể cả ngày lễ", "Tính theo tuần", "Do cán bộ tự quyết định"], correct: 0 },
-            { id: 25, title: "Trong kế hoạch CCHC xã Mỏ Cày năm 2026, kế hoạch phát triển hạ tầng số xã Mỏ Cày giai đoạn 2026 - 2030 dự kiến được ban hành vào thời gian nào?", options: ["Quý III/2026", "Quý II/2026", "Quý I/2026", "Tháng 12/2026"], correct: 0 },
-            { id: 26, title: "Để thực hiện phản ánh, kiến nghị về thủ tục hành chính, người dân gửi qua đâu?", options: ["Cổng Dịch vụ công Quốc gia hoặc Ứng dụng Công dân số", "Đăng lên tài khoản Tiktok cá nhân", "Nhắn tin cho bạn bè", "Gửi thư tay không ghi địa chỉ"], correct: 0 },
-            { id: 27, title: "Bảo mật thông tin cá nhân trên mạng bao gồm việc KHÔNG làm điều gì?", options: ["Chia sẻ công khai số CCCD, số điện thoại, mã OTP lên mạng xã hội", "Đặt mật khẩu phức tạp", "Bật xác thực 2 bước", "Cập nhật ứng dụng thường xuyên"], correct: 0 },
-            { id: 28, title: "Chỉ thị số 31-CT/TU và Chỉ thị số 17/CT-UBND được nhắc đến trong kế hoạch CCHC xã Mỏ Cày năm 2026 nhằm tăng cường kỷ luật hành chính về nội dung cụ thể nào?", options: ["Phải đeo thẻ công chức khi làm việc", "Không dùng bia, rượu buổi trưa", "Nghiêm cấm làm việc riêng trong giờ làm việc", "Không đi muộn, về sớm"], correct: 1 },
-            { id: 29, title: "Nền tảng VNeID tích hợp được những giấy tờ nào của công dân?", options: ["Bảo hiểm y tế, Giấy phép lái xe, Đăng ký xe, Thông tin cư trú, Mã số thuế", "Chỉ duy nhất thẻ BHYT", "Thẻ học sinh", "Thẻ ngân hàng nội bộ"], correct: 0 },
-            { id: 30, title: "Theo Kế hoạch số 113-KH/ĐU ngày 19/6/2026 của Đảng ủy xã Mỏ Cày, đến hết năm 2035, xã Mỏ Cày phấn đấu hình thành bao nhiêu doanh nghiệp khởi nghiệp sáng tạo?", options: ["Từ 3 đến 5 doanh nghiệp", "Từ 5 đến 7 doanh nghiệp", "Từ 1 đến 2 doanh nghiệp", "Trên 10 doanh nghiệp"], correct: 0 }
-        ];
-
-        // Chuyển đổi mảng câu hỏi sang dạng bảo mật: Xóa bỏ hoàn toàn trường 'correct', thay bằng chữ ký băm
-        const SECURE_QUESTIONS = RAW_QUESTIONS.map(q => ({
-            id: q.id,
-            title: q.title,
-            options: q.options,
-            ansHash: generateAnswerHash(q.id, q.correct)
-        }));
-
-        let currentUser = null;
-        let timerInterval = null;
-        let examTimeLeft = TOTAL_EXAM_SECONDS;
-        let examStartTime = 0;
-        let currentQuestionIdx = 0;
-        let userAnswers = {};
-        let flaggedQuestions = {};
-        let activeQuestions = [];
-        let pendingConfirmAction = null;
-        let captchaResult = 0;
-
-        // --- CÁC HÀM ĐIỀU KHIỂN MODAL CHUẨN XÁC, CHỐNG KẸT CSS ---
+        // --- ĐIỀU KHIỂN MODAL DỨT KHOÁT (CHỐNG KẸT CSS) ---
         function showModal(modalId) {
             const modal = document.getElementById(modalId);
             if (!modal) return;
             modal.style.display = 'flex';
-            modal.classList.remove('hidden');
-            modal.classList.add('modal-active');
         }
 
         function hideModal(modalId) {
             const modal = document.getElementById(modalId);
             if (!modal) return;
             modal.style.display = 'none';
-            modal.classList.add('hidden');
-            modal.classList.remove('modal-active');
         }
 
         function toggleModal(modalId, forceState) {
             const modal = document.getElementById(modalId);
             if (!modal) return;
-            const isCurrentlyOpen = modal.style.display === 'flex' || modal.classList.contains('modal-active');
-            const shouldOpen = forceState !== undefined ? forceState : !isCurrentlyOpen;
+            const isOpen = modal.style.display === 'flex';
+            const shouldOpen = forceState !== undefined ? forceState : !isOpen;
             if (shouldOpen) {
                 showModal(modalId);
                 if (modalId === 'registerModal') refreshCaptcha();
@@ -856,61 +725,48 @@
         }
         window.toggleModal = toggleModal;
 
-        // Cơ chế Migration tương thích ngược: Tự động khôi phục dữ liệu đã có từ các phiên bản trước
+        function toggleMobileMenu(forceState) {
+            const menu = document.getElementById('mobileMenu');
+            if (!menu) return;
+            if (forceState !== undefined) {
+                menu.classList.toggle('hidden', !forceState);
+            } else {
+                menu.classList.toggle('hidden');
+            }
+        }
+        window.toggleMobileMenu = toggleMobileMenu;
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toastMessage');
+            if (msgEl) msgEl.textContent = msg;
+            if (toast) {
+                toast.classList.remove('hidden');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => toast.classList.add('hidden'), 3500);
+            }
+        }
+
+        // --- QUẢN LÝ DỮ LIỆU THÍ SINH (TƯƠNG THÍCH NGƯỢC) ---
         function getStoredUsers() {
             let users = [];
             try {
-                users = JSON.parse(localStorage.getItem('cds_users_v2'));
-                if (Array.isArray(users) && users.length > 0) return users;
-            } catch(e) {}
-
-            try {
-                // Tự động khôi phục từ key cũ
                 users = JSON.parse(localStorage.getItem('cds_registered_users')) || [];
-                if (users.length > 0) {
-                    localStorage.setItem('cds_users_v2', JSON.stringify(users));
-                }
             } catch(e) { users = []; }
             return users;
         }
 
         function saveStoredUsers(users) {
-            localStorage.setItem('cds_users_v2', JSON.stringify(users));
-            localStorage.setItem('cds_registered_users', JSON.stringify(users)); // Đồng bộ ngược
-        }
-
-        function getStoredLogs() {
-            let logs = [];
-            try {
-                logs = JSON.parse(localStorage.getItem('cds_logs_v2'));
-                if (Array.isArray(logs) && logs.length > 0) return logs;
-            } catch(e) {}
-            try {
-                logs = JSON.parse(localStorage.getItem('cds_exam_logs')) || [];
-                if (logs.length > 0) localStorage.setItem('cds_logs_v2', JSON.stringify(logs));
-            } catch(e) { logs = []; }
-            return logs;
-        }
-
-        function saveStoredLogs(logs) {
-            localStorage.setItem('cds_logs_v2', JSON.stringify(logs));
-            localStorage.setItem('cds_exam_logs', JSON.stringify(logs));
+            localStorage.setItem('cds_registered_users', JSON.stringify(users));
         }
 
         function loadUserSession() {
-            let saved = localStorage.getItem('cds_user_v2') || localStorage.getItem('cds_user');
+            const saved = localStorage.getItem('cds_user');
             if (saved) {
                 try {
                     currentUser = JSON.parse(saved);
-                    // Đồng bộ số lượt thi mới nhất từ kho dữ liệu
-                    const users = getStoredUsers();
-                    const matched = users.find(u => (u.phone && u.phone === (currentUser.phone || currentUser.cccd)) || (u.cccd && u.cccd === (currentUser.phone || currentUser.cccd)));
-                    if (matched) {
-                        currentUser.attempts = matched.attempts || 0;
-                    }
                     updateUserUI();
                 } catch(e) {
-                    localStorage.removeItem('cds_user_v2');
                     localStorage.removeItem('cds_user');
                 }
             }
@@ -934,7 +790,7 @@
                             <span class="text-[10px] text-slate-500">Đã thi: <strong class="text-orange-600">${attempts}/2</strong> lượt</span>
                         </div>
                     </div>
-                    <button type="button" id="btnLogout" class="border border-slate-300 text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold transition-all">
+                    <button type="button" onclick="window.handleLogout()" class="border border-slate-300 text-slate-600 hover:bg-slate-100 px-3 py-2 rounded-xl text-xs font-semibold transition-all">
                         <i class="fa-solid fa-right-from-bracket mr-1"></i>Thoát
                     </button>
                 `;
@@ -945,118 +801,47 @@
                             <p class="font-bold text-gov">${safeName}</p>
                             <p class="text-slate-500 text-[11px]">Đã thi: <strong class="text-orange-600">${attempts}/2</strong> lượt</p>
                         </div>
-                        <button type="button" id="btnMobileStartExam" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
+                        <button type="button" onclick="window.startExamFlow(); window.toggleMobileMenu(false);" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
                             <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
                         </button>
-                        <button type="button" id="btnMobileLogout" class="w-full bg-slate-100 text-slate-700 py-2.5 rounded-xl font-bold border border-slate-200">
+                        <button type="button" onclick="window.handleLogout(); window.toggleMobileMenu(false);" class="w-full bg-slate-100 text-slate-700 py-2.5 rounded-xl font-bold border border-slate-200">
                             Đăng xuất
                         </button>
                     `;
                 }
-
-                // Gán sự kiện cho các nút đăng xuất mới sinh
-                document.getElementById('btnLogout')?.addEventListener('click', handleLogout);
-                document.getElementById('btnMobileLogout')?.addEventListener('click', handleLogout);
-                document.getElementById('btnMobileStartExam')?.addEventListener('click', () => {
-                    toggleMobileMenu(false);
-                    startExamFlow();
-                });
             } else {
                 if (navArea) {
                     navArea.innerHTML = `
-                        <button type="button" id="btnNavLogin" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+                        <button type="button" onclick="window.toggleModal('loginModal', true)" class="border border-gov text-gov hover:bg-blue-50 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
                             <i class="fa-solid fa-right-to-bracket mr-1.5"></i>Đăng nhập
                         </button>
-                        <button type="button" id="btnNavRegister" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
+                        <button type="button" onclick="window.toggleModal('registerModal', true)" class="bg-cta hover:bg-cta-hover text-white px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-orange-500/30 hover:scale-105 transition-all">
                             <i class="fa-solid fa-user-plus mr-1.5"></i>Đăng ký
                         </button>
                     `;
-                    document.getElementById('btnNavLogin')?.addEventListener('click', () => toggleModal('loginModal', true));
-                    document.getElementById('btnNavRegister')?.addEventListener('click', () => toggleModal('registerModal', true));
                 }
-
                 if (mobileArea) {
                     mobileArea.innerHTML = `
-                        <button type="button" id="btnMobileRegister" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
+                        <button type="button" onclick="window.toggleModal('registerModal', true); window.toggleMobileMenu(false);" class="w-full bg-cta text-white py-2.5 rounded-xl font-bold shadow-md">
                             <i class="fa-solid fa-pen-to-square mr-1.5"></i>Đăng ký tham gia
                         </button>
-                        <button type="button" id="btnMobileExam" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
+                        <button type="button" onclick="window.startExamFlow(); window.toggleMobileMenu(false);" class="w-full bg-gov text-white py-2.5 rounded-xl font-bold shadow-md">
                             <i class="fa-solid fa-laptop-code mr-1.5"></i>Vào thi ngay
                         </button>
                     `;
-                    document.getElementById('btnMobileRegister')?.addEventListener('click', () => {
-                        toggleMobileMenu(false);
-                        toggleModal('registerModal', true);
-                    });
-                    document.getElementById('btnMobileExam')?.addEventListener('click', () => {
-                        toggleMobileMenu(false);
-                        startExamFlow();
-                    });
                 }
             }
         }
 
         function handleLogout() {
             currentUser = null;
-            localStorage.removeItem('cds_user_v2');
             localStorage.removeItem('cds_user');
             updateUserUI();
-            showToast("Đã đăng xuất tài khoản an toàn!");
+            showToast("Đã đăng xuất tài khoản!");
         }
+        window.handleLogout = handleLogout;
 
-        function updateStatsUI() {
-            const users = getStoredUsers();
-            const logs = getStoredLogs();
-
-            const totalUsers = users.length;
-            const totalAttempts = users.reduce((sum, u) => sum + (parseInt(u.attempts, 10) || 0), 0);
-            const totalCompleted = logs.length;
-            const totalScore = logs.reduce((sum, l) => sum + (parseFloat(l.score) || 0), 0);
-            const avgScore = totalCompleted > 0 ? (totalScore / totalCompleted).toFixed(1) : "0.0";
-            const onlineEstimate = Math.max(1, Math.floor(totalUsers * 0.2) + Math.floor(Math.random() * 3));
-
-            animateCounter('statUsers', totalUsers);
-            animateCounter('statAttempts', totalAttempts);
-            animateCounter('statCompleted', totalCompleted);
-            const avgEl = document.getElementById('statAvgScore');
-            if (avgEl) avgEl.innerHTML = `${avgScore} <span class="text-xs font-normal text-slate-400">/20</span>`;
-            animateCounter('statOnline', onlineEstimate);
-
-            // Truy vấn số liệu từ GAS nếu có
-            if (GAS_API_URL) {
-                fetch(`${GAS_API_URL}?action=getStats`)
-                    .then(res => res.json())
-                    .then(res => {
-                        if (res.status === 'success') {
-                            animateCounter('statUsers', res.users || totalUsers);
-                            animateCounter('statAttempts', res.attempts || totalAttempts);
-                            animateCounter('statCompleted', res.completed || totalCompleted);
-                            if (avgEl && res.avgScore) avgEl.innerHTML = `${res.avgScore} <span class="text-xs font-normal text-slate-400">/20</span>`;
-                            animateCounter('statOnline', res.online || onlineEstimate);
-                        }
-                    })
-                    .catch(() => {});
-            }
-        }
-
-        function animateCounter(elemId, target) {
-            const el = document.getElementById(elemId);
-            if (!el) return;
-            const cur = parseInt(el.innerText, 10) || 0;
-            if (cur === target) return;
-            let val = cur;
-            const step = Math.ceil(Math.abs(target - cur) / 10) || 1;
-            const timer = setInterval(() => {
-                if (val < target) {
-                    val = Math.min(target, val + step);
-                } else {
-                    val = Math.max(target, val - step);
-                }
-                el.innerText = val;
-                if (val === target) clearInterval(timer);
-            }, 30);
-        }
-
+        // --- MATH CAPTCHA ---
         function refreshCaptcha() {
             const num1 = Math.floor(Math.random() * 9) + 1;
             const num2 = Math.floor(Math.random() * 9) + 1;
@@ -1067,27 +852,118 @@
             if (ansEl) ansEl.value = '';
         }
 
-        function handleRegisterSubmit(e) {
+        // --- THỐNG KÊ REALTIME ---
+        function updateStatsUI() {
+            fetch(`${GAS_API_URL}?action=getStats`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        animateCounter('statUsers', res.users || 0);
+                        animateCounter('statAttempts', res.attempts || 0);
+                        animateCounter('statCompleted', res.completed || 0);
+                        const avgEl = document.getElementById('statAvgScore');
+                        if (avgEl) avgEl.innerHTML = `${res.avgScore || "0.0"} <span class="text-xs font-normal text-slate-400">/20</span>`;
+                        animateCounter('statOnline', res.online || 1);
+                    }
+                })
+                .catch(() => {});
+        }
+
+        // --- LẤY BẢNG XẾP HẠNG TOP 20 TỪ SERVER ---
+        function loadLeaderboard() {
+            const tbody = document.getElementById('leaderboardBody');
+            if (!tbody) return;
+
+            fetch(`${GAS_API_URL}?action=getLeaderboard`)
+                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 'success' && Array.isArray(res.data) && res.data.length > 0) {
+                        tbody.innerHTML = res.data.map((row, idx) => {
+                            // Cột sheet: [0: Mã Bài Thi, 1: CCCD/SĐT, 2: Họ Tên, 3: Đơn vị, 4: Điểm Số, 5: Số Câu Đúng, 6: Thời Gian, 7: Dự Đoán, 8: Ngày Thi]
+                            const rank = idx + 1;
+                            let badge = `<span class="font-bold text-slate-600">${rank}</span>`;
+                            if (rank === 1) badge = `<span class="text-xl">🥇</span>`;
+                            else if (rank === 2) badge = `<span class="text-xl">🥈</span>`;
+                            else if (rank === 3) badge = `<span class="text-xl">🥉</span>`;
+
+                            const name = escapeHtml(row[2] || "Thí sinh");
+                            const unit = escapeHtml(row[3] || "---");
+                            const score = row[4];
+                            const durationSec = parseInt(row[6], 10) || 0;
+                            const durationText = `${Math.floor(durationSec / 60)}:${String(durationSec % 60).padStart(2, '0')}`;
+                            const prediction = row[7] || "---";
+                            const examDate = escapeHtml(String(row[8] || "").split(" ")[0]);
+
+                            return `
+                                <tr class="hover:bg-blue-50/50 transition-colors ${rank <= 3 ? 'bg-amber-50/40' : ''}">
+                                    <td class="py-3 px-4 text-center font-bold">${badge}</td>
+                                    <td class="py-3 px-4 font-bold text-slate-900">${name}</td>
+                                    <td class="py-3 px-4 text-slate-600">${unit}</td>
+                                    <td class="py-3 px-4 text-center font-black text-gov">${score}/20</td>
+                                    <td class="py-3 px-4 text-center font-mono text-xs font-semibold text-slate-600">${durationText}</td>
+                                    <td class="py-3 px-4 text-center font-medium text-slate-600">${prediction}</td>
+                                    <td class="py-3 px-4 text-center text-xs text-slate-500">${examDate}</td>
+                                </tr>
+                            `;
+                        }).join('');
+                    } else {
+                        tbody.innerHTML = `
+                            <tr>
+                                <td colspan="7" class="py-8 text-center text-slate-400">
+                                    <i class="fa-solid fa-inbox text-2xl block mb-2 opacity-50"></i>
+                                    Chưa có lượt nộp bài nào trên hệ thống. Hãy là người đầu tiên!
+                                </td>
+                            </tr>
+                        `;
+                    }
+                })
+                .catch(() => {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="py-6 text-center text-slate-400">
+                                Không thể tải dữ liệu bảng xếp hạng lúc này.
+                            </td>
+                        </tr>
+                    `;
+                });
+        }
+        window.loadLeaderboard = loadLeaderboard;
+
+        function animateCounter(elemId, target) {
+            const el = document.getElementById(elemId);
+            if (!el) return;
+            const cur = parseInt(el.innerText, 10) || 0;
+            if (cur === target) return;
+            let val = cur;
+            const step = Math.ceil(Math.abs(target - cur) / 10) || 1;
+            const timer = setInterval(() => {
+                if (val < target) val = Math.min(target, val + step);
+                else val = Math.max(target, val - step);
+                el.innerText = val;
+                if (val === target) clearInterval(timer);
+            }, 30);
+        }
+
+        // --- XỬ LÝ ĐĂNG KÝ VÀ ĐĂNG NHẬP ---
+        async function handleRegisterSubmit(e) {
             e.preventDefault();
 
-            // 1. Kiểm tra Bot Trap (Honeypot)
-            const trapVal = document.getElementById('regTrap')?.value;
-            if (trapVal) {
-                showToast("Phát hiện hành vi gửi dữ liệu tự động bất thường!");
+            // 1. Kiểm tra Honeypot Bot Trap
+            if (document.getElementById('regTrap')?.value) {
+                showToast("Phát hiện hành vi spam tự động!");
                 return;
             }
 
             // 2. Kiểm tra Math CAPTCHA
             const capAns = parseInt(document.getElementById('captchaAnswer')?.value, 10);
             if (capAns !== captchaResult) {
-                showToast("Kết quả xác thực Math CAPTCHA chưa chính xác!");
+                showToast("Kết quả CAPTCHA chưa chính xác!");
                 refreshCaptcha();
                 return;
             }
 
             const pass = document.getElementById('regPass').value;
             const passConfirm = document.getElementById('regPassConfirm').value;
-
             if (pass !== passConfirm) {
                 showToast("Mật khẩu xác nhận không khớp!");
                 return;
@@ -1100,93 +976,83 @@
             const phone = sanitizeInput(document.getElementById('regPhone').value).replace(/[^0-9]/g, '');
             const email = sanitizeInput(document.getElementById('regEmail')?.value);
 
-            let users = getStoredUsers();
-            const exists = users.find(u => (u.phone && u.phone === phone) || (u.cccd && u.cccd === cccd));
-            if (exists) {
-                showToast("Số điện thoại hoặc CCCD này đã được đăng ký! Vui lòng đăng nhập.");
-                toggleModal('registerModal', false);
-                toggleModal('loginModal', true);
-                return;
-            }
+            const regBtn = document.getElementById('regSubmitBtn');
+            regBtn.disabled = true;
+            regBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang xác thực...';
 
-            const newUser = {
-                name,
-                dob,
-                cccd,
-                village,
-                phone,
-                email,
-                passHash: sha256Sync(pass + HASH_SALT),
-                attempts: 0,
-                createdAt: Date.now()
-            };
+            const auth = await createClientSignature();
 
-            users.push(newUser);
-            saveStoredUsers(users);
-
-            currentUser = newUser;
-            localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
-
-            updateUserUI();
-            updateStatsUI();
-
-            // Gửi dữ liệu đăng ký an toàn về Google Apps Script
-            if (GAS_API_URL) {
-                const sig = createClientSignature();
-                fetch(GAS_API_URL, {
+            try {
+                const response = await fetch(GAS_API_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         action: 'register',
-                        name,
-                        dob,
-                        cccd,
-                        village,
-                        phone,
-                        email,
-                        clientToken: sig.clientToken,
-                        timestamp: sig.timestamp
+                        name, dob, cccd, village, phone, email,
+                        passHash: pass, // Backend sẽ lưu trữ an toàn
+                        clientToken: auth.clientToken,
+                        timestamp: auth.timestamp
                     })
-                }).catch(() => {});
-            }
+                });
+                const result = await response.json();
 
-            toggleModal('registerModal', false);
-            showToast(`Đăng ký thành công! Chào mừng thí sinh ${currentUser.name}.`);
+                if (result.status === 'success') {
+                    // Lưu session cục bộ
+                    const newUser = { name, dob, cccd, village, phone, email, attempts: 0 };
+                    currentUser = newUser;
+                    localStorage.setItem('cds_user', JSON.stringify(currentUser));
+
+                    let users = getStoredUsers();
+                    users.push(newUser);
+                    saveStoredUsers(users);
+
+                    updateUserUI();
+                    updateStatsUI();
+                    hideModal('registerModal');
+                    showToast(`Đăng ký thành công! Chào mừng ${currentUser.name}.`);
+                } else {
+                    showToast(result.message || "Đăng ký không thành công!");
+                }
+            } catch(err) {
+                showToast("Lỗi kết nối máy chủ! Vui lòng thử lại.");
+            } finally {
+                regBtn.disabled = false;
+                regBtn.innerHTML = '<i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản';
+            }
         }
 
         function handleLoginSubmit(e) {
             e.preventDefault();
             const userKey = sanitizeInput(document.getElementById('loginUser').value);
             const pass = document.getElementById('loginPass').value;
-            const passHash = sha256Sync(pass + HASH_SALT);
 
             const users = getStoredUsers();
             const found = users.find(u => (u.phone && u.phone === userKey) || (u.cccd && u.cccd === userKey));
 
             if (!found) {
-                showToast("Tài khoản chưa đăng ký trên hệ thống! Vui lòng đăng ký.");
-                return;
+                // Nếu chưa có trên máy này, tạo phiên đăng nhập với userKey để máy chủ xác thực lượt thi
+                currentUser = {
+                    name: userKey,
+                    village: "Xã Mỏ Cày",
+                    phone: userKey,
+                    cccd: userKey,
+                    attempts: 0
+                };
+            } else {
+                currentUser = found;
             }
 
-            if (found.passHash && found.passHash !== passHash) {
-                showToast("Mật khẩu đăng nhập không chính xác!");
-                return;
-            }
-
-            currentUser = found;
-            localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
             localStorage.setItem('cds_user', JSON.stringify(currentUser));
             updateUserUI();
-            toggleModal('loginModal', false);
-            showToast(`Đăng nhập thành công! Xin chào ${currentUser.name}.`);
+            hideModal('loginModal');
+            showToast(`Đăng nhập thành công!`);
         }
 
-        function startExamFlow() {
+        // --- TIẾN TRÌNH THI (TẢI ĐỀ BẢO MẬT TỪ SERVER) ---
+        async function startExamFlow() {
             if (!currentUser) {
                 showToast("Vui lòng đăng ký hoặc đăng nhập trước khi vào thi!");
-                toggleModal('loginModal', true);
+                showModal('loginModal');
                 return;
             }
 
@@ -1194,46 +1060,64 @@
             const start = new Date(CONTEST_START_DATE).getTime();
             const end = new Date(CONTEST_END_DATE).getTime();
 
-            if (!TEST_MODE) {
-                if (now < start) {
-                    showToast("Cuộc thi chưa chính thức bắt đầu!");
-                    return;
-                }
-                if (now > end) {
-                    showToast("Cuộc thi đã kết thúc thời hạn làm bài!");
-                    return;
-                }
+            if (now < start) {
+                showToast("Cuộc thi chưa chính thức bắt đầu!");
+                return;
+            }
+            if (now > end) {
+                showToast("Cuộc thi đã kết thúc thời hạn làm bài!");
+                return;
             }
 
-            const attempts = parseInt(currentUser.attempts, 10) || 0;
-            if (attempts >= 2) {
+            if ((parseInt(currentUser.attempts, 10) || 0) >= 2) {
                 showToast("Bạn đã hoàn thành tối đa 02/02 lượt thi theo quy định!");
                 return;
             }
 
-            // Trộn ngẫu nhiên 20 câu hỏi từ ngân hàng bảo mật
-            const shuffled = [...SECURE_QUESTIONS].sort(() => 0.5 - Math.random());
-            activeQuestions = shuffled.slice(0, Math.min(20, SECURE_QUESTIONS.length));
+            showToast("Đang kết nối nhận đề thi bảo mật từ máy chủ...");
 
-            currentQuestionIdx = 0;
-            userAnswers = {};
-            flaggedQuestions = {};
-            examTimeLeft = TOTAL_EXAM_SECONDS;
-            examStartTime = Date.now();
+            const auth = await createClientSignature();
+            const userIdentifier = currentUser.phone || currentUser.cccd;
 
-            const predInput = document.getElementById('examPredictionInput');
-            if (predInput) {
-                predInput.value = '';
-                predInput.classList.remove('ring-2', 'ring-red-500', 'border-red-500');
+            try {
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'getExamQuestions',
+                        userKey: userIdentifier,
+                        clientToken: auth.clientToken,
+                        timestamp: auth.timestamp
+                    })
+                });
+                const data = await res.json();
+
+                if (data.status !== 'success') {
+                    showToast(data.message || "Không thể tải đề thi từ máy chủ!");
+                    return;
+                }
+
+                currentExamToken = data.examToken;
+                activeQuestions = data.questions; // Câu hỏi không chứa đáp án!
+                currentQuestionIdx = 0;
+                userAnswers = {};
+                flaggedQuestions = {};
+                examTimeLeft = TOTAL_EXAM_SECONDS;
+
+                const predInput = document.getElementById('examPredictionInput');
+                if (predInput) predInput.value = '';
+
+                document.getElementById('examCandidateName').textContent = `Thí sinh: ${currentUser.name}`;
+                document.getElementById('examCandidateUnit').textContent = `Đơn vị: ${currentUser.village}`;
+
+                renderQuestionMatrix();
+                loadQuestion(0);
+                startExamTimer();
+                showModal('examModal');
+
+            } catch (err) {
+                showToast("Lỗi kết nối máy chủ khi cấp đề thi!");
             }
-
-            document.getElementById('examCandidateName').textContent = `Thí sinh: ${currentUser.name}`;
-            document.getElementById('examCandidateUnit').textContent = `Đơn vị: ${currentUser.village} (Lượt thi: ${attempts + 1}/2)`;
-
-            renderQuestionMatrix();
-            loadQuestion(0);
-            startExamTimer();
-            showModal('examModal');
         }
         window.startExamFlow = startExamFlow;
 
@@ -1268,7 +1152,7 @@
             container.innerHTML = '';
 
             q.options.forEach((opt, optIdx) => {
-                const isSelected = userAnswers[idx] === optIdx;
+                const isSelected = userAnswers[q.id] === optIdx;
                 const optDiv = document.createElement('div');
                 optDiv.className = `p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all ${
                     isSelected ? 'border-gov bg-blue-50/90 text-gov font-bold shadow-sm ring-1 ring-gov' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
@@ -1282,13 +1166,12 @@
                     </div>
                 `;
                 optDiv.addEventListener('click', () => {
-                    userAnswers[idx] = optIdx;
+                    userAnswers[q.id] = optIdx;
                     loadQuestion(idx);
                 });
                 container.appendChild(optDiv);
             });
 
-            // Cập nhật giao diện thanh điều hướng
             const prevBtn = document.getElementById('prevQBtn');
             const nextBtn = document.getElementById('nextQBtn');
             if (prevBtn) {
@@ -1305,7 +1188,7 @@
         }
 
         function updateMatrixStyles() {
-            activeQuestions.forEach((_, idx) => {
+            activeQuestions.forEach((q, idx) => {
                 const btn = document.getElementById(`qMatrixBtn_${idx}`);
                 if (!btn) return;
                 let base = 'w-9 h-9 rounded-xl font-bold text-xs transition-all ';
@@ -1313,7 +1196,7 @@
 
                 if (flaggedQuestions[idx]) {
                     btn.className = base + 'bg-yellow-400 text-slate-900 border-yellow-500';
-                } else if (userAnswers[idx] !== undefined) {
+                } else if (userAnswers[q.id] !== undefined) {
                     btn.className = base + 'bg-gov text-white border-gov';
                 } else {
                     btn.className = base + 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-100';
@@ -1332,11 +1215,12 @@
 
                 if (examTimeLeft <= 0) {
                     clearInterval(timerInterval);
-                    finishExam();
+                    executeSubmitExam();
                 }
             }, 1000);
         }
 
+        // --- HỘP THOẠI XÁC NHẬN NỘP BÀI (Z-INDEX 80) ---
         function openConfirmDialog(action) {
             pendingConfirmAction = action;
             const predSidebar = document.getElementById('examPredictionInput');
@@ -1352,14 +1236,12 @@
 
             if (action === 'submit') {
                 const answered = Object.keys(userAnswers).length;
-                if (title) title.textContent = "Xác nhận hoàn thành & nộp bài?";
+                if (title) title.textContent = "Xác nhận hoàn thành bài thi?";
                 if (msg) msg.innerHTML = `Bạn đã trả lời <strong class="text-gov">${answered}/${activeQuestions.length} câu hỏi</strong>.<br>Vui lòng xác nhận hoặc bổ sung số dự đoán bên dưới:`;
 
-                // Đồng bộ giá trị dự đoán nếu đã nhập bên ngoài
                 if (modalPredInput && predSidebar) {
                     modalPredInput.value = predSidebar.value || '';
                 }
-
                 if (predBox) predBox.style.display = 'block';
                 if (iconBox) {
                     iconBox.className = "w-14 h-14 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4";
@@ -1367,11 +1249,11 @@
                 }
                 if (actBtn) {
                     actBtn.textContent = "Xác nhận nộp ngay";
-                    actBtn.className = "flex-1 py-3 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-lg shadow-orange-500/30 transition-all cursor-pointer";
+                    actBtn.className = "flex-1 py-3 bg-cta hover:bg-cta-hover text-white font-bold text-xs rounded-xl shadow-lg shadow-orange-500/30 transition-all";
                 }
             } else {
                 if (title) title.textContent = "Thoát phòng thi?";
-                if (msg) msg.textContent = "Kết quả bài làm hiện tại sẽ không được lưu lại. Bạn có chắc chắn muốn thoát?";
+                if (msg) msg.textContent = "Kết quả bài làm hiện tại sẽ không được lưu. Bạn có chắc chắn muốn thoát?";
                 if (predBox) predBox.style.display = 'none';
                 if (iconBox) {
                     iconBox.className = "w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4";
@@ -1379,7 +1261,7 @@
                 }
                 if (actBtn) {
                     actBtn.textContent = "Thoát không nộp";
-                    actBtn.className = "flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer";
+                    actBtn.className = "flex-1 py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow-md transition-all";
                 }
             }
 
@@ -1410,12 +1292,8 @@
                     return;
                 }
 
-                // Đồng bộ ngược lại ô sidebar
-                const predSidebar = document.getElementById('examPredictionInput');
-                if (predSidebar) predSidebar.value = predVal;
-
                 closeConfirmDialog();
-                finishExam(predVal);
+                executeSubmitExam(predVal);
             } else if (pendingConfirmAction === 'exit') {
                 closeConfirmDialog();
                 clearInterval(timerInterval);
@@ -1424,137 +1302,68 @@
         }
         window.executeConfirmAction = executeConfirmAction;
 
-        function finishExam(customPrediction) {
+        // --- NỘP BÀI: SERVER TỰ CHẤM ĐIỂM (CLIENT KHÔNG TỰ KHAI BÁO SCORE) ---
+        async function executeSubmitExam(customPrediction) {
             clearInterval(timerInterval);
-
-            // Đảm bảo có tài khoản fallback không bao giờ crash
-            if (!currentUser) {
-                currentUser = {
-                    name: "Thí sinh tự do",
-                    village: "Xã Mỏ Cày",
-                    phone: "0900000000",
-                    cccd: "025000000000",
-                    attempts: 0
-                };
-            }
-
-            const duration = Math.max(1, Math.floor((Date.now() - examStartTime) / 1000));
-
-            // Chấm điểm đối sánh Salted Hash an toàn
-            let score = 0;
-            activeQuestions.forEach((q, idx) => {
-                const chosen = userAnswers[idx];
-                if (chosen !== undefined) {
-                    const testHash = generateAnswerHash(q.id, chosen);
-                    if (testHash === q.ansHash) {
-                        score++;
-                    }
-                }
-            });
-
             const prediction = customPrediction || Math.max(1, parseInt(document.getElementById('examPredictionInput')?.value, 10) || 1);
 
-            // Cập nhật lượt thi của người dùng
-            currentUser.attempts = (parseInt(currentUser.attempts, 10) || 0) + 1;
-            localStorage.setItem('cds_user_v2', JSON.stringify(currentUser));
-            localStorage.setItem('cds_user', JSON.stringify(currentUser));
+            showToast("Đang nộp bài thi về máy chủ để chấm điểm...");
+            const auth = await createClientSignature();
 
-            // Cập nhật kho users
-            let users = getStoredUsers();
-            const uIdx = users.findIndex(u => (u.phone && u.phone === (currentUser.phone || currentUser.cccd)) || (u.cccd && u.cccd === (currentUser.phone || currentUser.cccd)));
-            if (uIdx !== -1) {
-                users[uIdx].attempts = currentUser.attempts;
-                saveStoredUsers(users);
-            }
+            try {
+                const res = await fetch(GAS_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'submitExam',
+                        examToken: currentExamToken,
+                        answers: userAnswers, // Chỉ gửi mảng câu trả lời
+                        prediction: prediction,
+                        clientToken: auth.clientToken,
+                        timestamp: auth.timestamp
+                    })
+                });
+                const result = await res.json();
 
-            // Ghi nhật ký bài thi
-            let logs = getStoredLogs();
-            logs.push({
-                userKey: currentUser.phone || currentUser.cccd,
-                name: currentUser.name,
-                score: score,
-                durationSeconds: duration,
-                prediction: prediction,
-                timestamp: Date.now()
-            });
-            saveStoredLogs(logs);
+                if (result.status === 'success') {
+                    // Cập nhật số lượt thi thành công
+                    currentUser.attempts = (parseInt(currentUser.attempts, 10) || 0) + 1;
+                    localStorage.setItem('cds_user', JSON.stringify(currentUser));
 
-            updateUserUI();
-            updateStatsUI();
+                    let users = getStoredUsers();
+                    const uIdx = users.findIndex(u => (u.phone && u.phone === currentUser.phone) || (u.cccd && u.cccd === currentUser.cccd));
+                    if (uIdx !== -1) {
+                        users[uIdx].attempts = currentUser.attempts;
+                        saveStoredUsers(users);
+                    }
 
-            // Hiển thị kết quả lên giao diện
-            const resScore = document.getElementById('resScoreText');
-            const resCorrect = document.getElementById('resCorrectText');
-            const resTime = document.getElementById('resTimeText');
-            const resPred = document.getElementById('resPredictionText');
+                    updateUserUI();
+                    updateStatsUI();
 
-            if (resScore) resScore.textContent = `${score}/${activeQuestions.length}`;
-            if (resCorrect) resCorrect.textContent = score;
-            if (resTime) resTime.textContent = `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`;
-            if (resPred) resPred.textContent = `${prediction} người`;
+                    // Hiển thị kết quả do Server chấm
+                    document.getElementById('resScoreText').textContent = `${result.score}/${result.totalQuestions}`;
+                    document.getElementById('resCorrectText').textContent = result.correctCount;
+                    document.getElementById('resTimeText').textContent = `${Math.floor(result.durationSeconds / 60)}:${String(result.durationSeconds % 60).padStart(2, '0')}`;
+                    document.getElementById('resPredictionText').textContent = `${result.prediction} người`;
 
-            // ĐÓNG PHÒNG THI VÀ MỞ KẾT QUẢ DỨT KHOÁT
-            hideModal('examModal');
-            showModal('resultModal');
+                    hideModal('examModal');
+                    showModal('resultModal');
 
-            if (typeof confetti === 'function') {
-                try {
-                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                } catch(e) {}
-            }
+                    if (typeof confetti === 'function') {
+                        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                    }
 
-            // Gửi dữ liệu ngầm lên Google Apps Script không chặn giao diện
-            if (GAS_API_URL) {
-                try {
-                    const sig = createClientSignature();
-                    fetch(GAS_API_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                        body: JSON.stringify({
-                            action: 'submitExam',
-                            userKey: sanitizeInput(currentUser.phone || currentUser.cccd),
-                            name: sanitizeInput(currentUser.name),
-                            village: sanitizeInput(currentUser.village),
-                            score: score,
-                            correctCount: score,
-                            durationSeconds: duration,
-                            prediction: prediction,
-                            clientToken: sig.clientToken,
-                            timestamp: sig.timestamp
-                        })
-                    }).catch(() => {});
-                } catch(e) {}
-            }
-        }
-        window.finishExam = finishExam;
-
-        function closeResultModal() {
-            hideModal('resultModal');
-        }
-        window.closeResultModal = closeResultModal;
-
-        function toggleMobileMenu(forceState) {
-            const menu = document.getElementById('mobileMenu');
-            if (!menu) return;
-            if (forceState !== undefined) {
-                menu.classList.toggle('hidden', !forceState);
-            } else {
-                menu.classList.toggle('hidden');
+                    // Tự động làm mới bảng xếp hạng sau khi nộp bài
+                    loadLeaderboard();
+                } else {
+                    showToast(result.message || "Lỗi khi nộp bài thi!");
+                }
+            } catch (err) {
+                showToast("Lỗi kết nối máy chủ khi nộp bài!");
             }
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            const msgEl = document.getElementById('toastMessage');
-            if (msgEl) msgEl.textContent = msg;
-            if (toast) {
-                toast.classList.remove('hidden');
-                clearTimeout(toast._timer);
-                toast._timer = setTimeout(() => toast.classList.add('hidden'), 3500);
-            }
-        }
-
+        // --- ĐỒNG HỒ ĐẾM NGƯỢC CUỘC THI ---
         function initCountdown() {
             const start = new Date(CONTEST_START_DATE).getTime();
             const end = new Date(CONTEST_END_DATE).getTime();
@@ -1595,30 +1404,19 @@
             setInterval(updateTimer, 1000);
         }
 
-        // Khởi tạo toàn bộ ứng dụng an toàn cho mọi môi trường iFrame/Trình duyệt
+        // --- KHỞI TẠO ỨNG DỤNG ---
         function initApp() {
             initCountdown();
             loadUserSession();
             updateStatsUI();
+            loadLeaderboard();
             refreshCaptcha();
             setInterval(updateStatsUI, 25000);
+            setInterval(loadLeaderboard, 60000);
 
-            // Gán sự kiện Form
             document.getElementById('registerForm')?.addEventListener('submit', handleRegisterSubmit);
             document.getElementById('loginForm')?.addEventListener('submit', handleLoginSubmit);
 
-            // Nút Hero
-            document.getElementById('btnHeroStartExam')?.addEventListener('click', startExamFlow);
-
-            // Nút nộp bài và thoát phòng thi
-            document.getElementById('btnSubmitExam')?.addEventListener('click', () => openConfirmDialog('submit'));
-            document.getElementById('btnExitExam')?.addEventListener('click', () => openConfirmDialog('exit'));
-
-            // Các nút trong popup xác nhận
-            document.getElementById('confirmCancelBtn')?.addEventListener('click', closeConfirmDialog);
-            document.getElementById('confirmActionBtn')?.addEventListener('click', executeConfirmAction);
-
-            // Điều hướng câu hỏi
             document.getElementById('prevQBtn')?.addEventListener('click', () => {
                 if (currentQuestionIdx > 0) loadQuestion(currentQuestionIdx - 1);
             });
@@ -1628,23 +1426,6 @@
             document.getElementById('flagBtn')?.addEventListener('click', () => {
                 flaggedQuestions[currentQuestionIdx] = !flaggedQuestions[currentQuestionIdx];
                 loadQuestion(currentQuestionIdx);
-            });
-
-            // Nút đóng modal kết quả
-            document.getElementById('btnCloseResultModal')?.addEventListener('click', closeResultModal);
-
-            // Nút đóng các modal chung
-            document.querySelectorAll('.close-modal-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const mId = btn.getAttribute('data-modal');
-                    if (mId) hideModal(mId);
-                });
-            });
-
-            // Mobile menu toggle
-            document.getElementById('mobileMenuBtn')?.addEventListener('click', () => toggleMobileMenu());
-            document.querySelectorAll('.mobile-nav-link').forEach(link => {
-                link.addEventListener('click', () => toggleMobileMenu(false));
             });
 
             // Accordion FAQ
@@ -1660,7 +1441,6 @@
             });
         }
 
-        // Tự động chạy ngay lập tức nếu DOM đã sẵn sàng (chống lỗi trễ DOMContentLoaded)
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initApp);
         } else {
