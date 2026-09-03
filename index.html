@@ -1089,29 +1089,16 @@
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
 
-            // In dữ liệu thực tế ra F12 Console để theo dõi
-            console.log("Dữ liệu câu hỏi đang hiển thị:", q);
-
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
-           // Lấy tiêu đề: Kiểm tra lần lượt
-           let titleText = q.title || q.text || q.question || "";
-
-            // Nếu server vẫn chưa có tiêu đề, tự động quét lấy chuỗi văn bản còn lại
-            if (!titleText || titleText.trim() === "") {
-                for (let key in q) {
-                    if (key !== 'id' && key !== 'options' && typeof q[key] === 'string' && q[key].trim().length > 0) {
-                        titleText = q[key];
-                        break;
-                    }
-                }
-            }
-
+            // ĐỌC TRỰC TIẾP q.title TỪ SERVER_QUESTION_BANK
+            const questionTitleText = q.title || q.text || "";
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${titleText || "Câu hỏi số " + q.id}`;
+                titleEl.textContent = `${idx + 1}. ${questionTitleText}`;
             }
+
             const progEl = document.getElementById('examProgressBar');
             if (progEl) progEl.style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
 
