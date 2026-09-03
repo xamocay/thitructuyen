@@ -1095,25 +1095,18 @@
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
-            // Lấy tiêu đề: Quét toàn diện các trường
-            let titleText = q.title || q.text || q.question || "";
-            
-            // Nếu vẫn trống rỗng (do server trả về rỗng), quét tìm chuỗi dài nhất trong object q
-            if (!titleText || titleText.trim() === "") {
-                for (let k in q) {
-                    if (k !== 'id' && k !== 'options' && typeof q[k] === 'string' && q[k].trim().length > 3) {
-                        titleText = q[k].trim();
-                        break;
-                    }
-                }
+           // Lấy tiêu đề: Kiểm tra lần lượt
+            let titleText = (q.title && q.title.trim()) || (q.text && q.text.trim()) || (q.question && q.question.trim()) || "";
+
+            // Nếu cả 3 đều rỗng, in cấu trúc object q ra màn hình để biết server gửi trường nào
+            if (!titleText) {
+                titleText = "Lỗi dữ liệu câu hỏi: " + JSON.stringify(q);
             }
 
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                // Sử dụng textContent để chống lỗi HTML và hiển thị trực tiếp
-                titleEl.textContent = `${idx + 1}. ${titleText || "Câu hỏi số " + q.id}`;
+                titleEl.textContent = `${idx + 1}. ${titleText}`;
             }
-
             const progEl = document.getElementById('examProgressBar');
             if (progEl) progEl.style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
 
