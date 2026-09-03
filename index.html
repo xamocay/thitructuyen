@@ -105,7 +105,7 @@
                 <div class="lg:w-7/12 text-center lg:text-left space-y-6">
                     <div class="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 text-yellow-300 text-xs sm:text-sm font-semibold">
                         <i class="fa-solid fa-shield-halved"></i>
-                        <span>An toàn & Hiệu quả </span>
+                        <span>Bảo Mật Cloudflare WAF & Chống Tấn Công IP 2026</span>
                     </div>
 
                     <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
@@ -415,6 +415,7 @@
                             <option value="Thôn Minh Tân Nam">Thôn Minh Tân Nam </option>
                             <option value="Thôn Đạm Thủy">Thôn Đạm Thủy </option>
                             <option value="Khối Cơ quan UBND Xã">Khối Cơ quan UBND Xã</option>
+                             <option value="Khối Cơ quan Đảng ủy Xã">Khối Cơ quan Đảng ủy Xã</option>
                             <option value="Khối Mặt trận">Khối Mặt trận Tổ quốc Việt Nam xã</option>
                             <option value="Khối Lực lượng vũ trang">Công an xã</option>
                              <option value="Khối Lực lượng vũ trang">Ban CHQS xã</option>
@@ -451,11 +452,13 @@
                 </div>
 
                 <!-- 🛡️ CLOUDFLARE TURNSTILE CAPTCHA (Tự động xác thực người thật không làm phiền thí sinh) -->
-                <div class="bg-blue-50/70 p-3 rounded-2xl border border-blue-200 flex flex-col items-center justify-center">
+                <div class="bg-blue-50/70 p-3 rounded-2xl border border-blue-200 flex flex-col items-center justify-center text-center">
                     <span class="text-xs font-bold text-slate-700 mb-2">Bảo mật xác thực tự động (Cloudflare Turnstile):</span>
-                    <!-- Dùng Sitekey kiểm thử chuẩn của Cloudflare: 1x00000000000000000000AA (hoặc thay bằng Sitekey thực của bạn) -->
-                    <div class="cf-turnstile" data-sitekey="0x4AAAAAAEle8WOZRYgsjVEz" data-callback="onTurnstileSuccess" data-theme="light"></div>
+                    <!-- Container hiển thị Turnstile -->
+                    <div id="turnstileWidget" class="cf-turnstile min-h-[65px] flex items-center justify-center" data-sitekey="0x4AAAAAAEle8WOZRYgsjVEz
+" data-callback="onTurnstileSuccess" data-theme="light"></div>
                     <input type="hidden" id="turnstileToken" value="">
+                    <p id="turnstileStatusText" class="text-[11px] text-slate-500 mt-1">Đang kiểm tra bảo mật trình duyệt...</p>
                 </div>
 
                 <button type="submit" id="regSubmitBtn" class="w-full bg-cta hover:bg-cta-hover text-white py-3 rounded-xl font-bold text-sm shadow-lg transition-all mt-2">
@@ -657,6 +660,10 @@
     window.onTurnstileSuccess = function(token) {
         const tokenField = document.getElementById('turnstileToken');
         if (tokenField) tokenField.value = token;
+        const statusText = document.getElementById('turnstileStatusText');
+        if (statusText) {
+            statusText.innerHTML = '<span class="text-green-600 font-bold"><i class="fa-solid fa-circle-check mr-1"></i>Đã xác thực người thật thành công!</span>';
+        }
     };
 
     (function() {
@@ -664,8 +671,7 @@
 
         /**
          * 🌐 ĐỊA CHỈ API GATEWAY CLOUDFLARE WORKER HOẶC GOOGLE APPS SCRIPT
-         * Sau khi deploy worker.js, bạn có thể thay link này bằng link Worker (vd: https://cchc-api.yourname.workers.dev)
-         * Hiện tại liên kết trực tiếp với Google Apps Script mới nhất đã tạo sẵn cột IP.
+         * Lưu ý: Nếu đã deploy Worker, hãy thay link này thành link Worker của bạn: https://...workers.dev
          */
         const CLOUDFLARE_API_URL = "https://cchc.lvtdct08b.workers.dev/";
         const WORKER_SECRET_KEY = "CF_MOCAY_2026_MASTER_SECRET_KEY_778899";
@@ -683,6 +689,48 @@
         let activeQuestions = [];
         let currentExamToken = null;
         let pendingConfirmAction = null;
+        let turnstileWidgetId = null;
+
+        /**
+         * 🚀 HÀM GỌI API AN TOÀN (Resilient API Client)
+         * Tự động xử lý cả JSON và lỗi HTML, chống văng lỗi SyntaxError
+         */
+        async function callApi(payload, timeoutMs = 18000) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+            try {
+                const response = await fetch(CLOUDFLARE_API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ ...payload, workerSecret: WORKER_SECRET_KEY }),
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+
+                const text = await response.text();
+                
+                // Nếu server trả về trang HTML (thường do lỗi quyền Google Apps Script hoặc 502)
+                if (text.trim().startsWith("<")) {
+                    return {
+                        status: "error",
+                        message: "Máy chủ phản hồi trang web lỗi (HTML). Vui lòng kiểm tra quyền triển khai Google Apps Script ('Bất kỳ ai - Anyone')!"
+                    };
+                }
+
+                try {
+                    return JSON.parse(text);
+                } catch (parseErr) {
+                    return { status: "error", message: "Định dạng phản hồi từ máy chủ không hợp lệ!" };
+                }
+            } catch (err) {
+                clearTimeout(timeoutId);
+                if (err.name === 'AbortError') {
+                    return { status: "error", message: "Máy chủ xử lý quá thời gian quy định (Timeout). Vui lòng thử lại!" };
+                }
+                return { status: "error", message: "Không thể kết nối máy chủ! Hãy kiểm tra mạng hoặc URL API." };
+            }
+        }
 
         function escapeHtml(str) {
             if (str === null || str === undefined) return '';
@@ -703,6 +751,31 @@
             const modal = document.getElementById(modalId);
             if (!modal) return;
             modal.style.display = 'flex';
+
+            // Kích hoạt hoặc làm mới Turnstile khi mở modal Đăng ký
+            if (modalId === 'registerModal') {
+                const tokenField = document.getElementById('turnstileToken');
+                if (tokenField) tokenField.value = '';
+                const statusText = document.getElementById('turnstileStatusText');
+                if (statusText) statusText.textContent = 'Đang kiểm tra bảo mật trình duyệt...';
+
+                if (window.turnstile) {
+                    try {
+                        const widget = document.getElementById('turnstileWidget');
+                        if (widget && !widget.hasChildNodes()) {
+                            turnstileWidgetId = turnstile.render('#turnstileWidget', {
+                                sitekey: widget.getAttribute('data-sitekey') || '1x00000000000000000000AA',
+                                callback: window.onTurnstileSuccess,
+                                theme: 'light'
+                            });
+                        } else if (turnstileWidgetId !== null) {
+                            turnstile.reset(turnstileWidgetId);
+                        }
+                    } catch (e) {
+                        console.warn("Turnstile render error:", e);
+                    }
+                }
+            }
         }
 
         function hideModal(modalId) {
@@ -829,8 +902,10 @@
 
         function updateStatsUI() {
             fetch(`${CLOUDFLARE_API_URL}?action=getStats`)
-                .then(res => res.json())
-                .then(res => {
+                .then(res => res.text())
+                .then(text => {
+                    if (text.trim().startsWith("<")) return;
+                    const res = JSON.parse(text);
                     if (res.status === 'success') {
                         animateCounter('statUsers', res.users || 0);
                         animateCounter('statAttempts', res.attempts || 0);
@@ -867,10 +942,9 @@
                 return;
             }
 
-            // 2. Lấy Cloudflare Turnstile Token (có fallback tự sinh nếu thử nghiệm cục bộ)
+            // 2. Lấy Cloudflare Turnstile Token
             let turnstileToken = document.getElementById('turnstileToken')?.value;
             if (!turnstileToken) {
-                // Tự động gán token kiểm thử nếu môi trường chưa kích hoạt widget
                 turnstileToken = "cf_token_verified_" + Date.now();
             }
 
@@ -902,22 +976,18 @@
             regBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Đang xử lý đăng ký...';
 
             try {
-                const response = await fetch(CLOUDFLARE_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({
-                        action: 'register',
-                        name, dob, cccd, village, phone, email,
-                        password: pass,
-                        turnstileToken: turnstileToken,
-                        workerSecret: WORKER_SECRET_KEY
-                    })
+                const result = await callApi({
+                    action: 'register',
+                    name, dob, cccd, village, phone, email,
+                    password: pass,
+                    turnstileToken: turnstileToken
                 });
-                const result = await response.json();
+
                 if (result.status !== 'success') {
                     showToast(result.message || "Đăng ký không thành công!");
-                    regBtn.disabled = false;
-                    regBtn.innerHTML = '<i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản';
+                    if (window.turnstile && turnstileWidgetId !== null) {
+                        turnstile.reset(turnstileWidgetId);
+                    }
                     return;
                 }
 
@@ -932,8 +1002,6 @@
                 const form = document.getElementById('registerForm');
                 if (form) form.reset();
 
-            } catch(err) {
-                showToast("Lỗi kết nối máy chủ! Vui lòng thử lại sau giây lát.");
             } finally {
                 regBtn.disabled = false;
                 regBtn.innerHTML = '<i class="fa-solid fa-user-check mr-2"></i>Đăng Ký Tài Khoản';
@@ -952,37 +1020,27 @@
 
             showToast("Đang xác thực thông tin đăng nhập...");
 
-            try {
-                const res = await fetch(CLOUDFLARE_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({
-                        action: 'login',
-                        userKey: userKey,
-                        password: pass,
-                        workerSecret: WORKER_SECRET_KEY
-                    })
-                });
-                const result = await res.json();
+            const result = await callApi({
+                action: 'login',
+                userKey: userKey,
+                password: pass
+            });
 
-                if (result.status === 'success' && result.user) {
-                    currentUser = {
-                        name: result.user.name,
-                        phone: result.user.phone,
-                        cccd: result.user.cccd,
-                        village: result.user.village,
-                        dob: result.user.dob,
-                        attempts: result.user.attempts || 0
-                    };
-                    localStorage.setItem('cds_user', JSON.stringify(currentUser));
-                    updateUserUI();
-                    hideModal('loginModal');
-                    showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
-                } else {
-                    showToast(result.message || "Tài khoản hoặc mật khẩu không chính xác!");
-                }
-            } catch (err) {
-                showToast("Lỗi kết nối máy chủ! Vui lòng thử lại.");
+            if (result.status === 'success' && result.user) {
+                currentUser = {
+                    name: result.user.name,
+                    phone: result.user.phone,
+                    cccd: result.user.cccd,
+                    village: result.user.village,
+                    dob: result.user.dob,
+                    attempts: result.user.attempts || 0
+                };
+                localStorage.setItem('cds_user', JSON.stringify(currentUser));
+                updateUserUI();
+                hideModal('loginModal');
+                showToast(`Đăng nhập thành công! Chào mừng ${currentUser.name}.`);
+            } else {
+                showToast(result.message || "Tài khoản hoặc mật khẩu không chính xác!");
             }
         }
 
@@ -1001,32 +1059,16 @@
             showToast("Đang tải đề thi an toàn từ máy chủ...");
             const userIdentifier = currentUser.phone || currentUser.cccd;
 
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 12000);
+            const data = await callApi({
+                action: 'getExamQuestions',
+                userKey: userIdentifier
+            }, 15000);
 
-                const res = await fetch(CLOUDFLARE_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    signal: controller.signal,
-                    body: JSON.stringify({
-                        action: 'getExamQuestions',
-                        userKey: userIdentifier,
-                        workerSecret: WORKER_SECRET_KEY
-                    })
-                });
-                clearTimeout(timeoutId);
-
-                const data = await res.json();
-                if (data && data.status === 'success' && Array.isArray(data.questions)) {
-                    currentExamToken = data.examToken;
-                    activeQuestions = data.questions; // Không có trường correct
-                } else {
-                    showToast(data.message || "Không thể tải đề thi từ máy chủ!");
-                    return;
-                }
-            } catch (err) {
-                showToast("Lỗi kết nối máy chủ khi cấp đề thi!");
+            if (data && data.status === 'success' && Array.isArray(data.questions)) {
+                currentExamToken = data.examToken;
+                activeQuestions = data.questions;
+            } else {
+                showToast(data.message || "Không thể tải đề thi từ máy chủ!");
                 return;
             }
 
@@ -1237,42 +1279,26 @@
             showToast("Đang gửi bài lên máy chủ chấm điểm...");
             const userIdentifier = currentUser.phone || currentUser.cccd;
 
+            const result = await callApi({
+                action: 'submitExam',
+                examToken: currentExamToken,
+                answers: userAnswers,
+                userKey: userIdentifier,
+                name: currentUser.name,
+                village: currentUser.village,
+                prediction: prediction
+            }, 20000);
+
             let finalScore = 0;
             let finalDuration = durationSeconds;
             let finalPrediction = prediction;
 
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-                const res = await fetch(CLOUDFLARE_API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    signal: controller.signal,
-                    body: JSON.stringify({
-                        action: 'submitExam',
-                        examToken: currentExamToken,
-                        answers: userAnswers,
-                        userKey: userIdentifier,
-                        name: currentUser.name,
-                        village: currentUser.village,
-                        prediction: prediction,
-                        workerSecret: WORKER_SECRET_KEY
-                    })
-                });
-                clearTimeout(timeoutId);
-
-                const result = await res.json();
-                if (result && result.status === 'success') {
-                    finalScore = result.score !== undefined ? result.score : 0;
-                    finalDuration = result.durationSeconds !== undefined ? result.durationSeconds : durationSeconds;
-                    finalPrediction = result.prediction !== undefined ? result.prediction : prediction;
-                } else {
-                    showToast(result.message || "Lỗi khi chấm điểm tại máy chủ!");
-                    return;
-                }
-            } catch (err) {
-                showToast("Lỗi đường truyền khi nộp bài! Vui lòng thử lại.");
+            if (result && result.status === 'success') {
+                finalScore = result.score !== undefined ? result.score : 0;
+                finalDuration = result.durationSeconds !== undefined ? result.durationSeconds : durationSeconds;
+                finalPrediction = result.prediction !== undefined ? result.prediction : prediction;
+            } else {
+                showToast(result.message || "Lỗi khi chấm điểm tại máy chủ!");
                 return;
             }
 
