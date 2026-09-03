@@ -1096,16 +1096,21 @@
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
            // Lấy tiêu đề: Kiểm tra lần lượt
-            let titleText = (q.title && q.title.trim()) || (q.text && q.text.trim()) || (q.question && q.question.trim()) || "";
+           let titleText = q.title || q.text || q.question || "";
 
-            // Nếu cả 3 đều rỗng, in cấu trúc object q ra màn hình để biết server gửi trường nào
-            if (!titleText) {
-                titleText = "Lỗi dữ liệu câu hỏi: " + JSON.stringify(q);
+            // Nếu server vẫn chưa có tiêu đề, tự động quét lấy chuỗi văn bản còn lại
+            if (!titleText || titleText.trim() === "") {
+                for (let key in q) {
+                    if (key !== 'id' && key !== 'options' && typeof q[key] === 'string' && q[key].trim().length > 0) {
+                        titleText = q[key];
+                        break;
+                    }
+                }
             }
 
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${titleText}`;
+                titleEl.textContent = `${idx + 1}. ${titleText || "Câu hỏi số " + q.id}`;
             }
             const progEl = document.getElementById('examProgressBar');
             if (progEl) progEl.style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
