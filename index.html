@@ -1089,14 +1089,29 @@
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
 
+            // In dữ liệu thực tế ra F12 Console để theo dõi
+            console.log("Dữ liệu câu hỏi đang hiển thị:", q);
+
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
-            // Ưu tiên đọc q.title từ SERVER_QUESTION_BANK
-            const questionTitleText = q.title || q.text || q.question || "";
+            // Lấy tiêu đề: Quét toàn diện các trường
+            let titleText = q.title || q.text || q.question || "";
+            
+            // Nếu vẫn trống rỗng (do server trả về rỗng), quét tìm chuỗi dài nhất trong object q
+            if (!titleText || titleText.trim() === "") {
+                for (let k in q) {
+                    if (k !== 'id' && k !== 'options' && typeof q[k] === 'string' && q[k].trim().length > 3) {
+                        titleText = q[k].trim();
+                        break;
+                    }
+                }
+            }
+
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${questionTitleText}`;
+                // Sử dụng textContent để chống lỗi HTML và hiển thị trực tiếp
+                titleEl.textContent = `${idx + 1}. ${titleText || "Câu hỏi số " + q.id}`;
             }
 
             const progEl = document.getElementById('examProgressBar');
