@@ -1092,20 +1092,50 @@
         }
         window.startExamFlow = startExamFlow;
 
-        function renderQuestionMatrix() {
-            const matrix = document.getElementById('questionMatrix');
-            if (!matrix) return;
-            matrix.innerHTML = '';
-            activeQuestions.forEach((q, idx) => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.id = `qMatrixBtn_${idx}`;
-                btn.className = 'w-9 h-9 rounded-xl font-bold text-xs border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 transition-all';
-                btn.textContent = idx + 1;
-                btn.addEventListener('click', () => loadQuestion(idx));
-                matrix.appendChild(btn);
-            });
-        }
+       function renderQuestion() {
+  if (!examQuestions || examQuestions.length === 0) return;
+
+  const q = examQuestions[currentQuestionIndex];
+  if (!q) return;
+
+  // Lấy nội dung câu hỏi an toàn (hỗ trợ cả .text lẫn .question)
+  const qTitle = q.text || q.question || q.title || "";
+  
+  // Hiển thị tiêu đề câu hỏi
+  const titleEl = document.getElementById("questionText"); // hoặc id tương ứng trong html của bạn
+  if (titleEl) {
+    titleEl.innerHTML = `<span class="badge bg-primary me-2">Câu ${currentQuestionIndex + 1}</span> ${qTitle}`;
+  }
+
+  // Hiển thị 4 phương án lựa chọn
+  const optionsContainer = document.getElementById("optionsContainer"); // hoặc id tương ứng
+  if (optionsContainer && q.options) {
+    optionsContainer.innerHTML = "";
+    
+    const labels = ["A", "B", "C", "D"];
+    q.options.forEach((opt, idx) => {
+      const isChecked = (userAnswers[q.id] !== undefined && Number(userAnswers[q.id]) === idx);
+      
+      const optDiv = document.createElement("div");
+      optDiv.className = `option-item p-3 mb-2 rounded border ${isChecked ? "border-primary bg-light" : ""}`;
+      optDiv.style.cursor = "pointer";
+      optDiv.onclick = () => selectOption(q.id, idx);
+
+      optDiv.innerHTML = `
+        <label class="d-flex align-items-center mb-0 w-100" style="cursor:pointer">
+          <input type="radio" name="question_${q.id}" value="${idx}" class="form-check-input me-2" ${isChecked ? "checked" : ""}>
+          <strong>${labels[idx]}.</strong>&nbsp;${opt}
+        </label>
+      `;
+      optionsContainer.appendChild(optDiv);
+    });
+  }
+
+  // Cập nhật trạng thái câu hỏi (bảng điều hướng câu)
+  if (typeof updatePalette === "function") {
+    updatePalette();
+  }
+}
 
         function loadQuestion(idx) {
             if (!activeQuestions || activeQuestions.length === 0 || idx < 0 || idx >= activeQuestions.length) return;
