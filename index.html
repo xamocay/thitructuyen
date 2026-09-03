@@ -1084,16 +1084,36 @@
         // =========================================================================
         // HÀM HIỂN THỊ CÂU HỎI CHUẨN XÁC: ĐÃ SỬA LỖI MẤT TIÊU ĐỀ
         // =========================================================================
-        function loadQuestion(idx) {
+       function loadQuestion(idx) {
             if (!activeQuestions || activeQuestions.length === 0 || idx < 0 || idx >= activeQuestions.length) return;
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
 
+            // In ra Console để kiểm tra chính xác các thuộc tính máy chủ trả về
+            console.log("Dữ liệu câu hỏi nhận từ server:", q);
+
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
-            // Lấy tiêu đề an toàn từ q.text hoặc q.title hoặc q.question
-            const questionTitleText = q.text || q.title || q.question || "Nội dung câu hỏi đang được cập nhật...";
+            // BỘ QUÉT TỰ ĐỘNG MỌI THUỘC TÍNH:
+            // 1. Thử các tên thuộc tính thông dụng
+            let questionTitleText = q.text || q.title || q.question || q.cauHoi || q.noiDung || q["Câu hỏi"] || q.content;
+
+            // 2. Nếu vẫn chưa thấy, tự động duyệt qua các key của q để lấy chuỗi văn bản của câu hỏi
+            if (!questionTitleText && typeof q === 'object') {
+                for (let key in q) {
+                    if (key !== 'id' && key !== 'options' && key !== 'correct' && typeof q[key] === 'string') {
+                        questionTitleText = q[key];
+                        break;
+                    }
+                }
+            }
+
+            // Nếu vẫn không có, hiển thị chi tiết để biết server gửi gì
+            if (!questionTitleText) {
+                questionTitleText = "Dữ liệu server: " + JSON.stringify(q);
+            }
+
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
                 titleEl.textContent = `${idx + 1}. ${questionTitleText}`;
@@ -1109,8 +1129,10 @@
             if (!container) return;
             container.innerHTML = '';
 
-            if (q.options && Array.isArray(q.options)) {
-                q.options.forEach((opt, optIdx) => {
+            // Lấy danh sách options (hỗ trợ cả options, dapan, choices)
+            const opts = q.options || q.dapAn || q.choices || [];
+            if (Array.isArray(opts)) {
+                opts.forEach((opt, optIdx) => {
                     const isSelected = userAnswers[q.id] === optIdx;
                     const optDiv = document.createElement('div');
                     optDiv.className = `p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all ${
