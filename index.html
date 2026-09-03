@@ -1092,28 +1092,21 @@
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
-            // 1. LẤY TIÊU ĐỀ CHUẨN XÁC (Tránh nhầm sang ID hoặc đáp án)
+            // Lấy tiêu đề câu hỏi: Kiểm tra lần lượt text, title, question
             let titleText = "";
-            if (q.text && typeof q.text === 'string' && q.text.length > 5) {
-                titleText = q.text;
-            } else if (q.question && typeof q.question === 'string' && q.question.length > 5) {
-                titleText = q.question;
-            } else if (q.title && typeof q.title === 'string' && q.title.length > 5) {
-                titleText = q.title;
+            if (q.text && typeof q.text === 'string' && q.text.trim() !== "") {
+                titleText = q.text.trim();
+            } else if (q.title && typeof q.title === 'string' && q.title.trim() !== "") {
+                titleText = q.title.trim();
+            } else if (q.question && typeof q.question === 'string' && q.question.trim() !== "") {
+                titleText = q.question.trim();
             } else {
-                // Quét tìm chuỗi văn bản dài nhất trong object q (bỏ qua id, correct)
-                let maxLen = 0;
-                for (let k in q) {
-                    if (k !== 'id' && k !== 'correct' && typeof q[k] === 'string' && q[k].length > maxLen) {
-                        maxLen = q[k].length;
-                        titleText = q[k];
-                    }
-                }
+                titleText = `Câu hỏi trắc nghiệm số ${q.id}`;
             }
 
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${titleText || "Nội dung câu hỏi đang cập nhật..."}`;
+                titleEl.textContent = `${idx + 1}. ${titleText}`;
             }
 
             const progEl = document.getElementById('examProgressBar');
@@ -1122,7 +1115,6 @@
             const flagText = document.getElementById('flagBtnText');
             if (flagText) flagText.textContent = flaggedQuestions[idx] ? "Đã đánh dấu" : "Đánh dấu xem lại";
 
-            // 2. HIỂN THỊ 4 ĐÁP ÁN A, B, C, D
             const container = document.getElementById('qOptions');
             if (!container) return;
             container.innerHTML = '';
