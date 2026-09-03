@@ -1089,7 +1089,7 @@
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
 
-            // 1. Cập nhật số thứ tự câu hỏi & thanh tiến trình
+            // 1. Cập nhật nhãn số thứ tự câu hỏi và thanh tiến trình
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
@@ -1099,56 +1099,66 @@
             const flagText = document.getElementById('flagBtnText');
             if (flagText) flagText.textContent = flaggedQuestions[idx] ? "Đã đánh dấu" : "Đánh dấu xem lại";
 
-            // 2. GÁN TIÊU ĐỀ CÂU HỎI (Đồng bộ tuyệt đối với Code.gs)
+            // 2. HIỂN THỊ TIÊU ĐỀ CÂU HỎI
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                const questionTitle = q.title || q.text || q.question || "Đang tải câu hỏi...";
+                // Ưu tiên lấy title từ server, nếu server thiếu thì lấy text hoặc question
+                const questionTitle = q.title || q.text || q.question || "Chọn đáp án đúng cho câu hỏi sau:";
                 titleEl.textContent = `${idx + 1}. ${questionTitle}`;
             }
 
-            // 3. HIỂN THỊ 4 ĐÁP ÁN
+            // 3. HIỂN THỊ 4 ĐÁP ÁN VÀ XỬ LÝ CHỌN CHÍNH XÁC 100%
             const container = document.getElementById('qOptions');
             if (!container) return;
             container.innerHTML = '';
 
             const opts = Array.isArray(q.options) ? q.options : [];
             opts.forEach((opt, optIdx) => {
-                const isSelected = userAnswers[q.id] === optIdx;
+                const isSelected = (userAnswers[q.id] === optIdx);
                 const optDiv = document.createElement('div');
-                optDiv.id = `opt_${q.id}_${optIdx}`;
-                optDiv.className = `p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all ${
-                    isSelected ? 'border-gov bg-blue-50/90 text-gov font-bold shadow-sm ring-1 ring-gov' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                }`;
+                
+                // Gán class màu sắc rõ ràng khi chọn
+                if (isSelected) {
+                    optDiv.className = 'p-4 rounded-2xl border text-sm font-bold cursor-pointer flex items-center justify-between transition-all border-blue-600 bg-blue-50 text-blue-800 shadow-sm ring-2 ring-blue-500';
+                } else {
+                    optDiv.className = 'p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all border-slate-200 bg-white text-slate-700 hover:bg-slate-50';
+                }
+
                 optDiv.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <div class="w-6 h-6 rounded-full border flex items-center justify-center text-xs ${isSelected ? 'border-gov bg-gov text-white font-bold' : 'border-slate-300 bg-slate-100 text-slate-600'}">
+                    <div class="flex items-center space-x-3 pointer-events-none">
+                        <div class="w-7 h-7 rounded-full border flex items-center justify-center text-xs font-bold ${isSelected ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-slate-100 text-slate-600'}">
                             ${String.fromCharCode(65 + optIdx)}
                         </div>
-                        <span>${escapeHtml(opt)}</span>
+                        <span class="leading-relaxed">${escapeHtml(opt)}</span>
                     </div>
                 `;
 
-                // Xử lý click chọn đáp án không bị giật màn hình
-                optDiv.addEventListener('click', () => {
+                // Khi click chọn đáp án: Lưu kết quả -> vẽ lại đúng thẻ câu hỏi này mượt mà
+                optDiv.addEventListener('click', function(e) {
+                    e.preventDefault();
                     userAnswers[q.id] = optIdx;
-                    
-                    // Cập nhật lại màu sắc 4 ô đáp án trực tiếp
-                    opts.forEach((_, i) => {
-                        const el = document.getElementById(`opt_${q.id}_${i}`);
-                        if (!el) return;
-                        const badge = el.querySelector('div > div');
-                        if (i === optIdx) {
-                            el.className = 'p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all border-gov bg-blue-50/90 text-gov font-bold shadow-sm ring-1 ring-gov';
-                            if (badge) badge.className = 'w-6 h-6 rounded-full border flex items-center justify-center text-xs border-gov bg-gov text-white font-bold';
-                        } else {
-                            el.className = 'p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all border-slate-200 bg-white text-slate-700 hover:bg-slate-50';
-                            if (badge) badge.className = 'w-6 h-6 rounded-full border flex items-center justify-center text-xs border-slate-300 bg-slate-100 text-slate-600';
-                        }
-                    });
-
-                    // Cập nhật nút số ở ma trận bên phải
-                    updateMatrixStyles();
+                    loadQuestion(idx);
                 });
+
+                container.appendChild(optDiv);
+            });
+
+            // 4. CẬP NHẬT TRẠNG THÁI NÚT ĐIỀU HƯỚNG
+            const prevBtn = document.getElementById('prevQBtn');
+            const nextBtn = document.getElementById('nextQBtn');
+            if (prevBtn) {
+                prevBtn.disabled = (idx === 0);
+                prevBtn.classList.toggle('opacity-40', idx === 0);
+            }
+            if (nextBtn) {
+                nextBtn.innerHTML = (idx === activeQuestions.length - 1) 
+                    ? `Câu cuối <i class="fa-solid fa-check ml-1.5"></i>`
+                    : `Câu tiếp <i class="fa-solid fa-chevron-right ml-1.5"></i>`;
+            }
+
+            // Cập nhật ma trận câu hỏi bên phải
+            updateMatrixStyles();
+        }
 
                 container.appendChild(optDiv);
             });
