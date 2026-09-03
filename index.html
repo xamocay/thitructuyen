@@ -1084,19 +1084,14 @@
         // =========================================================================
         // HÀM HIỂN THỊ CÂU HỎI CHUẨN XÁC: ĐÃ SỬA LỖI MẤT TIÊU ĐỀ
         // =========================================================================
-      function loadQuestion(idx) {
+     function loadQuestion(idx) {
             if (!activeQuestions || activeQuestions.length === 0 || idx < 0 || idx >= activeQuestions.length) return;
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
 
+            // 1. Cập nhật số thứ tự câu hỏi & thanh tiến trình
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
-
-            // GÁN TRỰC TIẾP TIÊU ĐỀ
-            const titleEl = document.getElementById('qTitle');
-            if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${q.title || "Chọn đáp án đúng cho câu hỏi sau:"}`;
-            }
 
             const progEl = document.getElementById('examProgressBar');
             if (progEl) progEl.style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
@@ -1104,6 +1099,14 @@
             const flagText = document.getElementById('flagBtnText');
             if (flagText) flagText.textContent = flaggedQuestions[idx] ? "Đã đánh dấu" : "Đánh dấu xem lại";
 
+            // 2. GÁN TIÊU ĐỀ CÂU HỎI (Đồng bộ tuyệt đối với Code.gs)
+            const titleEl = document.getElementById('qTitle');
+            if (titleEl) {
+                const questionTitle = q.title || q.text || q.question || "Đang tải câu hỏi...";
+                titleEl.textContent = `${idx + 1}. ${questionTitle}`;
+            }
+
+            // 3. HIỂN THỊ 4 ĐÁP ÁN
             const container = document.getElementById('qOptions');
             if (!container) return;
             container.innerHTML = '';
@@ -1112,6 +1115,7 @@
             opts.forEach((opt, optIdx) => {
                 const isSelected = userAnswers[q.id] === optIdx;
                 const optDiv = document.createElement('div');
+                optDiv.id = `opt_${q.id}_${optIdx}`;
                 optDiv.className = `p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all ${
                     isSelected ? 'border-gov bg-blue-50/90 text-gov font-bold shadow-sm ring-1 ring-gov' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                 }`;
@@ -1123,13 +1127,33 @@
                         <span>${escapeHtml(opt)}</span>
                     </div>
                 `;
+
+                // Xử lý click chọn đáp án không bị giật màn hình
                 optDiv.addEventListener('click', () => {
                     userAnswers[q.id] = optIdx;
-                    loadQuestion(idx);
+                    
+                    // Cập nhật lại màu sắc 4 ô đáp án trực tiếp
+                    opts.forEach((_, i) => {
+                        const el = document.getElementById(`opt_${q.id}_${i}`);
+                        if (!el) return;
+                        const badge = el.querySelector('div > div');
+                        if (i === optIdx) {
+                            el.className = 'p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all border-gov bg-blue-50/90 text-gov font-bold shadow-sm ring-1 ring-gov';
+                            if (badge) badge.className = 'w-6 h-6 rounded-full border flex items-center justify-center text-xs border-gov bg-gov text-white font-bold';
+                        } else {
+                            el.className = 'p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all border-slate-200 bg-white text-slate-700 hover:bg-slate-50';
+                            if (badge) badge.className = 'w-6 h-6 rounded-full border flex items-center justify-center text-xs border-slate-300 bg-slate-100 text-slate-600';
+                        }
+                    });
+
+                    // Cập nhật nút số ở ma trận bên phải
+                    updateMatrixStyles();
                 });
+
                 container.appendChild(optDiv);
             });
 
+            // 4. ĐIỀU HƯỚNG NÚT BẤM
             const prevBtn = document.getElementById('prevQBtn');
             const nextBtn = document.getElementById('nextQBtn');
             if (prevBtn) {
