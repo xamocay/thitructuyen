@@ -1092,21 +1092,11 @@
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
-            // Lấy tiêu đề câu hỏi: Kiểm tra lần lượt text, title, question
-            let titleText = "";
-            if (q.text && typeof q.text === 'string' && q.text.trim() !== "") {
-                titleText = q.text.trim();
-            } else if (q.title && typeof q.title === 'string' && q.title.trim() !== "") {
-                titleText = q.title.trim();
-            } else if (q.question && typeof q.question === 'string' && q.question.trim() !== "") {
-                titleText = q.question.trim();
-            } else {
-                titleText = `Câu hỏi trắc nghiệm số ${q.id}`;
-            }
-
+            // Ưu tiên đọc q.title từ SERVER_QUESTION_BANK
+            const questionTitleText = q.title || q.text || q.question || "";
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${titleText}`;
+                titleEl.textContent = `${idx + 1}. ${questionTitleText}`;
             }
 
             const progEl = document.getElementById('examProgressBar');
