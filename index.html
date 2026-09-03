@@ -1089,9 +1089,15 @@
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
 
-            // 1. Cập nhật nhãn số thứ tự câu hỏi và thanh tiến trình
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
+
+            // ĐỒNG BỘ: Nhận trực tiếp tiêu đề câu hỏi từ máy chủ an toàn
+            const questionTitleText = q.title || q.text || q.question || "";
+            const titleEl = document.getElementById('qTitle');
+            if (titleEl) {
+                titleEl.textContent = `${idx + 1}. ${questionTitleText}`;
+            }
 
             const progEl = document.getElementById('examProgressBar');
             if (progEl) progEl.style.width = `${((idx + 1) / activeQuestions.length) * 100}%`;
@@ -1099,54 +1105,6 @@
             const flagText = document.getElementById('flagBtnText');
             if (flagText) flagText.textContent = flaggedQuestions[idx] ? "Đã đánh dấu" : "Đánh dấu xem lại";
 
-            // 2. TRÍCH XUẤT TIÊU ĐỀ CÂU HỎI (Cơ chế bảo vệ đa tầng)
-            let questionTitleText = "";
-
-            // Tầng 1: Đọc từ các trường dữ liệu tiêu chuẩn từ backend
-            if (q.title && typeof q.title === 'string' && q.title.trim().length > 0) {
-                questionTitleText = q.title.trim();
-            } else if (q.text && typeof q.text === 'string' && q.text.trim().length > 0) {
-                questionTitleText = q.text.trim();
-            } else if (q.question && typeof q.question === 'string' && q.question.trim().length > 0) {
-                questionTitleText = q.question.trim();
-            }
-
-            // Tầng 2: Quét tự động nếu backend gửi trường khác (loại trừ id, correct, options)
-            if (!questionTitleText && typeof q === 'object') {
-                for (let k in q) {
-                    if (k !== 'id' && k !== 'options' && k !== 'correct' && typeof q[k] === 'string' && q[k].trim().length > 3) {
-                        questionTitleText = q[k].trim();
-                        break;
-                    }
-                }
-            }
-
-            // Tầng 3: Nhận diện theo ngữ cảnh đáp án khi server gửi rỗng trường chữ
-            if (!questionTitleText && Array.isArray(q.options)) {
-                const optStr = q.options.join(" ");
-                if (optStr.includes("Dụ dỗ chốt đơn hàng")) {
-                    questionTitleText = "Đâu là một trong những hình thức lừa đảo chiếm đoạt tài sản phổ biến trên không gian mạng hiện nay?";
-                } else if (optStr.includes("Cải cách văn hóa công vụ") || optStr.includes("Cải cách thể chế")) {
-                    questionTitleText = "Nội dung nào sau đây là một trong những nhiệm vụ trọng tâm của công tác Cải cách hành chính nhà nước?";
-                } else if (optStr.includes("PAR INDEX") || optStr.includes("SIPAS")) {
-                    questionTitleText = "Chỉ số đánh giá kết quả cải cách hành chính hàng năm của các bộ, cơ quan ngang bộ, UBND các tỉnh, thành phố trực thuộc Trung ương là gì?";
-                } else if (q.options.some(o => /^\d+$/.test(o.trim()))) {
-                    questionTitleText = "Hãy chọn số lượng đúng theo quy định và mục tiêu chuyển đổi số của địa phương:";
-                }
-            }
-
-            // Dự phòng cuối cùng nếu không nhận diện được
-            if (!questionTitleText) {
-                questionTitleText = `Câu hỏi trắc nghiệm số ${q.id || (idx + 1)}`;
-            }
-
-            // Gán hiển thị lên màn hình
-            const titleEl = document.getElementById('qTitle');
-            if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${questionTitleText}`;
-            }
-
-            // 3. HIỂN THỊ 4 PHƯƠNG ÁN LỰA CHỌN A, B, C, D
             const container = document.getElementById('qOptions');
             if (!container) return;
             container.innerHTML = '';
@@ -1173,7 +1131,6 @@
                 container.appendChild(optDiv);
             });
 
-            // 4. CẬP NHẬT TRẠNG THÁI NÚT ĐIỀU HƯỚNG
             const prevBtn = document.getElementById('prevQBtn');
             const nextBtn = document.getElementById('nextQBtn');
             if (prevBtn) {
@@ -1186,7 +1143,6 @@
                     : `Câu tiếp <i class="fa-solid fa-chevron-right ml-1.5"></i>`;
             }
 
-            // Cập nhật ma trận 20 ô số bên phải
             updateMatrixStyles();
         }
         function updateMatrixStyles() {
