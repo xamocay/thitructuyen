@@ -1089,34 +1089,31 @@
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
 
-            // In ra Console để kiểm tra chính xác các thuộc tính máy chủ trả về
-            console.log("Dữ liệu câu hỏi nhận từ server:", q);
-
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
-            // BỘ QUÉT TỰ ĐỘNG MỌI THUỘC TÍNH:
-            // 1. Thử các tên thuộc tính thông dụng
-            let questionTitleText = q.text || q.title || q.question || q.cauHoi || q.noiDung || q["Câu hỏi"] || q.content;
-
-            // 2. Nếu vẫn chưa thấy, tự động duyệt qua các key của q để lấy chuỗi văn bản của câu hỏi
-            if (!questionTitleText && typeof q === 'object') {
-                for (let key in q) {
-                    if (key !== 'id' && key !== 'options' && key !== 'correct' && typeof q[key] === 'string') {
-                        questionTitleText = q[key];
-                        break;
+            // 1. LẤY TIÊU ĐỀ CHUẨN XÁC (Tránh nhầm sang ID hoặc đáp án)
+            let titleText = "";
+            if (q.text && typeof q.text === 'string' && q.text.length > 5) {
+                titleText = q.text;
+            } else if (q.question && typeof q.question === 'string' && q.question.length > 5) {
+                titleText = q.question;
+            } else if (q.title && typeof q.title === 'string' && q.title.length > 5) {
+                titleText = q.title;
+            } else {
+                // Quét tìm chuỗi văn bản dài nhất trong object q (bỏ qua id, correct)
+                let maxLen = 0;
+                for (let k in q) {
+                    if (k !== 'id' && k !== 'correct' && typeof q[k] === 'string' && q[k].length > maxLen) {
+                        maxLen = q[k].length;
+                        titleText = q[k];
                     }
                 }
             }
 
-            // Nếu vẫn không có, hiển thị chi tiết để biết server gửi gì
-            if (!questionTitleText) {
-                questionTitleText = "Dữ liệu server: " + JSON.stringify(q);
-            }
-
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${questionTitleText}`;
+                titleEl.textContent = `${idx + 1}. ${titleText || "Nội dung câu hỏi đang cập nhật..."}`;
             }
 
             const progEl = document.getElementById('examProgressBar');
@@ -1125,34 +1122,32 @@
             const flagText = document.getElementById('flagBtnText');
             if (flagText) flagText.textContent = flaggedQuestions[idx] ? "Đã đánh dấu" : "Đánh dấu xem lại";
 
+            // 2. HIỂN THỊ 4 ĐÁP ÁN A, B, C, D
             const container = document.getElementById('qOptions');
             if (!container) return;
             container.innerHTML = '';
 
-            // Lấy danh sách options (hỗ trợ cả options, dapan, choices)
-            const opts = q.options || q.dapAn || q.choices || [];
-            if (Array.isArray(opts)) {
-                opts.forEach((opt, optIdx) => {
-                    const isSelected = userAnswers[q.id] === optIdx;
-                    const optDiv = document.createElement('div');
-                    optDiv.className = `p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all ${
-                        isSelected ? 'border-gov bg-blue-50/90 text-gov font-bold shadow-sm ring-1 ring-gov' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                    }`;
-                    optDiv.innerHTML = `
-                        <div class="flex items-center space-x-3">
-                            <div class="w-6 h-6 rounded-full border flex items-center justify-center text-xs ${isSelected ? 'border-gov bg-gov text-white font-bold' : 'border-slate-300 bg-slate-100 text-slate-600'}">
-                                ${String.fromCharCode(65 + optIdx)}
-                            </div>
-                            <span>${escapeHtml(opt)}</span>
+            const opts = Array.isArray(q.options) ? q.options : [];
+            opts.forEach((opt, optIdx) => {
+                const isSelected = userAnswers[q.id] === optIdx;
+                const optDiv = document.createElement('div');
+                optDiv.className = `p-4 rounded-2xl border text-sm font-medium cursor-pointer flex items-center justify-between transition-all ${
+                    isSelected ? 'border-gov bg-blue-50/90 text-gov font-bold shadow-sm ring-1 ring-gov' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                }`;
+                optDiv.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="w-6 h-6 rounded-full border flex items-center justify-center text-xs ${isSelected ? 'border-gov bg-gov text-white font-bold' : 'border-slate-300 bg-slate-100 text-slate-600'}">
+                            ${String.fromCharCode(65 + optIdx)}
                         </div>
-                    `;
-                    optDiv.addEventListener('click', () => {
-                        userAnswers[q.id] = optIdx;
-                        loadQuestion(idx);
-                    });
-                    container.appendChild(optDiv);
+                        <span>${escapeHtml(opt)}</span>
+                    </div>
+                `;
+                optDiv.addEventListener('click', () => {
+                    userAnswers[q.id] = optIdx;
+                    loadQuestion(idx);
                 });
-            }
+                container.appendChild(optDiv);
+            });
 
             const prevBtn = document.getElementById('prevQBtn');
             const nextBtn = document.getElementById('nextQBtn');
@@ -1168,7 +1163,6 @@
 
             updateMatrixStyles();
         }
-
         function updateMatrixStyles() {
             activeQuestions.forEach((q, idx) => {
                 const btn = document.getElementById(`qMatrixBtn_${idx}`);
