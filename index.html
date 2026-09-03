@@ -1084,7 +1084,7 @@
         // =========================================================================
         // HÀM HIỂN THỊ CÂU HỎI CHUẨN XÁC: ĐÃ SỬA LỖI MẤT TIÊU ĐỀ
         // =========================================================================
-       function loadQuestion(idx) {
+      function loadQuestion(idx) {
             if (!activeQuestions || activeQuestions.length === 0 || idx < 0 || idx >= activeQuestions.length) return;
             currentQuestionIdx = idx;
             const q = activeQuestions[idx];
@@ -1092,11 +1092,10 @@
             const idxEl = document.getElementById('qCurrentIndexText');
             if (idxEl) idxEl.textContent = `Câu hỏi ${idx + 1} / ${activeQuestions.length}`;
 
-            // ĐỒNG BỘ: Nhận trực tiếp tiêu đề câu hỏi từ máy chủ an toàn
-            const questionTitleText = q.title || q.text || q.question || "";
+            // GÁN TRỰC TIẾP TIÊU ĐỀ
             const titleEl = document.getElementById('qTitle');
             if (titleEl) {
-                titleEl.textContent = `${idx + 1}. ${questionTitleText}`;
+                titleEl.textContent = `${idx + 1}. ${q.title || "Chọn đáp án đúng cho câu hỏi sau:"}`;
             }
 
             const progEl = document.getElementById('examProgressBar');
